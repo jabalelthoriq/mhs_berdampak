@@ -253,6 +253,34 @@
         margin-right: 12px;
         font-size: 14px;
     }
+
+    .nav-tabs {
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        color: #777;
+        font-weight: 600;
+        padding: 12px 20px;
+        margin-right: 5px;
+        border-radius: 0;
+    }
+
+    .nav-tabs .nav-link.active {
+        border-bottom: 3px solid #00b8d4;
+        color: #00b8d4;
+        background-color: transparent;
+    }
+
+    .nav-tabs .nav-link:hover:not(.active) {
+        border-bottom: 3px solid #f0f0f0;
+    }
+
+    .tab-content {
+        padding: 20px 0;
+    }
    </style>
 <body>
    <div class="vertical-navbar">
@@ -288,68 +316,34 @@
             <h2 class="fs-3 fw-bold m-0">Input Data</h2>
         </div>
 
-        <div class="row g-4 mb-4">
-            <!-- Card 1 - Total Users -->
-            <div class="col-md-4">
-                <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
-                        <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Users</p>
-                            {{-- <h2 class="display-6 fw-bold mb-0">{{ number_format($totalUsers) }}</h2> --}}
-                        </div>
-                        <div class="icon-container bg-primary bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-primary" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
+         <!-- Tab navigation -->
+        <ul class="nav nav-tabs" id="kesehatanTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="masyarakat-tab" data-bs-toggle="tab" data-bs-target="#masyarakat-content" type="button" role="tab" aria-controls="masyarakat-content" aria-selected="true">
+                    <i class="fas fa-users me-2"></i>Masyarakat
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kunjungan-tab" data-bs-toggle="tab" data-bs-target="#kunjungan-content" type="button" role="tab" aria-controls="kunjungan-content" aria-selected="false">
+                    <i class="fas fa-hospital-user me-2"></i>Kunjungan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kehamilan-tab" data-bs-toggle="tab" data-bs-target="#kehamilan-content" type="button" role="tab" aria-controls="kehamilan-content" aria-selected="false">
+                    <i class="fas fa-baby me-2"></i>Kehamilan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="imunisasi-tab" data-bs-toggle="tab" data-bs-target="#imunisasi-content" type="button" role="tab" aria-controls="imunisasi-content" aria-selected="false">
+                    <i class="fas fa-syringe me-2"></i>Imunisasi
+                </button>
+            </li>
+        </ul>
 
-            <!-- Card 2 - User Pregnant -->
-            <div class="col-md-4">
-                <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
-                        <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">User Pregnant</p>
-                            {{-- <h2 class="display-6 fw-bold mb-0">{{ number_format($totalPregnant) }}</h2> --}}
-                        </div>
-                        <div class="icon-container bg-warning bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-warning" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 - Total Appointment -->
-            <div class="col-md-4">
-                <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
-                        <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Midwaves</p>
-                            {{-- <h2 class="display-6 fw-bold mb-0">{{ number_format($totalMidwife) }}</h2> --}}
-                        </div>
-                        <div class="icon-container bg-success bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-success" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
-</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

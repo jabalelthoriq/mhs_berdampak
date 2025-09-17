@@ -12,99 +12,99 @@
     <title>Dashboard Admin</title>
 </head>
 <style>
-     body {
-       margin: 0;
-       padding: 0;
-       background-color: #F6F8FB;
-       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-       overflow-x: hidden;
-   }
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #F6F8FB;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        overflow-x: hidden;
+    }
 
-   .vertical-navbar {
-       position: fixed;
-       top: 0;
-       left: 0;
-       width: 80px;
-       height: 92vh;
-       background-color: #ffffff;
-       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       padding: 20px 0;
-       z-index: 1000;
-       border-radius: 15px 15px 15px 15px;
-       margin: 30px 30px;
-   }
+    .vertical-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 92vh;
+        background-color: #ffffff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        z-index: 1000;
+        border-radius: 15px;
+        margin: 30px 30px;
+    }
 
-   .nav-icon a {
-       text-decoration: none;
-       color: inherit;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       width: 100%;
-       height: 100%;
-   }
+    .nav-icon a {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
 
-   .nav-indicator {
-       position: absolute;
-       left: 0;
-       width: 4px;
-       height: 48px;
-       background-color: #00b8d4;
-       border-radius: 0 4px 4px 0;
-       transition: top 0.3s ease;
-       pointer-events: none;
-   }
+    .nav-indicator {
+        position: absolute;
+        left: 0;
+        width: 4px;
+        height: 48px;
+        background-color: #00b8d4;
+        border-radius: 0 4px 4px 0;
+        transition: top 0.3s ease;
+        pointer-events: none;
+    }
 
-   .nav-icon {
-       width: 48px;
-       height: 48px;
-       margin: 12px 0;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       border-radius: 8px;
-       color: #777;
-       font-size: 20px;
-       cursor: pointer;
-       transition: all 0.2s ease;
-   }
+    .nav-icon {
+        width: 48px;
+        height: 48px;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        color: #777;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-   .nav-icon:hover {
-       background-color: #f0f0f0;
-       transform: scale(1.2);
-   }
+    .nav-icon:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.2);
+    }
 
-   .nav-icon.active {
-       background-color: #00b8d4;
-       color: white;
-       transition: background-color 1s ease;
-   }
+    .nav-icon.active {
+        background-color: #00b8d4;
+        color: white;
+        transition: background-color 1s ease;
+    }
 
-   .nav-icon.logout {
-       margin-top: auto;
-       color: #f44336;
-   }
+    .nav-icon.logout {
+        margin-top: auto;
+        color: #f44336;
+    }
 
-   .main-content {
-       margin-left: 80px;
-       padding-left: 5rem;
-       padding-top: 3rem;
-       width: calc(100% - 80px);
-       max-width: 1440px;
-       margin-right: auto;
-   }
+    .main-content {
+        margin-left: 80px;
+        padding-left: 5rem;
+        padding-top: 3rem;
+        width: calc(100% - 80px);
+        max-width: 1440px;
+        margin-right: auto;
+    }
 
-   .header-container {
-       display: flex;
-       justify-content: space-between;
-       margin-bottom: 24px;
-       align-items: center;
-   }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        align-items: center;
+    }
 
-   .search-container {
+    .search-container {
         position: relative;
         margin-bottom: 20px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -143,25 +143,23 @@
     }
 
     .nav-logo {
-    width: 65px;
-    height: 65px;
-    margin: 0 0 12px 0; /* Hilangkan margin top */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
+        width: 65px;
+        height: 65px;
+        margin: 0 0 12px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
 
-    /* PERBAIKAN: CSS untuk gambar logo */
     .nav-logo img {
         width: 100%;
         height: 100%;
         object-fit: contain;
-        display: block; /* Pastikan gambar ditampilkan sebagai block */
+        display: block;
     }
 
-    /* Efek hover opsional */
     .nav-logo:hover img {
         transform: scale(1.05);
         transition: transform 0.3s ease;
@@ -225,7 +223,6 @@
             min-height: 120px;
         }
 
-        /* Perbaikan responsif untuk logo */
         .nav-logo {
             width: 50px;
             height: 50px;
@@ -253,10 +250,77 @@
         margin-right: 12px;
         font-size: 14px;
     }
-   </style>
+
+    .nav-tabs {
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        color: #777;
+        font-weight: 600;
+        padding: 12px 20px;
+        margin-right: 5px;
+        border-radius: 0;
+    }
+
+    .nav-tabs .nav-link.active {
+        border-bottom: 3px solid #00b8d4;
+        color: #00b8d4;
+        background-color: transparent;
+    }
+
+    .nav-tabs .nav-link:hover:not(.active) {
+        border-bottom: 3px solid #f0f0f0;
+    }
+
+    .tab-content {
+        padding: 20px 0;
+    }
+
+    /* Fix for pagination alignment */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    /* Fix for action buttons alignment */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+
+     /* Pagination styling */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item .page-link {
+            color: #00b8d4;
+            border: 1px solid #dee2e6;
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #00b8d4;
+            border-color: #00b8d4;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+        }
+</style>
 <body>
     <div class="vertical-navbar">
-        <div class="nav-logo" >
+        <div class="nav-logo">
             <img src="{{ asset('image/logo polije.png') }}" alt="Logo">
         </div>
         <div class="nav-icon">
@@ -288,98 +352,449 @@
             <h2 class="fs-3 fw-bold m-0">Data Kesehatan</h2>
         </div>
 
-        <div class="row g-4 mb-4">
-            <!-- Card 1 - Total Users -->
-            <div class="col-md-4">
-                <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
-                        <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Users</p>
-                            {{-- <h2 class="display-6 fw-bold mb-0">{{ number_format($totalUsers) }}</h2> --}}
+        <!-- Tab navigation -->
+        <ul class="nav nav-tabs" id="kesehatanTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="masyarakat-tab" data-bs-toggle="tab" data-bs-target="#masyarakat-content" type="button" role="tab" aria-controls="masyarakat-content" aria-selected="true">
+                    <i class="fas fa-users me-2"></i>Masyarakat
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kunjungan-tab" data-bs-toggle="tab" data-bs-target="#kunjungan-content" type="button" role="tab" aria-controls="kunjungan-content" aria-selected="false">
+                    <i class="fas fa-hospital-user me-2"></i>Kunjungan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kehamilan-tab" data-bs-toggle="tab" data-bs-target="#kehamilan-content" type="button" role="tab" aria-controls="kehamilan-content" aria-selected="false">
+                    <i class="fas fa-baby me-2"></i>Kehamilan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="imunisasi-tab" data-bs-toggle="tab" data-bs-target="#imunisasi-content" type="button" role="tab" aria-controls="imunisasi-content" aria-selected="false">
+                    <i class="fas fa-syringe me-2"></i>Imunisasi
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="kesehatanTabsContent">
+            <!-- Masyarakat Content -->
+            <div class="tab-pane fade show active" id="masyarakat-content" role="tabpanel" aria-labelledby="masyarakat-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Masyarakat</h5>
+                            <div class="search-container" style="width: 250px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" id="searchmasyarakat" placeholder="Cari masyarakat..." onkeyup="searchTable('masyarakatTable', this.value)">
+                            </div>
                         </div>
-                        <div class="icon-container bg-primary bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-primary" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="masyarakat-table-container">
+                            <table class="table table-hover mb-0" id="masyarakatTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                        <th>Nomor telepon</th>
+                                        <th>Jenis kelamin</th>
+                                        <th>Alamat</th>
+                                        <th>Tanggal lahir</th>
+                                        <th>Pekerjaan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($masyarakat as $warga)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary">{{ substr($warga->nama, 0, 2) }}</div>
+                                                    <span class="text-truncate">{{ $warga->nama }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-truncate">{{ $warga->nik }}</td>
+                                            <td class="text-truncate">{{ $warga->no_hp }}</td>
+                                            <td class="text-truncate">{{ $warga->jenis_kelamin }}</td>
+                                            <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
+                                            <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td>
+                                            <td class="text-truncate">{{ $warga->pekerjaan }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="text-center">Tidak ada data masyarakat</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+
+                        <!-- Pagination for masyarakat -->
+                        @if($masyarakat->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for masyarakat">
+                                <ul class="pagination">
+                                    {{-- Previous Page Link --}}
+                                    <li class="page-item {{ $masyarakat->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                           href="{{ $masyarakat->appends(['masyarakat_page' => $masyarakat->currentPage()])->previousPageUrl() }}#masyarakat-content"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @for($i = 1; $i <= $masyarakat->lastPage(); $i++)
+                                        <li class="page-item {{ $masyarakat->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                               href="{{ $masyarakat->url($i) }}#masyarakat-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next Page Link --}}
+                                    <li class="page-item {{ $masyarakat->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                           href="{{ $masyarakat->appends(['masyarakat_page' => $masyarakat->currentPage()])->nextPageUrl() }}#masyarakat-content"
+                                           aria-label="Next">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2 - User Pregnant -->
-            <div class="col-md-4">
-                <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
-                        <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">User Pregnant</p>
-                            {{-- <h2 class="display-6 fw-bold mb-0">{{ number_format($totalPregnant) }}</h2> --}}
+            <!-- Kunjungan Content -->
+            <div class="tab-pane fade" id="kunjungan-content" role="tabpanel" aria-labelledby="kunjungan-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Kunjungan</h5>
+                            <div class="search-container" style="width: 250px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" id="searchkunjungan" placeholder="Cari kunjungan..." onkeyup="searchTable('kunjunganTable', this.value)">
+                            </div>
                         </div>
-                        <div class="icon-container bg-warning bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-warning" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+
+                        @if(session('kesehatan_success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('kesehatan_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="kunjungan-table-container">
+                            <table class="table table-hover mb-0" id="kunjunganTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Keluhan</th>
+                                        <th>Diagnosa</th>
+                                        <th>Tindakan</th>
+                                        <th>Tanggal kunjungan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($kunjungan as $kesehatan)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-warning">
+                                                        {{ substr($kesehatan->masyarakat->nama ?? 'N/A', 0, 2) }}
+                                                    </div>
+                                                    <span class="text-truncate">{{ $kesehatan->masyarakat->nama ?? 'N/A' }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-truncate">{{ $kesehatan->keluhan }}</td>
+                                            <td class="text-truncate">{{ $kesehatan->diagnosa }}</td>
+                                            <td class="text-truncate">{{ $kesehatan->tindakan }}</td>
+                                            <td class="text-truncate">
+                                                {{ \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">Tidak ada data kunjungan</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+
+                        <!-- Pagination for kunjungan -->
+                        @if($kunjungan->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for kunjungan">
+                                <ul class="pagination">
+                                    {{-- Previous Page Link --}}
+                                    <li class="page-item {{ $kunjungan->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                           href="{{ $kunjungan->appends(['kunjungan_page' => $kunjungan->currentPage()])->previousPageUrl() }}#kunjungan-content"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @for($i = 1; $i <= $kunjungan->lastPage(); $i++)
+                                        <li class="page-item {{ $kunjungan->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                               href="{{ $kunjungan->url($i) }}#kunjungan-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next Page Link --}}
+                                    <li class="page-item {{ $kunjungan->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                           href="{{ $kunjungan->appends(['kunjungan_page' => $kunjungan->currentPage()])->nextPageUrl() }}#kunjungan-content"
+                                           aria-label="Next">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Card 3 - Total Appointment -->
-            <div class="col-md-4">
-                <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
-                        <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Midwaves</p>
-                            {{-- <h2 class="display-6 fw-bold mb-0">{{ number_format($totalMidwife) }}</h2> --}}
+            <!-- Kehamilan Content -->
+            <div class="tab-pane fade" id="kehamilan-content" role="tabpanel" aria-labelledby="kehamilan-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Kehamilan</h5>
+                            <div class="search-container" style="width: 250px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" id="searchKehamilan" placeholder="Cari kehamilan..." onkeyup="searchTable('kehamilanTable', this.value)">
+                            </div>
                         </div>
-                        <div class="icon-container bg-success bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-success" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+
+                        @if(session('pregnancy_success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('pregnancy_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="kehamilan-table-container">
+                            <table class="table table-hover mb-0" id="kehamilanTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>HPL</th>
+                                        <th>Usia kehamilan</th>
+                                        <th>Catatan</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($kehamilan as $hamil)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary">{{ substr($hamil->nama_pasien ?? '??', 0, 2) }}</div>
+                                                    <span class="ms-2">{{ $hamil->nama_pasien ?? 'Data tidak tersedia' }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ $hamil->hpl ?? '-' }}</td>
+                                            <td>{{ $hamil->usia_kehamilan ?? '-' }}</td>
+                                            <td>{{ $hamil->catatan ?? '-' }}</td>
+                                            <td class="text-center action-buttons">
+                                                <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">Tidak ada data kehamilan</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
+
+                        <!-- Pagination for kehamilan -->
+                        @if($kehamilan->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for kehamilan">
+                                <ul class="pagination">
+                                    {{-- Previous Page Link --}}
+                                    <li class="page-item {{ $kehamilan->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                           href="{{ $kehamilan->appends(['kehamilan_page' => $kehamilan->currentPage()])->previousPageUrl() }}#kehamilan-content"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @for($i = 1; $i <= $kehamilan->lastPage(); $i++)
+                                        <li class="page-item {{ $kehamilan->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                               href="{{ $kehamilan->url($i) }}#kehamilan-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next Page Link --}}
+                                    <li class="page-item {{ $kehamilan->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                           href="{{ $kehamilan->appends(['kehamilan_page' => $kehamilan->currentPage()])->nextPageUrl() }}#kehamilan-content"
+                                           aria-label="Next">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Imunisasi Content -->
+            <div class="tab-pane fade" id="imunisasi-content" role="tabpanel" aria-labelledby="imunisasi-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Imunisasi</h5>
+                            <div class="search-container" style="width: 250px;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" class="form-control" id="searchimunisasi" placeholder="Cari imunisasi..." onkeyup="searchTable('imunisasiTable', this.value)">
+                            </div>
+                        </div>
+
+                        @if(session('imunisasi_success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('imunisasi_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="imunisasi-table-container">
+                            <table class="table table-hover mb-0" id="imunisasiTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Jenis imunisasi</th>
+                                        <th>Tanggal imunisasi</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($imunisasi as $imun)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary">{{ substr($imun->masyarakat->nama ?? '??', 0, 2) }}</div>
+                                                    <span class="ms-2">{{ $imun->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ $imun->jenis_imunisasi ?? '-' }}</td>
+                                            <td>{{ isset($imun->tanggal_imunisasi) ? \Carbon\Carbon::parse($imun->tanggal_imunisasi)->format('d/m/Y') : '-' }}</td>
+                                            <td class="text-center action-buttons">
+                                                <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">Tidak ada data imunisasi</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination for imunisasi -->
+                        @if($imunisasi->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for imunisasi">
+                                <ul class="pagination">
+                                    {{-- Previous Page Link --}}
+                                    <li class="page-item {{ $imunisasi->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                           href="{{ $imunisasi->appends(['imunisasi_page' => $imunisasi->currentPage()])->previousPageUrl() }}#imunisasi-content"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        </a>
+                                    </li>
+
+                                    {{-- Pagination Elements --}}
+                                    @for($i = 1; $i <= $imunisasi->lastPage(); $i++)
+                                        <li class="page-item {{ $imunisasi->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                               href="{{ $imunisasi->url($i) }}#imunisasi-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next Page Link --}}
+                                    <li class="page-item {{ $imunisasi->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                           href="{{ $imunisasi->appends(['imunisasi_page' => $imunisasi->currentPage()])->nextPageUrl() }}#imunisasi-content"
+                                           aria-label="Next">
+                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-function handleLogout() {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Anda akan keluar dari aplikasi!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Logout',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Tampilkan notifikasi berhasil logout
+    <script>
+        function handleLogout() {
             Swal.fire({
-                title: 'Berhasil Logout!',
-                text: 'Anda telah keluar dari aplikasi',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: true
-            }).then(() => {
-                // Redirect setelah notifikasi selesai
-                window.location.href = '/';
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan keluar dari aplikasi!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Tampilkan notifikasi berhasil logout
+                    Swal.fire({
+                        title: 'Berhasil Logout!',
+                        text: 'Anda telah keluar dari aplikasi',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: true
+                    }).then(() => {
+                        // Redirect setelah notifikasi selesai
+                        window.location.href = '/';
+                    });
+                }
             });
         }
-    });
-}
 
         // Add navbar animation code
         document.addEventListener('DOMContentLoaded', function() {
@@ -460,7 +875,39 @@ function handleLogout() {
                 // Update indicator position
                 indicator.style.top = top + 'px';
             }
+
+            // Handle tab persistence on page reload
+            const url = window.location.href;
+            if (url.includes('#')) {
+                const tabId = url.split('#')[1];
+                const tabElement = document.querySelector(`button[data-bs-target="#${tabId}"]`);
+                if (tabElement) {
+                    const tabTrigger = new bootstrap.Tab(tabElement);
+                    tabTrigger.show();
+                }
+            }
         });
+
+        // Function for table search
+        function searchTable(tableId, query) {
+            const table = document.getElementById(tableId);
+            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    const cellText = cells[j].textContent || cells[j].innerText;
+                    if (cellText.toLowerCase().indexOf(query.toLowerCase()) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                rows[i].style.display = found ? '' : 'none';
+            }
+        }
     </script>
 </body>
 </html>

@@ -557,7 +557,7 @@
             <h2 class="fs-3 fw-bold m-0">Dashboard</h2>
         </div>
 
-        <!-- Card 1 yang sudah diperlebar -->
+        {{-- <!-- Card 1 yang sudah diperlebar -->
         <div class="card1">
             <div class="decorative-dots">
                 <div class="dot dot-1"></div>
@@ -584,7 +584,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row g-4 mb-4">
             <!-- Card 1 - Total Users -->
@@ -659,6 +659,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
+                                        <th>NIK</th>
                                         <th>No. HP</th>
                                         <th>Gender</th>
                                         <th>Alamat</th>
@@ -674,12 +675,10 @@
                                                     <span class="text-truncate">{{ $warga->nama }}</span>
                                                 </div>
                                             </td>
+                                            <td class="text-truncate">{{ $warga->nik }}</td>
                                             <td class="text-truncate">{{ $warga->no_hp }}</td>
-                                            <td>
-                                                <span class="badge {{ $warga->jenis_kelamin == 'Laki-laki' ? 'bg-info' : 'bg-pink' }}">
-                                                    {{ $warga->jenis_kelamin == 'Laki-laki' ? 'L' : 'P' }}
-                                                </span>
-                                            </td>
+                                            <td class="text-truncate">{{ $warga->jenis_kelamin }}</td>
+
                                             <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
                                             <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td>
                                         </tr>
