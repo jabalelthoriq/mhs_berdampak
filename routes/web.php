@@ -16,9 +16,8 @@ Route::get('/test', [DashboardController::class, 'test'])->name('test');
 
 
 // Protected routes
-Route::middleware('auth')->group(function () {
+// Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/petugas/dashboard', [DashboardController::class, 'petugasDashboard'])->name('petugas.dashboard');
     Route::get('/input', [InputController::class, 'index'])->name('input');
     Route::get('/data', [DataController::class, 'index'])->name('data');
-});
+// });

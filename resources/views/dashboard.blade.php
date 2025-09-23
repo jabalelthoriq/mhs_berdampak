@@ -31,21 +31,61 @@
        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
        display: flex;
        flex-direction: column;
-       align-items: center;
-       padding: 20px 0;
+       align-items: flex-start;
+       padding-left: 16px;
+       /* padding: 20px 0; */
        z-index: 1000;
        border-radius: 15px 15px 15px 15px;
        margin: 30px 30px;
+       transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
    }
+
+   .vertical-navbar:hover {
+       width: 250px;
+       align-items: flex-start;
+       padding-left: 16px;
+
+   }
+    .vertical-navbar:hover .nav-text {
+       opacity: 1;
+       visibility: visible;
+   }
+
+   .nav-text {
+    margin-left: 15px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.8s ease;
+
+    /* Font styling */
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  
+}
+
+
+.vertical-navbar:hover .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+}
+
 
    .nav-icon a {
        text-decoration: none;
        color: inherit;
        display: flex;
        align-items: center;
-       justify-content: center;
+        justify-content: flex-start;
        width: 100%;
        height: 100%;
+
+
+
    }
 
    .nav-indicator {
@@ -65,23 +105,28 @@
        margin: 12px 0;
        display: flex;
        align-items: center;
-       justify-content: center;
+        justify-content: flex-start;
        border-radius: 8px;
        color: #777;
        font-size: 20px;
        cursor: pointer;
        transition: all 0.2s ease;
+       padding-left: 14px;
+
    }
 
    .nav-icon:hover {
        background-color: #f0f0f0;
-       transform: scale(1.2);
+       transform: scale(1.05);
+        width: 90%;
    }
 
    .nav-icon.active {
        background-color: #00b8d4;
        color: white;
        transition: background-color 1s ease;
+        width: 90%;
+        padding-left: 19px;
    }
 
    .nav-icon.logout {
@@ -149,9 +194,22 @@
     margin: 0 0 12px 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 8px;
     transition: all 0.2s ease;
+    padding-right: 14px;
+
+}
+
+.nav-logo span {
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.8s ease;
+    color: #00b8d4;
+    width: 20px;
+        height: 20px;
 }
 
     .nav-logo img {
@@ -527,27 +585,32 @@
     <div class="vertical-navbar">
         <div class="nav-logo">
             <img src="{{ asset('image/logo polije.png') }}" alt="Logo">
+            <span class="nav-text">POLIJE SIP</span>
         </div>
         <div class="nav-icon active">
             <a href="dashboard">
                 <i class="fas fa-th-large"></i>
+                 <span class="nav-text">Dahboard</span>
             </a>
         </div>
 
         <div class="nav-icon">
             <a href="input">
             <i class="fas fa-edit"></i>
+             <span class="nav-text">Input Data</span>
             </a>
         </div>
 
         <div class="nav-icon">
             <a href="data">
                 <i class="fas fa-clinic-medical"></i>
+                 <span class="nav-text">Data Masyarakat</span>
             </a>
         </div>
 
         <div class="nav-icon logout" onclick="handleLogout()">
             <i class="fas fa-sign-out-alt"></i>
+             <span class="nav-text">Logout</span>
         </div>
     </div>
 
@@ -806,17 +869,26 @@
     @endif
 
     function handleLogout() {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda akan keluar dari aplikasi!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Logout',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Anda akan keluar dari aplikasi!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Kirim POST request ke route logout
+            fetch("{{ route('logout') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                    "Accept": "application/json"
+                }
+            })
+            .then(() => {
                 Swal.fire({
                     title: 'Berhasil Logout!',
                     text: 'Anda telah keluar dari aplikasi',
@@ -826,9 +898,14 @@
                 }).then(() => {
                     window.location.href = '/';
                 });
-            }
-        });
-    }
+            })
+            .catch((error) => {
+                console.error("Logout error:", error);
+            });
+        }
+    });
+}
+
 
     document.addEventListener('DOMContentLoaded', function() {
         const navIcons = document.querySelectorAll('.nav-icon:not(:first-child):not(.logout)');
