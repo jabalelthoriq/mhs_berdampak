@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
-class InputController
+class SettingController
 {
 
      public function __construct()
@@ -28,6 +28,6 @@ class InputController
     }
     public function index()
     {
-        return view('input');
+        return view('setting');
     }
 }

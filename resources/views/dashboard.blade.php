@@ -64,7 +64,7 @@
     font-size: 15px;
     font-weight: 500;
     letter-spacing: 0.3px;
-  
+
 }
 
 
@@ -594,17 +594,17 @@
             </a>
         </div>
 
-        <div class="nav-icon">
-            <a href="input">
-            <i class="fas fa-edit"></i>
-             <span class="nav-text">Input Data</span>
-            </a>
-        </div>
 
         <div class="nav-icon">
             <a href="data">
                 <i class="fas fa-clinic-medical"></i>
                  <span class="nav-text">Data Masyarakat</span>
+            </a>
+        </div>
+         <div class="nav-icon">
+            <a href="setting">
+            <i class="fas fa-cog"></i>
+             <span class="nav-text">Pengaturan</span>
             </a>
         </div>
 

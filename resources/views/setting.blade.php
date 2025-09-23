@@ -354,21 +354,19 @@
 
         </div>
 
-
-        <div class="nav-icon active">
-            <a href="input">
-            <i class="fas fa-edit"></i>
-             <span class="nav-text">Input Data</span>
-            </a>
-
-        </div>
-
         <div class="nav-icon">
             <a href="data">
                 <i class="fas fa-clinic-medical"></i>
                 <span class="nav-text">Data Masyarakat</span>
             </a>
 
+        </div>
+
+          <div class="nav-icon active">
+            <a href="setting">
+            <i class="fas fa-cog"></i>
+             <span class="nav-text">Pengaturan</span>
+            </a>
         </div>
 
         <div class="nav-icon logout" onclick="handleLogout()">
@@ -406,6 +404,131 @@
                 </button>
             </li>
         </ul>
+
+
+
+<div class="tab-content" id="kesehatanTabsContent">
+
+    <!-- Tab Masyarakat -->
+    <div class="tab-pane fade show active" id="masyarakat-content" role="tabpanel" aria-labelledby="masyarakat-tab">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-3">Form Data Masyarakat</h5>
+            <form>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">NIK</label>
+                        <input type="text" class="form-control" placeholder="Masukkan NIK">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alamat</label>
+                        <input type="text" class="form-control" placeholder="Masukkan alamat">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Jenis Kelamin</label>
+                        <select class="form-select">
+                            <option value="">Pilih...</option>
+                            <option>Laki-laki</option>
+                            <option>Perempuan</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tab Kunjungan -->
+    <div class="tab-pane fade" id="kunjungan-content" role="tabpanel" aria-labelledby="kunjungan-tab">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-3">Form Kunjungan Kesehatan</h5>
+            <form>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Tanggal Kunjungan</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Pasien</label>
+                        <input type="text" class="form-control" placeholder="Nama pasien">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Keluhan</label>
+                        <textarea class="form-control" rows="3" placeholder="Tuliskan keluhan..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tab Kehamilan -->
+    <div class="tab-pane fade" id="kehamilan-content" role="tabpanel" aria-labelledby="kehamilan-tab">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-3">Form Data Kehamilan</h5>
+            <form>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Ibu</label>
+                        <input type="text" class="form-control" placeholder="Masukkan nama ibu">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Usia Kehamilan (minggu)</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 24">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tanggal Periksa</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Catatan</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tab Imunisasi -->
+    <div class="tab-pane fade" id="imunisasi-content" role="tabpanel" aria-labelledby="imunisasi-tab">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-3">Form Imunisasi</h5>
+            <form>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nama Anak</label>
+                        <input type="text" class="form-control" placeholder="Masukkan nama anak">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Jenis Imunisasi</label>
+                        <select class="form-select">
+                            <option value="">Pilih...</option>
+                            <option>BCG</option>
+                            <option>DPT</option>
+                            <option>Polio</option>
+                            <option>Campak</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Tanggal Imunisasi</label>
+                        <input type="date" class="form-control">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
 
 
     </div>
