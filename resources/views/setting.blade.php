@@ -378,160 +378,104 @@
      <!-- Main Content -->
      <div class="main-content">
         <div class="header-container">
-            <h2 class="fs-3 fw-bold m-0">Input Data</h2>
+            <h2 class="fs-3 fw-bold m-0">Pengaturan</h2>
         </div>
 
-         <!-- Tab navigation -->
-        <ul class="nav nav-tabs" id="kesehatanTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="masyarakat-tab" data-bs-toggle="tab" data-bs-target="#masyarakat-content" type="button" role="tab" aria-controls="masyarakat-content" aria-selected="true">
-                    <i class="fas fa-users me-2"></i>Masyarakat
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="kunjungan-tab" data-bs-toggle="tab" data-bs-target="#kunjungan-content" type="button" role="tab" aria-controls="kunjungan-content" aria-selected="false">
-                    <i class="fas fa-hospital-user me-2"></i>Kunjungan
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="kehamilan-tab" data-bs-toggle="tab" data-bs-target="#kehamilan-content" type="button" role="tab" aria-controls="kehamilan-content" aria-selected="false">
-                    <i class="fas fa-baby me-2"></i>Kehamilan
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="imunisasi-tab" data-bs-toggle="tab" data-bs-target="#imunisasi-content" type="button" role="tab" aria-controls="imunisasi-content" aria-selected="false">
-                    <i class="fas fa-syringe me-2"></i>Imunisasi
-                </button>
-            </li>
-        </ul>
+       <!-- Tab navigation -->
+<ul class="nav nav-tabs" id="pengaturanTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-content" type="button" role="tab" aria-controls="profile-content" aria-selected="true">
+            <i class="fas fa-user-circle me-2"></i>Profile
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security-content" type="button" role="tab" aria-controls="security-content" aria-selected="false">
+            <i class="fas fa-shield-alt me-2"></i>Keamanan
+        </button>
+    </li>
+</ul>
 
+<div class="tab-content" id="pengaturanTabsContent">
 
-
-<div class="tab-content" id="kesehatanTabsContent">
-
-    <!-- Tab Masyarakat -->
-    <div class="tab-pane fade show active" id="masyarakat-content" role="tabpanel" aria-labelledby="masyarakat-tab">
+    <!-- Tab Profile -->
+    <div class="tab-pane fade show active" id="profile-content" role="tabpanel" aria-labelledby="profile-tab">
         <div class="card p-4">
-            <h5 class="fw-bold mb-3">Form Data Masyarakat</h5>
-            <form>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nama lengkap">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">NIK</label>
-                        <input type="text" class="form-control" placeholder="Masukkan NIK">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Alamat</label>
-                        <input type="text" class="form-control" placeholder="Masukkan alamat">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Lahir</label>
-                        <input type="date" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Jenis Kelamin</label>
-                        <select class="form-select">
-                            <option value="">Pilih...</option>
-                            <option>Laki-laki</option>
-                            <option>Perempuan</option>
-                        </select>
-                    </div>
+            <h5 class="fw-bold mb-4"><i class="fas fa-id-card me-2 text-primary"></i>Pengaturan Profile</h5>
+            <div class="row">
+                <!-- Foto Profil -->
+                <div class="col-md-4 text-center border-end d-flex flex-column align-items-center justify-content-center">
+                    <img id="previewFoto" src="https://via.placeholder.com/150" alt="Foto Profil" class="rounded-circle shadow mb-3" width="150" height="150">
+                    <input type="file" class="form-control mt-2" onchange="previewImage(event)">
                 </div>
-                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
-            </form>
+
+                <!-- Data Profile -->
+                <div class="col-md-8">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" placeholder="Masukkan nama lengkap" value="Admin SIP">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" placeholder="Masukkan email" value="admin@example.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nomor Telepon</label>
+                                <input type="text" class="form-control" placeholder="Masukkan nomor telepon" value="08123456789">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Alamat</label>
+                                <input type="text" class="form-control" placeholder="Alamat anda">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-4 px-4">
+                            <i class="fas fa-save me-2"></i>Simpan Perubahan
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Tab Kunjungan -->
-    <div class="tab-pane fade" id="kunjungan-content" role="tabpanel" aria-labelledby="kunjungan-tab">
+    <!-- Tab Keamanan -->
+    <div class="tab-pane fade" id="security-content" role="tabpanel" aria-labelledby="security-tab">
         <div class="card p-4">
-            <h5 class="fw-bold mb-3">Form Kunjungan Kesehatan</h5>
+            <h5 class="fw-bold mb-4"><i class="fas fa-lock me-2 text-danger"></i>Pengaturan Keamanan</h5>
             <form>
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Kunjungan</label>
-                        <input type="date" class="form-control">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 p-3 h-100">
+                            <h6 class="fw-bold text-muted mb-3"><i class="fas fa-key me-2"></i>Password Lama</h6>
+                            <input type="password" class="form-control" placeholder="Masukkan password lama">
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Nama Pasien</label>
-                        <input type="text" class="form-control" placeholder="Nama pasien">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 p-3 h-100">
+                            <h6 class="fw-bold text-muted mb-3"><i class="fas fa-lock me-2"></i>Password Baru</h6>
+                            <input type="password" class="form-control" placeholder="Masukkan password baru">
+                        </div>
                     </div>
-                    <div class="col-12">
-                        <label class="form-label">Keluhan</label>
-                        <textarea class="form-control" rows="3" placeholder="Tuliskan keluhan..."></textarea>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Tab Kehamilan -->
-    <div class="tab-pane fade" id="kehamilan-content" role="tabpanel" aria-labelledby="kehamilan-tab">
-        <div class="card p-4">
-            <h5 class="fw-bold mb-3">Form Data Kehamilan</h5>
-            <form>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Nama Ibu</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nama ibu">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Usia Kehamilan (minggu)</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 24">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Periksa</label>
-                        <input type="date" class="form-control">
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Catatan</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0 p-3 h-100">
+                            <h6 class="fw-bold text-muted mb-3"><i class="fas fa-check me-2"></i>Konfirmasi Password</h6>
+                            <input type="password" class="form-control" placeholder="Ulangi password baru">
+                        </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Tab Imunisasi -->
-    <div class="tab-pane fade" id="imunisasi-content" role="tabpanel" aria-labelledby="imunisasi-tab">
-        <div class="card p-4">
-            <h5 class="fw-bold mb-3">Form Imunisasi</h5>
-            <form>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Nama Anak</label>
-                        <input type="text" class="form-control" placeholder="Masukkan nama anak">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Jenis Imunisasi</label>
-                        <select class="form-select">
-                            <option value="">Pilih...</option>
-                            <option>BCG</option>
-                            <option>DPT</option>
-                            <option>Polio</option>
-                            <option>Campak</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Imunisasi</label>
-                        <input type="date" class="form-control">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+                <button type="submit" class="btn btn-danger mt-4 px-4">
+                    <i class="fas fa-sync-alt me-2"></i>Ubah Password
+                </button>
             </form>
         </div>
     </div>
 
 </div>
+</div>
 
 
 
-    </div>
+
 
 
 
@@ -657,6 +601,19 @@ function handleLogout() {
                 indicator.style.top = top + 'px';
             }
         });
+
+
+
+
+    // Preview Foto Profil
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById("previewFoto").src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
     </script>
 </body>
 </html>

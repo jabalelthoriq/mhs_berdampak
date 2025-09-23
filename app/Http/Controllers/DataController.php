@@ -32,23 +32,26 @@ class DataController
         }
     }
     public function index(Request $request)
-    {
-
+{
     $masyarakatPage = $request->get('masyarakat_page', 1);
-    $masyarakat = Masyarakat::paginate(10, ['*'], 'masyarakat_page', $masyarakatPage);
-
+    $masyarakat = Masyarakat::orderBy('created_at', 'desc')
+        ->paginate(10, ['*'], 'masyarakat_page', $masyarakatPage);
 
     $kunjunganPage = $request->get('kunjungan_page', 1);
-    $kunjungan = KunjunganKesehatan::with('masyarakat')->paginate(10, ['*'], 'kunjungan_page', $kunjunganPage);
-
+    $kunjungan = KunjunganKesehatan::with('masyarakat')
+        ->orderBy('tanggal_kunjungan', 'desc')
+        ->paginate(10, ['*'], 'kunjungan_page', $kunjunganPage);
 
     $kehamilanPage = $request->get('kehamilan_page', 1);
-    $kehamilan = Kehamilan::paginate(10, ['*'], 'kehamilan_page', $kehamilanPage);
-
+    $kehamilan = Kehamilan::orderBy('usia_kehamilan', 'desc')
+        ->paginate(10, ['*'], 'kehamilan_page', $kehamilanPage);
 
     $imunisasiPage = $request->get('imunisasi_page', 1);
-    $imunisasi = Imunisasi::with('masyarakat')->paginate(10, ['*'], 'imunisasi_page', $imunisasiPage);
+    $imunisasi = Imunisasi::with('masyarakat')
+        ->orderBy('tanggal_imunisasi', 'desc')
+        ->paginate(10, ['*'], 'imunisasi_page', $imunisasiPage);
 
     return view('data', compact('masyarakat', 'kunjungan', 'kehamilan', 'imunisasi'));
-    }
+}
+
 }

@@ -449,9 +449,14 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="card-title fw-bold">Tabel Data Masyarakat</h5>
-                            <div class="search-container" style="width: 250px;">
-                                <i class="fas fa-search"></i>
-                                <input type="text" class="form-control" id="searchmasyarakat" placeholder="Cari masyarakat..." onkeyup="searchTable('masyarakatTable', this.value)">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchmasyarakat" placeholder="Cari masyarakat..." onkeyup="searchTable('masyarakatTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalMasyarakat">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
                             </div>
                         </div>
 
@@ -540,15 +545,93 @@
                 </div>
             </div>
 
+
+          <!-- Form Input Masyarakat -->
+<div class="modal fade" id="modalMasyarakat" tabindex="-1" aria-labelledby="modalMasyarakatLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalMasyarakatLabel">Tambah Data Masyarakat</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('masyarakat.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nama -->
+            <div class="col-md-4">
+              <label class="form-label">Nama</label>
+              <input type="text" name="nama" class="form-control" maxlength="100" required>
+            </div>
+
+            <!-- NIK -->
+            <div class="col-md-4">
+              <label class="form-label">NIK</label>
+              <input type="text" name="nik" class="form-control" maxlength="16" required>
+            </div>
+
+            <!-- No HP -->
+            <div class="col-md-4">
+              <label class="form-label">Nomor Telepon</label>
+              <input type="text" name="no_hp" class="form-control" maxlength="15">
+            </div>
+
+            <!-- Jenis Kelamin -->
+            <div class="col-md-4">
+              <label class="form-label">Jenis Kelamin</label>
+              <select name="jenis_kelamin" class="form-select" required>
+                <option value="">--Pilih--</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+
+            <!-- Tanggal Lahir -->
+            <div class="col-md-4">
+              <label class="form-label">Tanggal Lahir</label>
+              <input type="date" name="tanggal_lahir" class="form-control">
+            </div>
+
+            <!-- Pekerjaan -->
+            <div class="col-md-4">
+              <label class="form-label">Pekerjaan</label>
+              <input type="text" name="pekerjaan" class="form-control" maxlength="100">
+            </div>
+
+            <!-- Alamat -->
+            <div class="col-md-12">
+              <label class="form-label">Alamat</label>
+              <textarea name="alamat" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
             <!-- Kunjungan Content -->
             <div class="tab-pane fade" id="kunjungan-content" role="tabpanel" aria-labelledby="kunjungan-tab">
                 <div class="card mt-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="card-title fw-bold">Tabel Data Kunjungan</h5>
-                            <div class="search-container" style="width: 250px;">
-                                <i class="fas fa-search"></i>
-                                <input type="text" class="form-control" id="searchkunjungan" placeholder="Cari kunjungan..." onkeyup="searchTable('kunjunganTable', this.value)">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchkunjungan" placeholder="Cari kunjungan..." onkeyup="searchTable('kunjunganTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalKunjungan">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
                             </div>
                         </div>
 
@@ -637,15 +720,82 @@
                 </div>
             </div>
 
+
+
+<!-- Form Input Kunjungan -->
+<div class="modal fade" id="modalKunjungan" tabindex="-1" aria-labelledby="modalKunjunganLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalKunjunganLabel">Tambah Data Kunjungan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('kunjungan.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Pilih Masyarakat -->
+            <div class="col-md-6">
+              <label class="form-label">Nama Masyarakat</label>
+              <select name="masyarakat_id" class="form-select" required>
+                <option value="">--Pilih Masyarakat--</option>
+                @foreach($masyarakat as $warga)
+                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- Tanggal Kunjungan -->
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Kunjungan</label>
+              <input type="date" name="tanggal_kunjungan" class="form-control" required>
+            </div>
+
+            <!-- Keluhan -->
+            <div class="col-md-4">
+              <label class="form-label">Keluhan</label>
+              <input type="text" name="keluhan" class="form-control" required>
+            </div>
+
+            <!-- Diagnosa -->
+            <div class="col-md-4">
+              <label class="form-label">Diagnosa</label>
+              <input type="text" name="diagnosa" class="form-control">
+            </div>
+
+            <!-- Tindakan -->
+            <div class="col-md-4">
+              <label class="form-label">Tindakan</label>
+              <input type="text" name="tindakan" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
             <!-- Kehamilan Content -->
             <div class="tab-pane fade" id="kehamilan-content" role="tabpanel" aria-labelledby="kehamilan-tab">
                 <div class="card mt-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="card-title fw-bold">Tabel Data Kehamilan</h5>
-                            <div class="search-container" style="width: 250px;">
-                                <i class="fas fa-search"></i>
-                                <input type="text" class="form-control" id="searchKehamilan" placeholder="Cari kehamilan..." onkeyup="searchTable('kehamilanTable', this.value)">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchKehamilan" placeholder="Cari kehamilan..." onkeyup="searchTable('kehamilanTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalKehamilan">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
                             </div>
                         </div>
 
@@ -672,8 +822,8 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-primary">{{ substr($kesehatan->masyarakat->nama ?? '??', 0, 2) }}</div>
-                                                    <span class="ms-2">{{ $kesehatan->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
+                                                    <div class="avatar bg-primary">{{ substr($hamil->masyarakat->nama ?? '??', 0, 2) }}</div>
+                                                    <span class="ms-2">{{ $hamil->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
                                                 </div>
                                             </td>
                                             <td>{{ $hamil->hpl ?? '-' }}</td>
@@ -734,18 +884,80 @@
                 </div>
             </div>
 
+
+
+
+<!-- Form Input Kehamilan -->
+<div class="modal fade" id="modalKehamilan" tabindex="-1" aria-labelledby="modalKehamilanLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalKehamilanLabel">Tambah Data Kehamilan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('kehamilan.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nama Masyarakat -->
+            <div class="col-md-6">
+              <label class="form-label">Nama Masyarakat</label>
+              <select name="masyarakat_id" class="form-select" required>
+                <option value="">--Pilih Masyarakat--</option>
+                @foreach($masyarakat as $warga)
+                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- HPL -->
+            <div class="col-md-6">
+              <label class="form-label">HPL</label>
+              <input type="date" name="hpl" class="form-control">
+            </div>
+
+            <!-- Usia Kehamilan -->
+            <div class="col-md-6">
+              <label class="form-label">Usia Kehamilan (minggu)</label>
+              <input type="number" name="usia_kehamilan" class="form-control">
+            </div>
+
+            <!-- Catatan -->
+            <div class="col-md-12">
+              <label class="form-label">Catatan</label>
+              <textarea name="catatan" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
             <!-- Imunisasi Content -->
             <div class="tab-pane fade" id="imunisasi-content" role="tabpanel" aria-labelledby="imunisasi-tab">
                 <div class="card mt-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="card-title fw-bold">Tabel Data Imunisasi</h5>
-                            <div class="search-container" style="width: 250px;">
-                                <i class="fas fa-search"></i>
-                                <input type="text" class="form-control" id="searchimunisasi" placeholder="Cari imunisasi..." onkeyup="searchTable('imunisasiTable', this.value)">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchimunisasi" placeholder="Cari imunisasi..." onkeyup="searchTable('imunisasiTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalImunisasi">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
                             </div>
                         </div>
-
                         @if(session('imunisasi_success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('imunisasi_success') }}
@@ -830,6 +1042,54 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Form Input Imunisasi -->
+<div class="modal fade" id="modalImunisasi" tabindex="-1" aria-labelledby="modalImunisasiLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalImunisasiLabel">Tambah Data Imunisasi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('imunisasi.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nama Masyarakat -->
+            <div class="col-md-6">
+              <label class="form-label">Nama Masyarakat</label>
+              <select name="masyarakat_id" class="form-select" required>
+                <option value="">--Pilih Masyarakat--</option>
+                @foreach($masyarakat as $warga)
+                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- Jenis Imunisasi -->
+            <div class="col-md-6">
+              <label class="form-label">Jenis Imunisasi</label>
+              <input type="text" name="jenis_imunisasi" class="form-control" maxlength="100" required>
+            </div>
+
+            <!-- Tanggal Imunisasi -->
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Imunisasi</label>
+              <input type="date" name="tanggal_imunisasi" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -984,6 +1244,10 @@
                 rows[i].style.display = found ? '' : 'none';
             }
         }
+
+
+
+
     </script>
 </body>
 </html>
