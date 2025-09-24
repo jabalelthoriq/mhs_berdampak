@@ -47,10 +47,7 @@ class DashboardController
             'activePage' => 'dashboard'
         ]);
     }
-    public function petugasDashboard()
-    {
-        return view('petugas.dashboard');
-    }
+    
 
     public function test()
     {

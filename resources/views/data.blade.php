@@ -377,6 +377,31 @@
 
 </style>
 <body>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    Swal.fire({
+        title: 'Gagal!',
+        text: "{{ session('error') }}",
+        icon: 'error',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
     <div class="vertical-navbar">
         <div class="nav-logo">
             <img src="{{ asset('image/logo polije.png') }}" alt="Logo">
@@ -478,6 +503,7 @@
                                         <th>Alamat</th>
                                         <th>Tanggal lahir</th>
                                         <th>Pekerjaan</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -495,6 +521,21 @@
                                             <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
                                             <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td>
                                             <td class="text-truncate">{{ $warga->pekerjaan }}</td>
+
+                                            <td class="text-center action-buttons">
+                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+
+                                            <form action="{{ route('masyarakat.destroy', $warga->masyarakat_id) }}"
+                                                method="POST" class="d-inline delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+
+
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -651,6 +692,7 @@
                                         <th>Diagnosa</th>
                                         <th>Tindakan</th>
                                         <th>Tanggal kunjungan</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -669,6 +711,17 @@
                                             <td class="text-truncate">{{ $kesehatan->tindakan }}</td>
                                             <td class="text-truncate">
                                                 {{ \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') }}
+                                            </td>
+                                            <td class="text-center action-buttons">
+                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                                <form action="{{ route('kunjungan.destroy', $kesehatan->kunjungan_id) }}"
+                                                method="POST" class="d-inline delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -830,9 +883,15 @@
                                             <td>{{ $hamil->usia_kehamilan ?? '-' }}</td>
                                             <td>{{ $hamil->catatan ?? '-' }}</td>
                                             <td class="text-center action-buttons">
-                                                <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
                                                 <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                                <form action="{{ route('kehamilan.destroy', $hamil->kehamilan_id) }}"
+                                                    method="POST" class="d-inline delete-form">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -987,9 +1046,15 @@
                                             <td>{{ $imun->jenis_imunisasi ?? '-' }}</td>
                                             <td>{{ isset($imun->tanggal_imunisasi) ? \Carbon\Carbon::parse($imun->tanggal_imunisasi)->format('d/m/Y') : '-' }}</td>
                                             <td class="text-center action-buttons">
-                                                <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
                                                 <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
-                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                                <form action="{{ route('imunisasi.destroy', $imun->imunisasi_id) }}"
+                                                    method="POST" class="d-inline delete-form">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
@@ -1244,6 +1309,32 @@
                 rows[i].style.display = found ? '' : 'none';
             }
         }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.delete-form').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // cegah submit langsung
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
+
+
 
 
 

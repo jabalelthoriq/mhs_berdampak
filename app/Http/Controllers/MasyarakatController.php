@@ -21,7 +21,9 @@ class MasyarakatController
 
         Masyarakat::create($request->all());
 
-        return redirect()->back()->with('success', 'Data masyarakat berhasil ditambahkan.');
+        return redirect()
+        ->route('data', ['masyarakat_page' => 1])
+        ->with('success', 'Data masyarakat berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -40,7 +42,9 @@ class MasyarakatController
 
         $masyarakat->update($request->all());
 
-        return redirect()->back()->with('success', 'Data masyarakat berhasil diperbarui.');
+        return redirect()
+        ->route('data', ['masyarakat_page' => $request->get('page', 1)]) // balik ke page terakhir
+        ->with('success', 'Data masyarakat berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -48,6 +52,8 @@ class MasyarakatController
         $masyarakat = Masyarakat::findOrFail($id);
         $masyarakat->delete();
 
-        return redirect()->back()->with('success', 'Data masyarakat berhasil dihapus.');
+         return redirect()
+        ->route('data', ['masyarakat_page' => request()->get('page', 1)])
+        ->with('success', 'Data masyarakat berhasil dihapus.');
     }
 }

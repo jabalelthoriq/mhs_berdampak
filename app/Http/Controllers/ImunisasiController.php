@@ -18,7 +18,9 @@ class ImunisasiController
 
         Imunisasi::create($request->all());
 
-        return redirect()->back()->with('imunisasi_success', 'Data imunisasi berhasil ditambahkan.');
+       return redirect()
+        ->route('data', ['imunisasi_page' => 1])
+        ->with('success', 'Data imunisasi berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -33,7 +35,9 @@ class ImunisasiController
 
         $imunisasi->update($request->all());
 
-        return redirect()->back()->with('imunisasi_success', 'Data imunisasi berhasil diperbarui.');
+       return redirect()
+        ->route('data', ['imunisasi_page' => $request->get('page', 1)]) // balik ke page terakhir
+        ->with('success', 'Data imunisasi berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -41,6 +45,8 @@ class ImunisasiController
         $imunisasi = Imunisasi::findOrFail($id);
         $imunisasi->delete();
 
-        return redirect()->back()->with('imunisasi_success', 'Data imunisasi berhasil dihapus.');
+         return redirect()
+        ->route('data', ['imunisasi_page' => request()->get('page', 1)])
+        ->with('success', 'Data imunisasi berhasil dihapus.');
     }
 }

@@ -20,7 +20,9 @@ class KunjunganController
 
         KunjunganKesehatan::create($request->all());
 
-        return redirect()->back()->with('kesehatan_success', 'Data kunjungan berhasil ditambahkan.');
+        return redirect()
+        ->route('data', ['kunjungan_page' => 1])
+        ->with('success', 'Data kunjungan berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -37,7 +39,9 @@ class KunjunganController
 
         $kunjungan->update($request->all());
 
-        return redirect()->back()->with('kesehatan_success', 'Data kunjungan berhasil diperbarui.');
+        return redirect()
+        ->route('data', ['kunjungan_page' => $request->get('page', 1)]) // balik ke page terakhir
+        ->with('success', 'Data kunjungan berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -45,6 +49,8 @@ class KunjunganController
         $kunjungan = KunjunganKesehatan::findOrFail($id);
         $kunjungan->delete();
 
-        return redirect()->back()->with('kesehatan_success', 'Data kunjungan berhasil dihapus.');
+         return redirect()
+        ->route('data', ['kunjungan_page' => request()->get('page', 1)])
+        ->with('success', 'Data kunjungan berhasil dihapus.');
     }
 }
