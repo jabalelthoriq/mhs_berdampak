@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use App\Models\Masyarakat;
 
 class AuthController
 {
@@ -14,6 +15,14 @@ class AuthController
     {
         return view('login');
     }
+     public function showLandingForm()
+    {
+        $totalMasyarakat = Masyarakat::count();
+        return view('landing',[
+            'totalMasyarakat' => $totalMasyarakat,
+            ]);
+    }
+
 
     public function login(Request $request)
 {
@@ -87,5 +96,6 @@ class AuthController
         'timer' => 2000
     ]);
 }
+
 
 }

@@ -20,8 +20,8 @@ class KehamilanController
         Kehamilan::create($request->all());
 
         return redirect()
-        ->route('data', ['kehamilan_page' => 1])
-        ->with('success', 'Data kehamilan berhasil ditambahkan.');
+            ->to(route('data', ['kehamilan_page' => 1]) . '#kehamilan-content')
+            ->with('success', 'Data kehamilan berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -38,8 +38,10 @@ class KehamilanController
         $kehamilan->update($request->all());
 
         return redirect()
-        ->route('data', ['kehamilan_page' => $request->get('page', 1)]) // balik ke page terakhir
-        ->with('success', 'Data kehamilan berhasil diperbarui.');
+            ->to(route('data', [
+                'kehamilan_page' => $request->get('kehamilan_page', 1)
+            ]) . '#kehamilan-content')
+            ->with('success', 'Data kehamilan berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -47,8 +49,10 @@ class KehamilanController
         $kehamilan = Kehamilan::findOrFail($id);
         $kehamilan->delete();
 
-         return redirect()
-        ->route('data', ['kehamilan_page' => request()->get('page', 1)])
-        ->with('success', 'Data kehamilan berhasil dihapus.');
+        return redirect()
+            ->to(route('data', [
+                'kehamilan_page' => request()->get('kehamilan_page', 1)
+            ]) . '#kehamilan-content')
+            ->with('success', 'Data kehamilan berhasil dihapus.');
     }
 }

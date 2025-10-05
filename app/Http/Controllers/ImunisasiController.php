@@ -11,16 +11,16 @@ class ImunisasiController
     public function store(Request $request)
     {
         $request->validate([
-            'masyarakat_id'    => 'required|exists:masyarakat,masyarakat_id',
-            'jenis_imunisasi'  => 'required|string|max:100',
-            'tanggal_imunisasi'=> 'required|date',
+            'masyarakat_id'     => 'required|exists:masyarakat,masyarakat_id',
+            'jenis_imunisasi'   => 'required|string|max:100',
+            'tanggal_imunisasi' => 'required|date',
         ]);
 
         Imunisasi::create($request->all());
 
-       return redirect()
-        ->route('data', ['imunisasi_page' => 1])
-        ->with('success', 'Data imunisasi berhasil ditambahkan.');
+        return redirect()
+            ->to(route('data', ['imunisasi_page' => 1]) . '#imunisasi-content')
+            ->with('success', 'Data imunisasi berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -28,16 +28,18 @@ class ImunisasiController
         $imunisasi = Imunisasi::findOrFail($id);
 
         $request->validate([
-            'masyarakat_id'    => 'required|exists:masyarakat,masyarakat_id',
-            'jenis_imunisasi'  => 'required|string|max:100',
-            'tanggal_imunisasi'=> 'required|date',
+            'masyarakat_id'     => 'required|exists:masyarakat,masyarakat_id',
+            'jenis_imunisasi'   => 'required|string|max:100',
+            'tanggal_imunisasi' => 'required|date',
         ]);
 
         $imunisasi->update($request->all());
 
-       return redirect()
-        ->route('data', ['imunisasi_page' => $request->get('page', 1)]) // balik ke page terakhir
-        ->with('success', 'Data imunisasi berhasil diperbarui.');
+        return redirect()
+            ->to(route('data', [
+                'imunisasi_page' => $request->get('imunisasi_page', 1)
+            ]) . '#imunisasi-content')
+            ->with('success', 'Data imunisasi berhasil diperbarui.');
     }
 
     public function destroy($id)
@@ -45,8 +47,10 @@ class ImunisasiController
         $imunisasi = Imunisasi::findOrFail($id);
         $imunisasi->delete();
 
-         return redirect()
-        ->route('data', ['imunisasi_page' => request()->get('page', 1)])
-        ->with('success', 'Data imunisasi berhasil dihapus.');
+        return redirect()
+            ->to(route('data', [
+                'imunisasi_page' => request()->get('imunisasi_page', 1)
+            ]) . '#imunisasi-content')
+            ->with('success', 'Data imunisasi berhasil dihapus.');
     }
 }

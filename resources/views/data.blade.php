@@ -8,17 +8,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Dashboard Admin</title>
 </head>
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background-color: #F6F8FB;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        overflow-x: hidden;
-    }
+    body { font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+
 
     .vertical-navbar {
        position: fixed;
@@ -404,13 +403,13 @@
 
     <div class="vertical-navbar">
         <div class="nav-logo">
-            <img src="{{ asset('image/logo polije.png') }}" alt="Logo">
+            <img src="{{ asset('image/logo_polije.png') }}" alt="Logo">
              <span class="nav-text">POLIJE SIP</span>
         </div>
         <div class="nav-icon">
             <a href="dashboard">
                 <i class="fas fa-th-large"></i>
-                 <span class="nav-text">Dahboard</span>
+                 <span class="nav-text">Dashboard</span>
             </a>
         </div>
 
@@ -485,13 +484,6 @@
                             </div>
                         </div>
 
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
                         <div class="table-responsive table-container" id="masyarakat-table-container">
                             <table class="table table-hover mb-0" id="masyarakatTable">
                                 <thead>
@@ -499,10 +491,10 @@
                                         <th>Nama</th>
                                         <th>NIK</th>
                                         <th>Nomor telepon</th>
-                                        <th>Jenis kelamin</th>
+                                        {{-- <th>Jenis kelamin</th> --}}
                                         <th>Alamat</th>
-                                        <th>Tanggal lahir</th>
-                                        <th>Pekerjaan</th>
+                                        {{-- <th>Tanggal lahir</th> --}}
+                                        {{-- <th>Pekerjaan</th> --}}
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -517,29 +509,39 @@
                                             </td>
                                             <td class="text-truncate">{{ $warga->nik }}</td>
                                             <td class="text-truncate">{{ $warga->no_hp }}</td>
-                                            <td class="text-truncate">{{ $warga->jenis_kelamin }}</td>
+                                            {{-- <td class="text-truncate">{{ $warga->jenis_kelamin }}</td> --}}
                                             <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
-                                            <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td>
-                                            <td class="text-truncate">{{ $warga->pekerjaan }}</td>
+                                            {{-- <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td> --}}
+                                            {{-- <td class="text-truncate">{{ $warga->pekerjaan }}</td> --}}
 
                                             <td class="text-center action-buttons">
-                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                            <!-- Tombol Lihat -->
+                                            <button class="btn btn-sm btn-info"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#detailMasyarakat{{ $warga->masyarakat_id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
 
+                                            <!-- Tombol Edit -->
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+
+                                            <!-- Tombol Hapus -->
                                             <form action="{{ route('masyarakat.destroy', $warga->masyarakat_id) }}"
                                                 method="POST" class="d-inline delete-form">
                                                 @csrf
                                                 @method('DELETE')
+                                                <input type="hidden" name="masyarakat_page"
+                                                    value="{{ request('masyarakat_page', $masyarakat->currentPage() ?? 1) }}">
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
+                                        </td>
 
-
-                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="7" class="text-center">Tidak ada data masyarakat</td>
+                                            <td colspan="8" class="text-center">Tidak ada data masyarakat</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -551,40 +553,84 @@
                         <div class="pagination-container">
                             <nav aria-label="Page navigation for masyarakat">
                                 <ul class="pagination">
-                                    {{-- Previous Page Link --}}
+                                    {{-- Previous --}}
                                     <li class="page-item {{ $masyarakat->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link"
-                                           href="{{ $masyarakat->appends(['masyarakat_page' => $masyarakat->currentPage()])->previousPageUrl() }}#masyarakat-content"
-                                           aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        href="{{ $masyarakat->previousPageUrl() }}#masyarakat-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
 
-                                    {{-- Pagination Elements --}}
+                                    {{-- Numbers --}}
                                     @for($i = 1; $i <= $masyarakat->lastPage(); $i++)
                                         <li class="page-item {{ $masyarakat->currentPage() == $i ? 'active' : '' }}">
                                             <a class="page-link"
-                                               href="{{ $masyarakat->url($i) }}#masyarakat-content">
+                                            href="{{ $masyarakat->url($i) }}#masyarakat-content">
                                                 {{ $i }}
                                             </a>
                                         </li>
                                     @endfor
 
-                                    {{-- Next Page Link --}}
+                                    {{-- Next --}}
                                     <li class="page-item {{ $masyarakat->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link"
-                                           href="{{ $masyarakat->appends(['masyarakat_page' => $masyarakat->currentPage()])->nextPageUrl() }}#masyarakat-content"
-                                           aria-label="Next">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        href="{{ $masyarakat->nextPageUrl() }}#masyarakat-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
                                 </ul>
                             </nav>
                         </div>
                         @endif
+
                     </div>
                 </div>
             </div>
+
+            <!-- Modal Detail Masyarakat -->
+@foreach($masyarakat as $warga)
+<div class="modal fade" id="detailMasyarakat{{ $warga->masyarakat_id }}" tabindex="-1" aria-labelledby="detailMasyarakatLabel{{ $warga->masyarakat_id }}" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="detailMasyarakatLabel{{ $warga->masyarakat_id }}">
+            Detail Masyarakat
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Nama:</strong> {{ $warga->nama }}</li>
+          <li class="list-group-item"><strong>NIK:</strong> {{ $warga->nik }}</li>
+          <li class="list-group-item"><strong>No HP:</strong> {{ $warga->no_hp ?? '-' }}</li>
+          <li class="list-group-item">
+            <strong>Jenis Kelamin:</strong>
+            @if($warga->jenis_kelamin === 'L')
+                Laki-laki
+            @elseif($warga->jenis_kelamin === 'P')
+                Perempuan
+            @else
+                -
+            @endif
+            </li>
+
+          <li class="list-group-item"><strong>Tanggal Lahir:</strong>
+              {{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}
+          </li>
+          <li class="list-group-item"><strong>Pekerjaan:</strong> {{ $warga->pekerjaan ?? '-' }}</li>
+          <li class="list-group-item"><strong>Alamat:</strong> {{ $warga->alamat ?? '-' }}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
+
 
 
           <!-- Form Input Masyarakat -->
@@ -689,8 +735,8 @@
                                     <tr>
                                         <th>Nama</th>
                                         <th>Keluhan</th>
-                                        <th>Diagnosa</th>
-                                        <th>Tindakan</th>
+                                        {{-- <th>Diagnosa</th>
+                                        <th>Tindakan</th> --}}
                                         <th>Tanggal kunjungan</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
@@ -706,27 +752,40 @@
                                                     <span class="text-truncate">{{ $kesehatan->masyarakat->nama ?? 'N/A' }}</span>
                                                 </div>
                                             </td>
-                                            <td class="text-truncate">{{ $kesehatan->keluhan }}</td>
-                                            <td class="text-truncate">{{ $kesehatan->diagnosa }}</td>
+                                            {{-- <td class="text-truncate">{{ $kesehatan->keluhan }}</td>
+                                            <td class="text-truncate">{{ $kesehatan->diagnosa }}</td> --}}
                                             <td class="text-truncate">{{ $kesehatan->tindakan }}</td>
                                             <td class="text-truncate">
                                                 {{ \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') }}
                                             </td>
                                             <td class="text-center action-buttons">
-                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
-                                                <form action="{{ route('kunjungan.destroy', $kesehatan->kunjungan_id) }}"
+                                            <!-- Tombol Lihat -->
+                                            <button class="btn btn-sm btn-info"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#detailKunjungan{{ $kesehatan->kunjungan_id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+
+                                            <!-- Tombol Edit -->
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+
+                                            <!-- Tombol Hapus -->
+                                            <form action="{{ route('kunjungan.destroy', $kesehatan->kunjungan_id) }}"
                                                 method="POST" class="d-inline delete-form">
                                                 @csrf
                                                 @method('DELETE')
+                                                <input type="hidden" name="kunjungan_page"
+                                                    value="{{ request('kunjungan_page', $kunjungan->currentPage() ?? 1) }}">
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
-                                            </td>
+                                        </td>
+
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">Tidak ada data kunjungan</td>
+                                            <td colspan="6" class="text-center">Tidak ada data kunjungan</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -738,31 +797,28 @@
                         <div class="pagination-container">
                             <nav aria-label="Page navigation for kunjungan">
                                 <ul class="pagination">
-                                    {{-- Previous Page Link --}}
                                     <li class="page-item {{ $kunjungan->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link"
-                                           href="{{ $kunjungan->appends(['kunjungan_page' => $kunjungan->currentPage()])->previousPageUrl() }}#kunjungan-content"
-                                           aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        href="{{ $kunjungan->previousPageUrl() }}#kunjungan-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
 
-                                    {{-- Pagination Elements --}}
                                     @for($i = 1; $i <= $kunjungan->lastPage(); $i++)
                                         <li class="page-item {{ $kunjungan->currentPage() == $i ? 'active' : '' }}">
                                             <a class="page-link"
-                                               href="{{ $kunjungan->url($i) }}#kunjungan-content">
+                                            href="{{ $kunjungan->url($i) }}#kunjungan-content">
                                                 {{ $i }}
                                             </a>
                                         </li>
                                     @endfor
 
-                                    {{-- Next Page Link --}}
                                     <li class="page-item {{ $kunjungan->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link"
-                                           href="{{ $kunjungan->appends(['kunjungan_page' => $kunjungan->currentPage()])->nextPageUrl() }}#kunjungan-content"
-                                           aria-label="Next">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        href="{{ $kunjungan->nextPageUrl() }}#kunjungan-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -772,6 +828,39 @@
                     </div>
                 </div>
             </div>
+
+
+
+<!-- Modal Detail Kunjungan -->
+@foreach($kunjungan as $kesehatan)
+<div class="modal fade" id="detailKunjungan{{ $kesehatan->kunjungan_id }}" tabindex="-1" aria-labelledby="detailKunjunganLabel{{ $kesehatan->kunjungan_id }}" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="detailKunjunganLabel{{ $kesehatan->kunjungan_id }}">
+            Detail Kunjungan
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Nama:</strong> {{ $kesehatan->masyarakat->nama ?? 'N/A' }}</li>
+          <li class="list-group-item"><strong>Keluhan:</strong> {{ $kesehatan->keluhan ?? '-' }}</li>
+          <li class="list-group-item"><strong>Diagnosa:</strong> {{ $kesehatan->diagnosa ?? '-' }}</li>
+          <li class="list-group-item"><strong>Tindakan:</strong> {{ $kesehatan->tindakan ?? '-' }}</li>
+          <li class="list-group-item"><strong>Tanggal Kunjungan:</strong>
+            {{ isset($kesehatan->tanggal_kunjungan) ? \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') : '-' }}
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
+
 
 
 
@@ -908,31 +997,28 @@
                         <div class="pagination-container">
                             <nav aria-label="Page navigation for kehamilan">
                                 <ul class="pagination">
-                                    {{-- Previous Page Link --}}
                                     <li class="page-item {{ $kehamilan->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link"
-                                           href="{{ $kehamilan->appends(['kehamilan_page' => $kehamilan->currentPage()])->previousPageUrl() }}#kehamilan-content"
-                                           aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        href="{{ $kehamilan->previousPageUrl() }}#kehamilan-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
 
-                                    {{-- Pagination Elements --}}
                                     @for($i = 1; $i <= $kehamilan->lastPage(); $i++)
                                         <li class="page-item {{ $kehamilan->currentPage() == $i ? 'active' : '' }}">
                                             <a class="page-link"
-                                               href="{{ $kehamilan->url($i) }}#kehamilan-content">
+                                            href="{{ $kehamilan->url($i) }}#kehamilan-content">
                                                 {{ $i }}
                                             </a>
                                         </li>
                                     @endfor
 
-                                    {{-- Next Page Link --}}
                                     <li class="page-item {{ $kehamilan->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link"
-                                           href="{{ $kehamilan->appends(['kehamilan_page' => $kehamilan->currentPage()])->nextPageUrl() }}#kehamilan-content"
-                                           aria-label="Next">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        href="{{ $kehamilan->nextPageUrl() }}#kehamilan-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -1048,12 +1134,14 @@
                                             <td class="text-center action-buttons">
                                                 <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
                                                 <form action="{{ route('imunisasi.destroy', $imun->imunisasi_id) }}"
+
                                                     method="POST" class="d-inline delete-form">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
+                                                    <input type="hidden" name="imunisasi_page" value="{{ request('imunisasi_page', $imunisasi->currentPage() ?? 1) }}">
                                                 </form>
                                             </td>
                                         </tr>
@@ -1071,31 +1159,28 @@
                         <div class="pagination-container">
                             <nav aria-label="Page navigation for imunisasi">
                                 <ul class="pagination">
-                                    {{-- Previous Page Link --}}
                                     <li class="page-item {{ $imunisasi->onFirstPage() ? 'disabled' : '' }}">
                                         <a class="page-link"
-                                           href="{{ $imunisasi->appends(['imunisasi_page' => $imunisasi->currentPage()])->previousPageUrl() }}#imunisasi-content"
-                                           aria-label="Previous">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                                        href="{{ $imunisasi->previousPageUrl() }}#imunisasi-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
                                         </a>
                                     </li>
 
-                                    {{-- Pagination Elements --}}
                                     @for($i = 1; $i <= $imunisasi->lastPage(); $i++)
                                         <li class="page-item {{ $imunisasi->currentPage() == $i ? 'active' : '' }}">
                                             <a class="page-link"
-                                               href="{{ $imunisasi->url($i) }}#imunisasi-content">
+                                            href="{{ $imunisasi->url($i) }}#imunisasi-content">
                                                 {{ $i }}
                                             </a>
                                         </li>
                                     @endfor
 
-                                    {{-- Next Page Link --}}
                                     <li class="page-item {{ $imunisasi->hasMorePages() ? '' : 'disabled' }}">
                                         <a class="page-link"
-                                           href="{{ $imunisasi->appends(['imunisasi_page' => $imunisasi->currentPage()])->nextPageUrl() }}#imunisasi-content"
-                                           aria-label="Next">
-                                            <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                                        href="{{ $imunisasi->nextPageUrl() }}#imunisasi-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -1158,187 +1243,165 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-       function handleLogout() {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Anda akan keluar dari aplikasi!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Logout',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Kirim POST request ke route logout
-            fetch("{{ route('logout') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                    "Accept": "application/json"
-                }
-            })
-            .then(() => {
-                Swal.fire({
-                    title: 'Berhasil Logout!',
-                    text: 'Anda telah keluar dari aplikasi',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: true
-                }).then(() => {
-                    window.location.href = '/';
-                });
-            })
-            .catch((error) => {
-                console.error("Logout error:", error);
-            });
+  <script>
+// ===========================
+// 1) Logout dengan SweetAlert
+// ===========================
+function handleLogout() {
+  Swal.fire({
+    title: 'Apakah Anda yakin?',
+    text: "Anda akan keluar dari aplikasi!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Ya, Logout',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch("{{ route('logout') }}", {
+        method: "POST",
+        headers: {
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+          "Accept": "application/json"
         }
-    });
+      })
+      .then(() => {
+        Swal.fire({
+          title: 'Berhasil Logout!',
+          text: 'Anda telah keluar dari aplikasi',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: true
+        }).then(() => {
+          window.location.href = '/';
+        });
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+    }
+  });
 }
 
-        // Add navbar animation code
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get all nav icons except logo and logout
-            const navIcons = document.querySelectorAll('.nav-icon:not(:first-child):not(.logout)');
+// =======================================
+// 2) Fungsi pencarian tabel
+// =======================================
+function searchTable(tableId, query) {
+  const table = document.getElementById(tableId);
+  if (!table) return;
 
-            // Create the sliding indicator element
-            const indicator = document.createElement('div');
-            indicator.className = 'nav-indicator';
-            document.querySelector('.vertical-navbar').appendChild(indicator);
+  const rows = table.tBodies[0]?.rows || [];
+  const q = (query || '').toLowerCase();
 
-            // Position the indicator at the currently active menu item on load
-            const activeIcon = document.querySelector('.nav-icon.active');
-            if (activeIcon) {
-                positionIndicator(activeIcon);
-            }
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].cells;
+    let found = false;
 
-            // Add click event listeners to all nav icons
-            navIcons.forEach(icon => {
-                icon.addEventListener('click', function(e) {
-                    // If clicking on the icon itself
-                    if (e.target.tagName === 'I') {
-                        e.preventDefault();
+    for (let j = 0; j < cells.length; j++) {
+      const txt = (cells[j].textContent || cells[j].innerText || '').toLowerCase();
+      if (txt.includes(q)) {
+        found = true;
+        break;
+      }
+    }
+    rows[i].style.display = found ? '' : 'none';
+  }
+}
 
-                        // Get the parent anchor href
-                        const href = this.querySelector('a').getAttribute('href');
-
-                        // Handle the active class and animation
-                        handleNavClick(this, href);
-                    }
-                });
-            });
-
-            // Add click event listeners to all anchors within nav icons
-            document.querySelectorAll('.nav-icon a').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const navIcon = this.parentElement;
-                    const href = this.getAttribute('href');
-
-                    // Handle the active class and animation
-                    handleNavClick(navIcon, href);
-                });
-            });
-
-            // Function to handle nav click animation and navigation
-            function handleNavClick(clickedIcon, href) {
-                // Skip if already active
-                if (clickedIcon.classList.contains('active')) return;
-
-                // Remove active class from current active icon
-                const currentActive = document.querySelector('.nav-icon.active');
-                if (currentActive) {
-                    currentActive.classList.remove('active');
-                }
-
-                // Add active class to clicked icon
-                clickedIcon.classList.add('active');
-
-                // Animate the indicator
-                positionIndicator(clickedIcon);
-
-                // Navigate after animation completes
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 300);
-            }
-
-            // Function to position the indicator
-            function positionIndicator(targetIcon) {
-                const rect = targetIcon.getBoundingClientRect();
-                const navbarRect = document.querySelector('.vertical-navbar').getBoundingClientRect();
-
-                // Calculate position relative to navbar
-                const top = rect.top - navbarRect.top;
-
-                // Update indicator position
-                indicator.style.top = top + 'px';
-            }
-
-            // Handle tab persistence on page reload
-            const url = window.location.href;
-            if (url.includes('#')) {
-                const tabId = url.split('#')[1];
-                const tabElement = document.querySelector(`button[data-bs-target="#${tabId}"]`);
-                if (tabElement) {
-                    const tabTrigger = new bootstrap.Tab(tabElement);
-                    tabTrigger.show();
-                }
-            }
-        });
-
-        // Function for table search
-        function searchTable(tableId, query) {
-            const table = document.getElementById(tableId);
-            const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let found = false;
-
-                for (let j = 0; j < cells.length; j++) {
-                    const cellText = cells[j].textContent || cells[j].innerText;
-                    if (cellText.toLowerCase().indexOf(query.toLowerCase()) > -1) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                rows[i].style.display = found ? '' : 'none';
-            }
-        }
-
-
+// ===================================================
+// 3) Saat dokumen siap
+// ===================================================
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.delete-form').forEach(function (form) {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault(); // cegah submit langsung
 
-            Swal.fire({
-                title: 'Yakin ingin menghapus?',
-                text: "Data akan dihapus permanen!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, Hapus',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
+  // -------------------------------------------------
+  // 3a) Navbar indicator
+  // -------------------------------------------------
+  const navbar = document.querySelector('.vertical-navbar');
+  if (navbar) {
+    const indicator = document.createElement('div');
+    indicator.className = 'nav-indicator';
+    navbar.appendChild(indicator);
+
+    function positionIndicator(targetIcon) {
+      const rect = targetIcon.getBoundingClientRect();
+      const navbarRect = navbar.getBoundingClientRect();
+      const top = rect.top - navbarRect.top;
+      indicator.style.top = top + 'px';
+    }
+
+    const activeIcon = document.querySelector('.nav-icon.active');
+    if (activeIcon) positionIndicator(activeIcon);
+
+    document.querySelectorAll('.nav-icon a').forEach(a => {
+      a.addEventListener('click', function () {
+        const icon = this.closest('.nav-icon');
+        if (!icon) return;
+
+        const curr = document.querySelector('.nav-icon.active');
+        if (curr) curr.classList.remove('active');
+        icon.classList.add('active');
+        positionIndicator(icon);
+      });
     });
+  }
+
+  // -------------------------------------------------
+  // 3b) Tab <-> URL fragment (#...)
+  // -------------------------------------------------
+  function activateTabFromHash() {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const btn = document.querySelector(`button[data-bs-target="${hash}"]`);
+    if (btn) new bootstrap.Tab(btn).show();
+  }
+
+  // Aktifkan tab dari hash saat load
+  activateTabFromHash();
+
+  // Update hash saat tab berubah
+  document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => {
+    btn.addEventListener('shown.bs.tab', (e) => {
+      const target = e.target.getAttribute('data-bs-target');
+      if (target) {
+        const baseUrl = window.location.pathname + window.location.search;
+        history.replaceState(null, '', baseUrl + target);
+      }
+    });
+  });
+
+  // Aktifkan tab saat hash berubah manual
+  window.addEventListener('hashchange', activateTabFromHash);
+
+  // -------------------------------------------------
+  // 3c) Konfirmasi hapus dengan SweetAlert
+  // -------------------------------------------------
+  document.querySelectorAll('.delete-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const row = form.closest('tr');
+      const nama = row?.querySelector('td span.text-truncate, td .ms-2')?.textContent?.trim() || 'data ini';
+
+      Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: `Data ${nama} akan dihapus permanen!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+
 });
+</script>
 
-
-
-
-
-
-    </script>
 </body>
 </html>

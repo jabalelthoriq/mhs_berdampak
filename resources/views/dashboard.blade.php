@@ -9,17 +9,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Dashboard Admin</title>
 </head>
 <style>
-    body {
-       margin: 0;
-       padding: 0;
-       background-color: #F6F8FB;
-       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-       overflow-x: hidden;
-   }
+    body { font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+
 
    .vertical-navbar {
        position: fixed;
@@ -584,13 +582,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <div class="vertical-navbar">
         <div class="nav-logo">
-            <img src="{{ asset('image/logo polije.png') }}" alt="Logo">
+            <img src="{{ asset('image/logo_polije.png') }}" alt="Logo">
             <span class="nav-text">POLIJE SIP</span>
         </div>
         <div class="nav-icon active">
             <a href="dashboard">
                 <i class="fas fa-th-large"></i>
-                 <span class="nav-text">Dahboard</span>
+                 <span class="nav-text">Dashboard</span>
             </a>
         </div>
 

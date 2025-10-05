@@ -8,17 +8,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Dashboard Admin</title>
 </head>
 <style>
-     body {
-       margin: 0;
-       padding: 0;
-       background-color: #F6F8FB;
-       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-       overflow-x: hidden;
-   }
+     body { font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+
 
    .vertical-navbar {
        position: fixed;
@@ -340,9 +338,33 @@
     }
    </style>
 <body>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    Swal.fire({
+        title: 'Gagal!',
+        text: "{{ session('error') }}",
+        icon: 'error',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
    <div class="vertical-navbar">
         <div class="nav-logo" >
-            <img src="{{ asset('image/logo polije.png') }}" alt="Logo">
+            <img src="{{ asset('image/logo_polije.png') }}" alt="Logo">
              <span class="nav-text">POLIJE SIP</span>
         </div>
 
@@ -404,35 +426,45 @@
             <div class="row">
                 <!-- Foto Profil -->
                 <div class="col-md-4 text-center border-end d-flex flex-column align-items-center justify-content-center">
-                    <img id="previewFoto" src="https://via.placeholder.com/150" alt="Foto Profil" class="rounded-circle shadow mb-3" width="150" height="150">
-                    <input type="file" class="form-control mt-2" onchange="previewImage(event)">
+                    <img id="previewFoto"
+                        src="{{ $user->foto ? asset($user->foto) : 'https://via.placeholder.com/150' }}"
+                        alt="Foto Profil"
+                        class="rounded-circle shadow mb-3" width="250" height="250">
+
+
                 </div>
 
                 <!-- Data Profile -->
                 <div class="col-md-8">
-                    <form>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" placeholder="Masukkan nama lengkap" value="Admin SIP">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" placeholder="Masukkan email" value="admin@example.com">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Nomor Telepon</label>
-                                <input type="text" class="form-control" placeholder="Masukkan nomor telepon" value="08123456789">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Alamat</label>
-                                <input type="text" class="form-control" placeholder="Alamat anda">
-                            </div>
+                    <form action="{{ route('update.profile') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
                         </div>
-                        <button type="submit" class="btn btn-primary mt-4 px-4">
-                            <i class="fas fa-save me-2"></i>Simpan Perubahan
-                        </button>
-                    </form>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nomor Telepon</label>
+                            <input type="text" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Alamat</label>
+                            <input type="text" name="alamat" class="form-control" value="{{ old('alamat', $user->alamat) }}">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Foto Profil</label>
+                            <input type="file" name="foto" class="form-control" onchange="previewImage(event)">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4 px-4">
+                        <i class="fas fa-save me-2"></i>Simpan Perubahan
+                    </button>
+                </form>
+
                 </div>
             </div>
         </div>
@@ -442,24 +474,29 @@
     <div class="tab-pane fade" id="security-content" role="tabpanel" aria-labelledby="security-tab">
         <div class="card p-4">
             <h5 class="fw-bold mb-4"><i class="fas fa-lock me-2 text-danger"></i>Pengaturan Keamanan</h5>
-            <form>
+
+
+
+            <!-- Form Ubah Password -->
+            <form action="{{ route('update.password') }}" method="POST">
+                @csrf
                 <div class="row g-3">
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 p-3 h-100">
                             <h6 class="fw-bold text-muted mb-3"><i class="fas fa-key me-2"></i>Password Lama</h6>
-                            <input type="password" class="form-control" placeholder="Masukkan password lama">
+                            <input type="password" name="current_password" class="form-control" placeholder="Masukkan password lama" required>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 p-3 h-100">
                             <h6 class="fw-bold text-muted mb-3"><i class="fas fa-lock me-2"></i>Password Baru</h6>
-                            <input type="password" class="form-control" placeholder="Masukkan password baru">
+                            <input type="password" name="new_password" class="form-control" placeholder="Masukkan password baru" required>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card shadow-sm border-0 p-3 h-100">
                             <h6 class="fw-bold text-muted mb-3"><i class="fas fa-check me-2"></i>Konfirmasi Password</h6>
-                            <input type="password" class="form-control" placeholder="Ulangi password baru">
+                            <input type="password" name="new_password_confirmation" class="form-control" placeholder="Ulangi password baru" required>
                         </div>
                     </div>
                 </div>
@@ -467,8 +504,56 @@
                     <i class="fas fa-sync-alt me-2"></i>Ubah Password
                 </button>
             </form>
+          
+        <!-- Tombol buka modal reset password -->
+<button type="button" class="btn btn-link text-decoration-none mt-2"
+        data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
+    <i class="fas fa-unlock-alt me-2"></i>Verifikasi Token Reset Password
+</button>
+
+
         </div>
+
+
+       <!-- Modal Reset Password (Verifikasi Token) -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="resetPasswordModalLabel">Reset Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form action="{{ route('password.update') }}" method="POST">
+        @csrf
+        <input type="hidden" name="token" value="{{ $token ?? '' }}">
+        <input type="hidden" name="email" value="{{ $email ?? '' }}">
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Password Baru</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Konfirmasi Password Baru</label>
+            <input type="password" name="password_confirmation" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-key me-2"></i>Reset Password
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
+
+    </div>
+
 
 </div>
 </div>

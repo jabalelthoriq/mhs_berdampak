@@ -11,7 +11,8 @@ use App\Http\Controllers\KehamilanController;
 use App\Http\Controllers\ImunisasiController;
 
 // ================== AUTH ==================
-Route::get('/', [AuthController::class, 'showLoginForm'])->name('login.form');
+Route::get('/', [AuthController::class, 'showLandingForm'])->name('landing.form');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -22,10 +23,9 @@ Route::get('/test', [DashboardController::class, 'test'])->name('test');
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+
     // Data Master
     Route::get('/data', [DataController::class, 'index'])->name('data');
-    Route::get('/setting', [SettingController::class, 'index'])->name('setting');
-
     // CRUD Masyarakat
     Route::resource('masyarakat', MasyarakatController::class)->only(['index','store','update','destroy']);
 
@@ -38,3 +38,11 @@ Route::get('/test', [DashboardController::class, 'test'])->name('test');
     // CRUD Imunisasi
     Route::resource('imunisasi', ImunisasiController::class)->only(['index','store','update','destroy']);
 
+
+    // Setting
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting');
+    Route::post('/setting/update', [SettingController::class, 'updateProfile'])->name('update.profile');
+    Route::post('/setting/update-password', [SettingController::class, 'updatePassword'])->name('update.password');
+    Route::post('/setting/send-reset-link', [SettingController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [SettingController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [SettingController::class, 'resetPassword'])->name('password.update');

@@ -11,18 +11,18 @@ class KunjunganController
     public function store(Request $request)
     {
         $request->validate([
-            'masyarakat_id' => 'required|exists:masyarakat,masyarakat_id',
+            'masyarakat_id'     => 'required|exists:masyarakat,masyarakat_id',
             'tanggal_kunjungan' => 'required|date',
-            'keluhan' => 'required|string',
-            'diagnosa' => 'nullable|string',
-            'tindakan' => 'nullable|string',
+            'keluhan'           => 'required|string',
+            'diagnosa'          => 'nullable|string',
+            'tindakan'          => 'nullable|string',
         ]);
 
         KunjunganKesehatan::create($request->all());
 
         return redirect()
-        ->route('data', ['kunjungan_page' => 1])
-        ->with('success', 'Data kunjungan berhasil ditambahkan.');
+            ->to(route('data', ['kunjungan_page' => 1]) . '#kunjungan-content')
+            ->with('success', 'Data kunjungan berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -30,27 +30,31 @@ class KunjunganController
         $kunjungan = KunjunganKesehatan::findOrFail($id);
 
         $request->validate([
-            'masyarakat_id' => 'required|exists:masyarakat,masyarakat_id',
+            'masyarakat_id'     => 'required|exists:masyarakat,masyarakat_id',
             'tanggal_kunjungan' => 'required|date',
-            'keluhan' => 'required|string',
-            'diagnosa' => 'nullable|string',
-            'tindakan' => 'nullable|string',
+            'keluhan'           => 'required|string',
+            'diagnosa'          => 'nullable|string',
+            'tindakan'          => 'nullable|string',
         ]);
 
         $kunjungan->update($request->all());
 
         return redirect()
-        ->route('data', ['kunjungan_page' => $request->get('page', 1)]) // balik ke page terakhir
-        ->with('success', 'Data kunjungan berhasil diperbarui.');
+            ->to(route('data', [
+                'kunjungan_page' => $request->get('kunjungan_page', 1)
+            ]) . '#kunjungan-content')
+            ->with('success', 'Data kunjungan berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        $kunjungan = KunjunganKesehatan::findOrFail($id);
-        $kunjungan->delete();
+        $row = KunjunganKesehatan::findOrFail($id);
+        $row->delete();
 
-         return redirect()
-        ->route('data', ['kunjungan_page' => request()->get('page', 1)])
-        ->with('success', 'Data kunjungan berhasil dihapus.');
+        return redirect()
+            ->to(route('data', [
+                'kunjungan_page' => request()->get('kunjungan_page', 1)
+            ]) . '#kunjungan-content')
+            ->with('success', 'Data kunjungan berhasil dihapus.');
     }
 }
