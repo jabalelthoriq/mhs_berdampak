@@ -269,6 +269,133 @@
   #tembakau .col-lg-4 > div { margin-bottom: 25px; }
 }
 
+
+
+/* ===== SECTION LOKASI (EFEK PARALLAX SINKRON DENGAN HERO) ===== */
+#lokasi {
+  position: relative;
+  overflow: hidden;
+  padding: 150px 0;
+  color: #fff;
+  z-index: 1;
+}
+
+/* === Background Parallax === */
+.lokasi-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 130%; /* lebih tinggi sedikit agar tidak ada celah saat bergeser */
+  background: url('{{ asset('image/padi.jpg') }}') center / cover no-repeat;
+  z-index: 0;
+  filter: brightness(0.9);
+  transform: translateY(0);
+  transition: transform 0.2s linear;
+  will-change: transform;
+}
+
+/* === Lapisan gelap seperti kontak === */
+.lokasi-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+
+/* === Kontainer konten === */
+#lokasi .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* === Hapus overlay lama === */
+.lokasi-overlay {
+  display: none !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+/* === Isi konten lokasi === */
+.lokasi-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Aktivitas (kiri) */
+.aktivitas-group {
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aktivitas-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 18px 20px;
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+  transition: all 0.4s ease;
+}
+.aktivitas-card:hover {
+  background: rgba(0,180,216,0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 0 20px rgba(0,180,216,0.35);
+}
+
+.aktivitas-card .icon-circle {
+  width: 55px;
+  height: 55px;
+  background: rgba(0,180,216,0.2);
+  color: #00b4d8;
+  font-size: 1.7rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Peta (kanan) */
+.map-wrapper {
+  flex: 1 1 48%;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 2px solid rgba(0,180,216,0.3);
+  box-shadow: 0 0 25px rgba(0,180,216,0.25);
+}
+.map-wrapper iframe {
+  width: 100%;
+  height: 420px;
+  border: none;
+  filter: brightness(1.05) contrast(1.1);
+}
+
+/* === Responsif === */
+@media (max-width: 992px) {
+  .lokasi-content {
+    flex-direction: column;
+    align-items: center;
+  }
+  .map-wrapper {
+    width: 100%;
+  }
+  .map-wrapper iframe {
+    height: 320px;
+  }
+}
+
+
+
   </style>
 </head>
 
@@ -284,7 +411,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="#about">Tentang</a></li>
-          <li class="nav-item"><a class="nav-link" href="#destinasi">Destinasi</a></li>
+          <li class="nav-item"><a class="nav-link" href="#potensi">Potensi</a></li>
           <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
           <li class="nav-item"><a class="nav-link" href="login">Login</a></li>
         </ul>
@@ -311,7 +438,7 @@
         <div class="hero-caption">
           <h1>EXPLORE <span>KEINDAHAN</span></h1>
           <p class="lead mt-3">Desa dengan panorama yang menenangkan hati</p>
-          <a href="#destinasi" class="btn btn-outline-light rounded-pill px-4 mt-3">Lihat Destinasi</a>
+          <a href="#potensi" class="btn btn-outline-light rounded-pill px-4 mt-3">Lihat potensi</a>
         </div>
       </div>
 
@@ -396,15 +523,64 @@
     </div>
   </div>
 </div>
-
-
-
       </div>
     </div>
   </div>
 </section>
+
+
+<section id="lokasi" class="position-relative">
+  <div class="lokasi-bg"></div>
+  <div class="lokasi-overlay"></div>
+
+  <div class="container" data-aos="fade-up">
+    <h2 class="fw-bold text-center mb-5">Aktivitas dan Lokasi Desa TamanKursi</h2>
+
+    <div class="lokasi-content">
+      <!-- Kolom Kiri: Aktivitas -->
+      <div class="aktivitas-group" >
+        <div class="aktivitas-card" data-aos="fade-right" data-aos-delay="0">
+          <div class="icon-circle"><i class="bi bi-tree-fill"></i></div>
+          <div>
+            <h5>Pertanian Tembakau</h5>
+            <p>Petani mengelola ladang tembakau dengan teknik tradisional ramah lingkungan.</p>
+          </div>
+        </div>
+
+        <div class="aktivitas-card" data-aos="fade-right" data-aos-delay="150">
+          <div class="icon-circle"><i class="bi bi-people-fill"></i></div>
+          <div>
+            <h5>Kegiatan Gotong Royong</h5>
+            <p>Warga rutin bekerja sama menjaga kebersihan dan memperbaiki fasilitas umum.</p>
+          </div>
+        </div>
+
+        <div class="aktivitas-card" data-aos="fade-right" data-aos-delay="300">
+          <div class="icon-circle"><i class="bi bi-flower3"></i></div>
+          <div>
+            <h5>Kerajinan Lokal</h5>
+            <p>Masyarakat menghasilkan kerajinan anyaman dan olahan hasil bumi khas desa.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kolom Kanan: Peta -->
+      <div class="map-wrapper" data-aos="zoom-in" data-aos-delay="200">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63228.46045607635!2d113.58045723646963!3d-7.918161695305611!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6e5dcee028df5%3A0xd2d789ec1aab3a00!2sTamankursi%2C%20Kec.%20Sumbermalang%2C%20Kabupaten%20Situbondo%2C%20Jawa%20Timur!5e0!3m2!1sid!2sid!4v1759665992767!5m2!1sid!2sid"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
 <!-- ===== POTENSI TEMBAKAU (Revisi Gambar Tengah) ===== -->
-<section id="tembakau" class="section-dark" style="position: relative; overflow: hidden;">
+<section id="potensi" class="section-dark" style="position: relative; overflow: hidden;">
   <div class="container text-center" data-aos="fade-up">
     <h2 class="fw-bold mb-5 text-white">Kualitas Tembakau Desa TamanKursi</h2>
 
@@ -460,59 +636,20 @@
 
 
 
-  <!-- ===== DESTINASI ===== -->
-  <section id="destinasi" class="section-dark">
-    <div class="container text-center" data-aos="fade-up">
-      <h2 class="mb-5">Destinasi Favorit</h2>
-      <div class="row g-4">
-        <div class="col-md-3">
-          <div class="card card-dark">
-            <img src="{{ asset('image/potensi1.jpg') }}" class="card-img-top rounded-3" alt="Air Terjun Harmoni">
-            <div class="card-body">
-              <h5 class="fw-bold">1st Place</h5>
-              <p>Air Terjun Harmoni</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card card-dark">
-            <img src="{{ asset('image/potensi2.jpg') }}" class="card-img-top rounded-3" alt="Sawah Asri">
-            <div class="card-body">
-              <h5 class="fw-bold">2nd Place</h5>
-              <p>Sawah Asri</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card card-dark">
-            <img src="{{ asset('image/potensi3.jpg') }}" class="card-img-top rounded-3" alt="Bukit Cerah">
-            <div class="card-body">
-              <h5 class="fw-bold">3rd Place</h5>
-              <p>Bukit Cerah</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card card-dark">
-            <img src="{{ asset('image/desa1.jpg') }}" class="card-img-top rounded-3" alt="Danau Biru">
-            <div class="card-body">
-              <h5 class="fw-bold">4th Place</h5>
-              <p>Danau Biru</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ===== CTA ===== -->
   <section class="cta" id="kontak">
-    <div class="content" data-aos="zoom-in">
-      <h2>TRAVEL AND ENJOY YOUR HOLIDAY</h2>
-      <p class="lead">Choose your next adventure in Desa TamanKursi</p>
-      <a href="mailto:info@desaharmoni.id" class="btn btn-outline-light rounded-pill px-4 mt-3">Hubungi Kami</a>
-    </div>
-  </section>
+  <div class="content" data-aos="zoom-in">
+    <h2>TRAVEL AND ENJOY YOUR HOLIDAY</h2>
+    <p class="lead">Choose your next adventure in Desa TamanKursi</p>
+    <a id="contactButton"
+       href="#"
+       class="btn btn-outline-light rounded-pill px-4 mt-3 d-inline-flex align-items-center gap-2">
+       <i class="bi bi-envelope-fill" style="font-size: 1.2rem; color: #e70303;"></i>
+       Hubungi Kami
+    </a>
+  </div>
+</section>
 
   <!-- ===== FOOTER ===== -->
   <footer>
@@ -538,13 +675,34 @@
     else navbar.classList.remove('scrolled');
   });
 
-  // === Parallax Effect ===
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    document.querySelectorAll('.parallax-bg').forEach(bg => {
-      bg.style.transform = `translateY(${scrolled * 0.3}px)`;
-    });
+// === Efek Parallax Lembut untuk Hero & Lokasi ===
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+
+  // === Hero (seluruh layar) ===
+  document.querySelectorAll('.parallax-bg').forEach(bg => {
+    bg.style.transform = `translateY(${scrolled * 0.3}px)`; // 0.3 = lembut
   });
+
+  // === Lokasi (gerak relatif di dalam section) ===
+  const lokasi = document.querySelector('#lokasi');
+  const lokasiBg = document.querySelector('.lokasi-bg');
+  if (lokasi && lokasiBg) {
+    const rect = lokasi.getBoundingClientRect();
+    const sectionTop = rect.top + window.scrollY;           // posisi awal section
+    const relativeScroll = window.scrollY - sectionTop;     // seberapa jauh scroll di section lokasi
+
+    // Gerakan sama seperti hero → translateY(scrolled * 0.3)
+    // tapi dihitung relatif supaya tidak loncat
+    lokasiBg.style.transform = `translateY(${relativeScroll * 0.3}px)`;
+  }
+});
+
+
+
+
+
+
 
   // === Carousel Auto Slide ===
   document.addEventListener('DOMContentLoaded', () => {
@@ -634,6 +792,31 @@
     counter.setAttribute('data-unit', unit.trim());
     counter.innerText = `0 ${unit}`;
     observer.observe(counter);
+  });
+
+
+   // === Tombol Hubungi Kami dengan fallback Gmail/mailto ===
+  document.getElementById("contactButton").addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const email = "j.elthoriq@gmail.com";
+    const subject = "Pertanyaan tentang Desa TamanKursi";
+    const body = "Halo Admin Desa TamanKursi,%0A%0ASaya ingin bertanya mengenai destinasi dan aktivitas di desa.%0A%0ATerima kasih.";
+
+    // URL Gmail Compose
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${body}`;
+    // URL mailto fallback
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+
+    // Deteksi apakah kemungkinan besar user pakai Gmail/Chrome
+    const isGmailUser = /gmail|chrome|android/i.test(navigator.userAgent);
+
+    // Buka Gmail kalau bisa, fallback ke mailto jika tidak
+    if (isGmailUser) {
+      window.open(gmailUrl, "_blank");
+    } else {
+      window.location.href = mailtoUrl;
+    }
   });
 </script>
 
