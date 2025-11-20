@@ -17,7 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #00b8d4 0%, #0097a7 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #dffcff 100%);
             padding: 20px;
         }
 
@@ -349,19 +349,12 @@
         @enderror
     </div>
 
-    <div class="form-options">
-        <div class="remember-me">
-            <input type="checkbox" id="remember" name="remember">
-            <label for="remember">Remember me</label>
-        </div>
-        <a href="#" class="forgot-password">Forgot Password?</a>
-    </div>
 
     <button type="submit" class="signin-button">
         Sign In
     </button>
 
-    <p class="signup-link">Don't have an account? <a href="#">Sign up</a></p>
+   
 </form>
         </div>
     </div>

@@ -344,10 +344,17 @@
 
     /* Fix for action buttons alignment */
     .action-buttons {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-    }
+    text-align: center; /* td kembali normal */
+}
+
+.action-buttons > div {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+
 
 
      /* Pagination styling */
@@ -442,804 +449,479 @@
         </div>
 
         <!-- Tab navigation -->
-        <ul class="nav nav-tabs" id="kesehatanTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="masyarakat-tab" data-bs-toggle="tab" data-bs-target="#masyarakat-content" type="button" role="tab" aria-controls="masyarakat-content" aria-selected="true">
-                    <i class="fas fa-users me-2"></i>Masyarakat
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="kunjungan-tab" data-bs-toggle="tab" data-bs-target="#kunjungan-content" type="button" role="tab" aria-controls="kunjungan-content" aria-selected="false">
-                    <i class="fas fa-hospital-user me-2"></i>Kunjungan
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="kehamilan-tab" data-bs-toggle="tab" data-bs-target="#kehamilan-content" type="button" role="tab" aria-controls="kehamilan-content" aria-selected="false">
-                    <i class="fas fa-baby me-2"></i>Kehamilan
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="imunisasi-tab" data-bs-toggle="tab" data-bs-target="#imunisasi-content" type="button" role="tab" aria-controls="imunisasi-content" aria-selected="false">
-                    <i class="fas fa-syringe me-2"></i>Imunisasi
-                </button>
-            </li>
-        </ul>
+<ul class="nav nav-tabs" id="dataTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="orangtua-tab" data-bs-toggle="tab" data-bs-target="#orangtua-content" type="button" role="tab">
+      <i class="fas fa-user-friends me-2"></i>Orang Tua
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="anak-tab" data-bs-toggle="tab" data-bs-target="#anak-content" type="button" role="tab">
+      <i class="fas fa-child me-2"></i>Anak
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pelayanan-tab" data-bs-toggle="tab" data-bs-target="#pelayanan-content" type="button" role="tab">
+      <i class="fas fa-notes-medical me-2"></i>Pelayanan
+    </button>
+  </li>
+</ul>
+<!-- Tab content -->
+<div class="tab-content" id="dataTabsContent">
+  <!-- Orang Tua -->
+  <div class="tab-pane fade show active" id="orangtua-content" role="tabpanel">
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title fw-bold">Data Orang Tua</h5>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="search-container" style="width: 250px;">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control" placeholder="Cari orang tua..." onkeyup="searchTable('orangtuaTable', this.value)">
+          </div>
+          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalOrangtua">
+            <i class="fas fa-plus"></i> Tambah Data
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="orangtuaTable">
+            <thead>
+              <tr>
+                <th>Nama Orang Tua</th>
+                <th>NIK</th>
+                <th>Usia</th>
+                <th>Jenis Kelamin</th>
+                <th>Pekerjaan</th>
+                <th>Alamat</th>
+                <th>Riwayat Penyakit</th>
+                <th>Jenis Penyakit</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop data dari controller -->
+              @foreach($orangtua as $ortu)
+              <tr>
+                <td>{{ $ortu->nama_orangtua }}</td>
+                <td>{{ $ortu->nik }}</td>
+                <td>{{ $ortu->usia_orangtua }}</td>
+                <td>{{ $ortu->jenis_kelamin_orangtua }}</td>
+                <td>{{ $ortu->pekerjaan }}</td>
+                <td>{{ $ortu->alamat }}</td>
+                <td>{{ $ortu->riwayat_penyakit }}</td>
+                <td>{{ $ortu->jenis_penyakit }}</td>
+                <td class="text-center action-buttons">
+                 <button
+                    class="btn btn-sm btn-warning"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editOrangtua{{ $ortu->id_orangtua }}">
+                    <i class="fas fa-edit"></i>
+                    </button>
 
-        <!-- Tab content -->
-        <div class="tab-content" id="kesehatanTabsContent">
-            <!-- Masyarakat Content -->
-            <div class="tab-pane fade show active" id="masyarakat-content" role="tabpanel" aria-labelledby="masyarakat-tab">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Masyarakat</h5>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="search-container" style="width: 250px;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" class="form-control" id="searchmasyarakat" placeholder="Cari masyarakat..." onkeyup="searchTable('masyarakatTable', this.value)">
-                                </div>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalMasyarakat">
-                                    <i class="fas fa-plus"></i> Tambah Data
-                                </button>
-                            </div>
-                        </div>
 
-                        <div class="table-responsive table-container" id="masyarakat-table-container">
-                            <table class="table table-hover mb-0" id="masyarakatTable">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>NIK</th>
-                                        <th>Nomor telepon</th>
-                                        {{-- <th>Jenis kelamin</th> --}}
-                                        <th>Alamat</th>
-                                        {{-- <th>Tanggal lahir</th> --}}
-                                        {{-- <th>Pekerjaan</th> --}}
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($masyarakat as $warga)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-primary">{{ substr($warga->nama, 0, 2) }}</div>
-                                                    <span class="text-truncate">{{ $warga->nama }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-truncate">{{ $warga->nik }}</td>
-                                            <td class="text-truncate">{{ $warga->no_hp }}</td>
-                                            {{-- <td class="text-truncate">{{ $warga->jenis_kelamin }}</td> --}}
-                                            <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
-                                            {{-- <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td> --}}
-                                            {{-- <td class="text-truncate">{{ $warga->pekerjaan }}</td> --}}
+                  <form action="{{ route('orangtua.destroy', $ortu->id_orangtua) }}" method="POST" class="d-inline delete-form">
+                    @csrf @method('DELETE')
+                    <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
 
-                                            <td class="text-center action-buttons">
-                                            <!-- Tombol Lihat -->
-                                            <button class="btn btn-sm btn-info"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#detailMasyarakat{{ $warga->masyarakat_id }}">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
+        <!-- Pagination for orangtua -->
+        @if($orangtua->hasPages())
+        <div class="pagination-container">
+            <nav aria-label="Page navigation for orangtua">
+                <ul class="pagination">
+                    {{-- Previous --}}
+                    <li class="page-item {{ $orangtua->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link"
+                        href="{{ $orangtua->previousPageUrl() }}#orangtua-content"
+                        aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
 
-                                            <!-- Tombol Edit -->
-                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                    {{-- Numbers --}}
+                    @for($i = 1; $i <= $orangtua->lastPage(); $i++)
+                        <li class="page-item {{ $orangtua->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                            href="{{ $orangtua->url($i) }}#orangtua-content">
+                                {{ $i }}
+                            </a>
+                        </li>
+                    @endfor
 
-                                            <!-- Tombol Hapus -->
-                                            <form action="{{ route('masyarakat.destroy', $warga->masyarakat_id) }}"
-                                                method="POST" class="d-inline delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" name="masyarakat_page"
-                                                    value="{{ request('masyarakat_page', $masyarakat->currentPage() ?? 1) }}">
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
+                    {{-- Next --}}
+                    <li class="page-item {{ $orangtua->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link"
+                        href="{{ $orangtua->nextPageUrl() }}#orangtua-content"
+                        aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        @endif
 
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center">Tidak ada data masyarakat</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination for masyarakat -->
-                        @if($masyarakat->hasPages())
-                        <div class="pagination-container">
-                            <nav aria-label="Page navigation for masyarakat">
-                                <ul class="pagination">
-                                    {{-- Previous --}}
-                                    <li class="page-item {{ $masyarakat->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link"
-                                        href="{{ $masyarakat->previousPageUrl() }}#masyarakat-content"
-                                        aria-label="Previous">
-                                        <i class="fas fa-chevron-left"></i>
-                                        </a>
-                                    </li>
-
-                                    {{-- Numbers --}}
-                                    @for($i = 1; $i <= $masyarakat->lastPage(); $i++)
-                                        <li class="page-item {{ $masyarakat->currentPage() == $i ? 'active' : '' }}">
-                                            <a class="page-link"
-                                            href="{{ $masyarakat->url($i) }}#masyarakat-content">
-                                                {{ $i }}
-                                            </a>
-                                        </li>
-                                    @endfor
-
-                                    {{-- Next --}}
-                                    <li class="page-item {{ $masyarakat->hasMorePages() ? '' : 'disabled' }}">
-                                        <a class="page-link"
-                                        href="{{ $masyarakat->nextPageUrl() }}#masyarakat-content"
-                                        aria-label="Next">
-                                        <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        @endif
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Detail Masyarakat -->
-@foreach($masyarakat as $warga)
-<div class="modal fade" id="detailMasyarakat{{ $warga->masyarakat_id }}" tabindex="-1" aria-labelledby="detailMasyarakatLabel{{ $warga->masyarakat_id }}" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="detailMasyarakatLabel{{ $warga->masyarakat_id }}">
-            Detail Masyarakat
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <ul class="list-group">
-          <li class="list-group-item"><strong>Nama:</strong> {{ $warga->nama }}</li>
-          <li class="list-group-item"><strong>NIK:</strong> {{ $warga->nik }}</li>
-          <li class="list-group-item"><strong>No HP:</strong> {{ $warga->no_hp ?? '-' }}</li>
-          <li class="list-group-item">
-            <strong>Jenis Kelamin:</strong>
-            @if($warga->jenis_kelamin === 'L')
-                Laki-laki
-            @elseif($warga->jenis_kelamin === 'P')
-                Perempuan
-            @else
-                -
-            @endif
-            </li>
-
-          <li class="list-group-item"><strong>Tanggal Lahir:</strong>
-              {{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}
-          </li>
-          <li class="list-group-item"><strong>Pekerjaan:</strong> {{ $warga->pekerjaan ?? '-' }}</li>
-          <li class="list-group-item"><strong>Alamat:</strong> {{ $warga->alamat ?? '-' }}</li>
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
       </div>
     </div>
   </div>
-</div>
+
+
+ <!-- Anak -->
+  <div class="tab-pane fade" id="anak-content" role="tabpanel">
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title fw-bold">Data Anak</h5>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="search-container" style="width: 250px;">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control" placeholder="Cari anak..." onkeyup="searchTable('anakTable', this.value)">
+          </div>
+          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAnak">
+            <i class="fas fa-plus"></i> Tambah Data
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="anakTable">
+            <thead>
+                <tr>
+                    <th>NIK</th>
+                    <th>Nama Orang Tua</th>
+                    <th>Nama Anak</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Usia</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Imunisasi</th>
+                    <th>Tanggal Imunisasi</th>
+                    <th>Tinggi</th>
+                    <th>Berat</th>
+                    <th>Status Gizi</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+@php
+    $imunList = [
+        'hepatitis_b' => 'Hepatitis B',
+        'bcg' => 'BCG',
+        'polio' => 'Polio',
+        'dpt_hb_hib' => 'DPT-HB-HIB',
+        'pcv' => 'PCV',
+        'rota' => 'Rota Virus',
+        'campak_rubella' => 'Campak Rubella'
+    ];
+@endphp
+
+@foreach($anak as $child)
+<tr>
+
+    {{-- NIK --}}
+    <td>{{ $child->nik }}</td>
+
+    {{-- Nama Orang Tua --}}
+    <td>{{ $child->nama_ortu }}</td>
+
+    {{-- Nama Anak --}}
+    <td>{{ $child->nama_anak }}</td>
+
+    {{-- Tanggal Lahir --}}
+    <td>{{ $child->tanggal_lahir }}</td>
+
+    {{-- Usia --}}
+    <td>{{ $child->usia_anak }}</td>
+
+    {{-- Jenis Kelamin --}}
+    <td>{{ $child->jenis_kelamin_anak }}</td>
+
+    {{-- STATUS IMUNISASI --}}
+    <td style="white-space: nowrap;">
+        @foreach($imunList as $key => $label)
+            @php
+                $status = $child->{'imunisasi_'.$key};
+                $icon = $status == 'ya' ? '✓' : '✗';
+                $color = $status == 'ya' ? '#0a8f35' : '#d00';
+            @endphp
+
+            <span style="color: {{ $color }}; font-weight:bold;">
+                {{ $icon }}
+            </span>
+            {{ $label }} <br>
+        @endforeach
+    </td>
+
+    {{-- TANGGAL IMUNISASI --}}
+    <td style="white-space: nowrap;">
+        @foreach($imunList as $key => $label)
+            {{ $child->{'tanggal_'.$key} ?? '-' }} <br>
+        @endforeach
+    </td>
+
+    {{-- Tinggi Badan --}}
+    <td>{{ $child->tinggi_badan }}</td>
+
+    {{-- Berat Badan --}}
+    <td>{{ $child->berat_badan }}</td>
+
+    {{-- Status Gizi --}}
+    <td>{{ $child->kesimpulan }}</td>
+
+    {{-- ACTION BUTTONS --}}
+    <td class="text-center action-buttons">
+        <button
+            class="btn btn-sm btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#editAnak{{ $child->id_anak }}">
+            <i class="fas fa-edit"></i>
+        </button>
+
+        <form action="{{ route('anak.destroy', $child->id_anak) }}"
+              method="POST"
+              class="d-inline delete-form">
+            @csrf @method('DELETE')
+            <button class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+            </button>
+        </form>
+    </td>
+
+</tr>
 @endforeach
 
+</tbody>
+<tbody>
 
+@php
+    $imunList = [
+        'hepatitis_b' => 'Hepatitis B',
+        'bcg' => 'BCG',
+        'polio' => 'Polio',
+        'dpt_hb_hib' => 'DPT-HB-HIB',
+        'pcv' => 'PCV',
+        'rota' => 'Rota Virus',
+        'campak_rubella' => 'Campak Rubella'
+    ];
+@endphp
 
-          <!-- Form Input Masyarakat -->
-<div class="modal fade" id="modalMasyarakat" tabindex="-1" aria-labelledby="modalMasyarakatLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="modalMasyarakatLabel">Tambah Data Masyarakat</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form method="POST" action="{{ route('masyarakat.store') }}">
-        @csrf
-        <div class="modal-body">
-          <div class="row g-3">
-            <!-- Nama -->
-            <div class="col-md-4">
-              <label class="form-label">Nama</label>
-              <input type="text" name="nama" class="form-control" maxlength="100" required>
-            </div>
+@foreach($anak as $child)
+<tr>
 
-            <!-- NIK -->
-            <div class="col-md-4">
-              <label class="form-label">NIK</label>
-              <input type="text" name="nik" class="form-control" maxlength="16" required>
-            </div>
+    {{-- NIK --}}
+    <td>{{ $child->nik }}</td>
 
-            <!-- No HP -->
-            <div class="col-md-4">
-              <label class="form-label">Nomor Telepon</label>
-              <input type="text" name="no_hp" class="form-control" maxlength="15">
-            </div>
+    {{-- Nama Orang Tua --}}
+    <td>{{ $child->nama_ortu }}</td>
 
-            <!-- Jenis Kelamin -->
-            <div class="col-md-4">
-              <label class="form-label">Jenis Kelamin</label>
-              <select name="jenis_kelamin" class="form-select" required>
-                <option value="">--Pilih--</option>
-                <option value="L">Laki-laki</option>
-                <option value="P">Perempuan</option>
-              </select>
-            </div>
+    {{-- Nama Anak --}}
+    <td>{{ $child->nama_anak }}</td>
 
-            <!-- Tanggal Lahir -->
-            <div class="col-md-4">
-              <label class="form-label">Tanggal Lahir</label>
-              <input type="date" name="tanggal_lahir" class="form-control">
-            </div>
+    {{-- Tanggal Lahir --}}
+    <td>{{ $child->tanggal_lahir }}</td>
 
-            <!-- Pekerjaan -->
-            <div class="col-md-4">
-              <label class="form-label">Pekerjaan</label>
-              <input type="text" name="pekerjaan" class="form-control" maxlength="100">
-            </div>
+    {{-- Usia --}}
+    <td>{{ $child->usia_anak }}</td>
 
-            <!-- Alamat -->
-            <div class="col-md-12">
-              <label class="form-label">Alamat</label>
-              <textarea name="alamat" class="form-control"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+    {{-- Jenis Kelamin --}}
+    <td>{{ $child->jenis_kelamin_anak }}</td>
 
+    {{-- STATUS IMUNISASI --}}
+    <td style="white-space: nowrap;">
+        @foreach($imunList as $key => $label)
+            @php
+                $status = $child->{'imunisasi_'.$key};
+                $icon = $status == 'ya' ? '✓' : '✗';
+                $color = $status == 'ya' ? '#0a8f35' : '#d00';
+            @endphp
 
+            <span style="color: {{ $color }}; font-weight:bold;">
+                {{ $icon }}
+            </span>
+            {{ $label }} <br>
+        @endforeach
+    </td>
 
+    {{-- TANGGAL IMUNISASI --}}
+    <td style="white-space: nowrap;">
+        @foreach($imunList as $key => $label)
+            {{ $child->{'tanggal_'.$key} ?? '-' }} <br>
+        @endforeach
+    </td>
 
+    {{-- Tinggi Badan --}}
+    <td>{{ $child->tinggi_badan }}</td>
 
-            <!-- Kunjungan Content -->
-            <div class="tab-pane fade" id="kunjungan-content" role="tabpanel" aria-labelledby="kunjungan-tab">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Kunjungan</h5>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="search-container" style="width: 250px;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" class="form-control" id="searchkunjungan" placeholder="Cari kunjungan..." onkeyup="searchTable('kunjunganTable', this.value)">
-                                </div>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalKunjungan">
-                                    <i class="fas fa-plus"></i> Tambah Data
-                                </button>
-                            </div>
-                        </div>
+    {{-- Berat Badan --}}
+    <td>{{ $child->berat_badan }}</td>
 
-                        @if(session('kesehatan_success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('kesehatan_success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
+    {{-- Status Gizi --}}
+    <td>{{ $child->kesimpulan }}</td>
 
-                        <div class="table-responsive table-container" id="kunjungan-table-container">
-                            <table class="table table-hover mb-0" id="kunjunganTable">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Keluhan</th>
-                                        {{-- <th>Diagnosa</th>
-                                        <th>Tindakan</th> --}}
-                                        <th>Tanggal kunjungan</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($kunjungan as $kesehatan)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-warning">
-                                                        {{ substr($kesehatan->masyarakat->nama ?? 'N/A', 0, 2) }}
-                                                    </div>
-                                                    <span class="text-truncate">{{ $kesehatan->masyarakat->nama ?? 'N/A' }}</span>
-                                                </div>
-                                            </td>
-                                            {{-- <td class="text-truncate">{{ $kesehatan->keluhan }}</td>
-                                            <td class="text-truncate">{{ $kesehatan->diagnosa }}</td> --}}
-                                            <td class="text-truncate">{{ $kesehatan->tindakan }}</td>
-                                            <td class="text-truncate">
-                                                {{ \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') }}
-                                            </td>
-                                            <td class="text-center action-buttons">
-                                            <!-- Tombol Lihat -->
-                                            <button class="btn btn-sm btn-info"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#detailKunjungan{{ $kesehatan->kunjungan_id }}">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
+    {{-- ACTION BUTTONS --}}
+    <td class="text-center action-buttons">
+        <button
+            class="btn btn-sm btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#editAnak{{ $child->id_anak }}">
+            <i class="fas fa-edit"></i>
+        </button>
 
-                                            <!-- Tombol Edit -->
-                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+        <form action="{{ route('anak.destroy', $child->id_anak) }}"
+              method="POST"
+              class="d-inline delete-form">
+            @csrf @method('DELETE')
+            <button class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+            </button>
+        </form>
+    </td>
 
-                                            <!-- Tombol Hapus -->
-                                            <form action="{{ route('kunjungan.destroy', $kesehatan->kunjungan_id) }}"
-                                                method="POST" class="d-inline delete-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" name="kunjungan_page"
-                                                    value="{{ request('kunjungan_page', $kunjungan->currentPage() ?? 1) }}">
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center">Tidak ada data kunjungan</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination for kunjungan -->
-                        @if($kunjungan->hasPages())
-                        <div class="pagination-container">
-                            <nav aria-label="Page navigation for kunjungan">
-                                <ul class="pagination">
-                                    <li class="page-item {{ $kunjungan->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link"
-                                        href="{{ $kunjungan->previousPageUrl() }}#kunjungan-content"
-                                        aria-label="Previous">
-                                        <i class="fas fa-chevron-left"></i>
-                                        </a>
-                                    </li>
-
-                                    @for($i = 1; $i <= $kunjungan->lastPage(); $i++)
-                                        <li class="page-item {{ $kunjungan->currentPage() == $i ? 'active' : '' }}">
-                                            <a class="page-link"
-                                            href="{{ $kunjungan->url($i) }}#kunjungan-content">
-                                                {{ $i }}
-                                            </a>
-                                        </li>
-                                    @endfor
-
-                                    <li class="page-item {{ $kunjungan->hasMorePages() ? '' : 'disabled' }}">
-                                        <a class="page-link"
-                                        href="{{ $kunjungan->nextPageUrl() }}#kunjungan-content"
-                                        aria-label="Next">
-                                        <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-
-
-<!-- Modal Detail Kunjungan -->
-@foreach($kunjungan as $kesehatan)
-<div class="modal fade" id="detailKunjungan{{ $kesehatan->kunjungan_id }}" tabindex="-1" aria-labelledby="detailKunjunganLabel{{ $kesehatan->kunjungan_id }}" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="detailKunjunganLabel{{ $kesehatan->kunjungan_id }}">
-            Detail Kunjungan
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <ul class="list-group">
-          <li class="list-group-item"><strong>Nama:</strong> {{ $kesehatan->masyarakat->nama ?? 'N/A' }}</li>
-          <li class="list-group-item"><strong>Keluhan:</strong> {{ $kesehatan->keluhan ?? '-' }}</li>
-          <li class="list-group-item"><strong>Diagnosa:</strong> {{ $kesehatan->diagnosa ?? '-' }}</li>
-          <li class="list-group-item"><strong>Tindakan:</strong> {{ $kesehatan->tindakan ?? '-' }}</li>
-          <li class="list-group-item"><strong>Tanggal Kunjungan:</strong>
-            {{ isset($kesehatan->tanggal_kunjungan) ? \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') : '-' }}
-          </li>
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
+</tr>
 @endforeach
 
+</tbody>
 
 
+          </table>
+        </div>
 
-<!-- Form Input Kunjungan -->
-<div class="modal fade" id="modalKunjungan" tabindex="-1" aria-labelledby="modalKunjunganLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="modalKunjunganLabel">Tambah Data Kunjungan</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <!-- Pagination for anak -->
+        @if($anak->hasPages())
+        <div class="pagination-container">
+            <nav aria-label="Page navigation for anak">
+                <ul class="pagination">
+                    <li class="page-item {{ $anak->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link"
+                        href="{{ $anak->previousPageUrl() }}#anak-content"
+                        aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    @for($i = 1; $i <= $anak->lastPage(); $i++)
+                        <li class="page-item {{ $anak->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                            href="{{ $anak->url($i) }}#anak-content">
+                                {{ $i }}
+                            </a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $anak->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link"
+                        href="{{ $anak->nextPageUrl() }}#anak-content"
+                        aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        @endif
       </div>
-      <form method="POST" action="{{ route('kunjungan.store') }}">
-        @csrf
-        <div class="modal-body">
-          <div class="row g-3">
-            <!-- Pilih Masyarakat -->
-            <div class="col-md-6">
-              <label class="form-label">Nama Masyarakat</label>
-              <select name="masyarakat_id" class="form-select" required>
-                <option value="">--Pilih Masyarakat--</option>
-                @foreach($masyarakat as $warga)
-                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
-                @endforeach
-              </select>
-            </div>
+    </div>
+  </div>
 
-            <!-- Tanggal Kunjungan -->
-            <div class="col-md-6">
-              <label class="form-label">Tanggal Kunjungan</label>
-              <input type="date" name="tanggal_kunjungan" class="form-control" required>
-            </div>
 
-            <!-- Keluhan -->
-            <div class="col-md-4">
-              <label class="form-label">Keluhan</label>
-              <input type="text" name="keluhan" class="form-control" required>
-            </div>
 
-            <!-- Diagnosa -->
-            <div class="col-md-4">
-              <label class="form-label">Diagnosa</label>
-              <input type="text" name="diagnosa" class="form-control">
-            </div>
-
-            <!-- Tindakan -->
-            <div class="col-md-4">
-              <label class="form-label">Tindakan</label>
-              <input type="text" name="tindakan" class="form-control">
-            </div>
+<!-- Pelayanan -->
+  <div class="tab-pane fade" id="pelayanan-content" role="tabpanel">
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title fw-bold">Data Pelayanan</h5>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="search-container" style="width: 250px;">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control" placeholder="Cari pelayanan..." onkeyup="searchTable('pelayananTable', this.value)">
           </div>
+          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalPelayanan">
+            <i class="fas fa-plus"></i> Tambah Data
+          </button>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="pelayananTable">
+            <thead>
+              <tr>
+                <th>Nama Pasien</th>
+                <th>Tanggal Pelayanan</th>
+                <th>Detail Pelayanan</th>
+                <th>Jenis Pelayanan</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($pelayanan as $layanan)
+              <tr>
+                <td>{{ $layanan->nama_pasien }}</td>
+                <td>{{ $layanan->tanggal_pelayanan }}</td>
+                <td>{{ $layanan->program_kesehatan }}</td>
+                <td>{{ $layanan->jenis_pelayanan }}</td>
+                <td class="text-center action-buttons">
+                    <button
+                    class="btn btn-sm btn-warning"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editPelayanan{{ $layanan->id_pelayanan }}">
+                    <i class="fas fa-edit"></i>
+                    </button>
+
+
+
+                  <form action="{{ route('pelayanan.destroy', $layanan->id_pelayanan) }}" method="POST" class="d-inline delete-form">
+                    @csrf @method('DELETE')
+                    <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
-      </form>
+
+        <!-- Pagination for pelayanan -->
+        @if($pelayanan->hasPages())
+        <div class="pagination-container">
+            <nav aria-label="Page navigation for pelayanan">
+                <ul class="pagination">
+                    <li class="page-item {{ $pelayanan->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link"
+                        href="{{ $pelayanan->previousPageUrl() }}#pelayanan-content"
+                        aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    @for($i = 1; $i <= $pelayanan->lastPage(); $i++)
+                        <li class="page-item {{ $pelayanan->currentPage() == $i ? 'active' : '' }}">
+                            <a class="page-link"
+                            href="{{ $pelayanan->url($i) }}#pelayanan-content">
+                                {{ $i }}
+                            </a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $pelayanan->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link"
+                        href="{{ $pelayanan->nextPageUrl() }}#pelayanan-content"
+                        aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        @endif
+      </div>
     </div>
   </div>
 </div>
 
-
-
-
-            <!-- Kehamilan Content -->
-            <div class="tab-pane fade" id="kehamilan-content" role="tabpanel" aria-labelledby="kehamilan-tab">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Kehamilan</h5>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="search-container" style="width: 250px;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" class="form-control" id="searchKehamilan" placeholder="Cari kehamilan..." onkeyup="searchTable('kehamilanTable', this.value)">
-                                </div>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalKehamilan">
-                                    <i class="fas fa-plus"></i> Tambah Data
-                                </button>
-                            </div>
-                        </div>
-
-                        @if(session('pregnancy_success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('pregnancy_success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        <div class="table-responsive table-container" id="kehamilan-table-container">
-                            <table class="table table-hover mb-0" id="kehamilanTable">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>HPL</th>
-                                        <th>Usia kehamilan</th>
-                                        <th>Catatan</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($kehamilan as $hamil)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-primary">{{ substr($hamil->masyarakat->nama ?? '??', 0, 2) }}</div>
-                                                    <span class="ms-2">{{ $hamil->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
-                                                </div>
-                                            </td>
-                                            <td>{{ $hamil->hpl ?? '-' }}</td>
-                                            <td>{{ $hamil->usia_kehamilan ?? '-' }}</td>
-                                            <td>{{ $hamil->catatan ?? '-' }}</td>
-                                            <td class="text-center action-buttons">
-                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
-                                                <form action="{{ route('kehamilan.destroy', $hamil->kehamilan_id) }}"
-                                                    method="POST" class="d-inline delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">Tidak ada data kehamilan</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination for kehamilan -->
-                        @if($kehamilan->hasPages())
-                        <div class="pagination-container">
-                            <nav aria-label="Page navigation for kehamilan">
-                                <ul class="pagination">
-                                    <li class="page-item {{ $kehamilan->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link"
-                                        href="{{ $kehamilan->previousPageUrl() }}#kehamilan-content"
-                                        aria-label="Previous">
-                                        <i class="fas fa-chevron-left"></i>
-                                        </a>
-                                    </li>
-
-                                    @for($i = 1; $i <= $kehamilan->lastPage(); $i++)
-                                        <li class="page-item {{ $kehamilan->currentPage() == $i ? 'active' : '' }}">
-                                            <a class="page-link"
-                                            href="{{ $kehamilan->url($i) }}#kehamilan-content">
-                                                {{ $i }}
-                                            </a>
-                                        </li>
-                                    @endfor
-
-                                    <li class="page-item {{ $kehamilan->hasMorePages() ? '' : 'disabled' }}">
-                                        <a class="page-link"
-                                        href="{{ $kehamilan->nextPageUrl() }}#kehamilan-content"
-                                        aria-label="Next">
-                                        <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-
-
-
-<!-- Form Input Kehamilan -->
-<div class="modal fade" id="modalKehamilan" tabindex="-1" aria-labelledby="modalKehamilanLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="modalKehamilanLabel">Tambah Data Kehamilan</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form method="POST" action="{{ route('kehamilan.store') }}">
-        @csrf
-        <div class="modal-body">
-          <div class="row g-3">
-            <!-- Nama Masyarakat -->
-            <div class="col-md-6">
-              <label class="form-label">Nama Masyarakat</label>
-              <select name="masyarakat_id" class="form-select" required>
-                <option value="">--Pilih Masyarakat--</option>
-                @foreach($masyarakat as $warga)
-                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
-                @endforeach
-              </select>
-            </div>
-
-            <!-- HPL -->
-            <div class="col-md-6">
-              <label class="form-label">HPL</label>
-              <input type="date" name="hpl" class="form-control">
-            </div>
-
-            <!-- Usia Kehamilan -->
-            <div class="col-md-6">
-              <label class="form-label">Usia Kehamilan (minggu)</label>
-              <input type="number" name="usia_kehamilan" class="form-control">
-            </div>
-
-            <!-- Catatan -->
-            <div class="col-md-12">
-              <label class="form-label">Catatan</label>
-              <textarea name="catatan" class="form-control"></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-            <!-- Imunisasi Content -->
-            <div class="tab-pane fade" id="imunisasi-content" role="tabpanel" aria-labelledby="imunisasi-tab">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Imunisasi</h5>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="search-container" style="width: 250px;">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" class="form-control" id="searchimunisasi" placeholder="Cari imunisasi..." onkeyup="searchTable('imunisasiTable', this.value)">
-                                </div>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalImunisasi">
-                                    <i class="fas fa-plus"></i> Tambah Data
-                                </button>
-                            </div>
-                        </div>
-                        @if(session('imunisasi_success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('imunisasi_success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-
-                        <div class="table-responsive table-container" id="imunisasi-table-container">
-                            <table class="table table-hover mb-0" id="imunisasiTable">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Jenis imunisasi</th>
-                                        <th>Tanggal imunisasi</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($imunisasi as $imun)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-primary">{{ substr($imun->masyarakat->nama ?? '??', 0, 2) }}</div>
-                                                    <span class="ms-2">{{ $imun->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
-                                                </div>
-                                            </td>
-                                            <td>{{ $imun->jenis_imunisasi ?? '-' }}</td>
-                                            <td>{{ isset($imun->tanggal_imunisasi) ? \Carbon\Carbon::parse($imun->tanggal_imunisasi)->format('d/m/Y') : '-' }}</td>
-                                            <td class="text-center action-buttons">
-                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
-                                                <form action="{{ route('imunisasi.destroy', $imun->imunisasi_id) }}"
-
-                                                    method="POST" class="d-inline delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                    <input type="hidden" name="imunisasi_page" value="{{ request('imunisasi_page', $imunisasi->currentPage() ?? 1) }}">
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center">Tidak ada data imunisasi</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination for imunisasi -->
-                        @if($imunisasi->hasPages())
-                        <div class="pagination-container">
-                            <nav aria-label="Page navigation for imunisasi">
-                                <ul class="pagination">
-                                    <li class="page-item {{ $imunisasi->onFirstPage() ? 'disabled' : '' }}">
-                                        <a class="page-link"
-                                        href="{{ $imunisasi->previousPageUrl() }}#imunisasi-content"
-                                        aria-label="Previous">
-                                        <i class="fas fa-chevron-left"></i>
-                                        </a>
-                                    </li>
-
-                                    @for($i = 1; $i <= $imunisasi->lastPage(); $i++)
-                                        <li class="page-item {{ $imunisasi->currentPage() == $i ? 'active' : '' }}">
-                                            <a class="page-link"
-                                            href="{{ $imunisasi->url($i) }}#imunisasi-content">
-                                                {{ $i }}
-                                            </a>
-                                        </li>
-                                    @endfor
-
-                                    <li class="page-item {{ $imunisasi->hasMorePages() ? '' : 'disabled' }}">
-                                        <a class="page-link"
-                                        href="{{ $imunisasi->nextPageUrl() }}#imunisasi-content"
-                                        aria-label="Next">
-                                        <i class="fas fa-chevron-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Form Input Imunisasi -->
-<div class="modal fade" id="modalImunisasi" tabindex="-1" aria-labelledby="modalImunisasiLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold" id="modalImunisasiLabel">Tambah Data Imunisasi</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form method="POST" action="{{ route('imunisasi.store') }}">
-        @csrf
-        <div class="modal-body">
-          <div class="row g-3">
-            <!-- Nama Masyarakat -->
-            <div class="col-md-6">
-              <label class="form-label">Nama Masyarakat</label>
-              <select name="masyarakat_id" class="form-select" required>
-                <option value="">--Pilih Masyarakat--</option>
-                @foreach($masyarakat as $warga)
-                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
-                @endforeach
-              </select>
-            </div>
-
-            <!-- Jenis Imunisasi -->
-            <div class="col-md-6">
-              <label class="form-label">Jenis Imunisasi</label>
-              <input type="text" name="jenis_imunisasi" class="form-control" maxlength="100" required>
-            </div>
-
-            <!-- Tanggal Imunisasi -->
-            <div class="col-md-6">
-              <label class="form-label">Tanggal Imunisasi</label>
-              <input type="date" name="tanggal_imunisasi" class="form-control" required>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
+{{-- ================== MODALS ================== --}}
+@include('partials.modal_orangtua')
+@include('partials.modal_anak')
+@include('partials.modal_pelayanan')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

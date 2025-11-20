@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use App\Models\Masyarakat;
+use App\Models\anak;
+use App\Models\orangtua;
 
 class AuthController
 {
@@ -17,10 +18,15 @@ class AuthController
     }
      public function showLandingForm()
     {
-        $totalMasyarakat = Masyarakat::count();
-        return view('landing',[
-            'totalMasyarakat' => $totalMasyarakat,
-            ]);
+        $totalOrangtua = Orangtua::count();
+$totalAnak = Anak::count();
+
+$totalMasyarakat = $totalOrangtua + $totalAnak;
+
+return view('landing', [
+    'totalMasyarakat' => $totalMasyarakat,
+]);
+
     }
 
 

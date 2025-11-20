@@ -10,205 +10,164 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
     <title>Dashboard Admin</title>
 </head>
 <style>
-    body { font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+    body {
+        font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
 
+    .vertical-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80px;
+        height: 92vh;
+        background-color: #ffffff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 16px;
+        z-index: 1000;
+        border-radius: 15px;
+        margin: 30px 30px;
+        transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
+    }
 
-   .vertical-navbar {
-       position: fixed;
-       top: 0;
-       left: 0;
-       width: 80px;
-       height: 92vh;
-       background-color: #ffffff;
-       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-       display: flex;
-       flex-direction: column;
-       align-items: flex-start;
-       padding-left: 16px;
-       /* padding: 20px 0; */
-       z-index: 1000;
-       border-radius: 15px 15px 15px 15px;
-       margin: 30px 30px;
-       transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
-   }
+    .vertical-navbar:hover {
+        width: 250px;
+        align-items: flex-start;
+        padding-left: 16px;
+    }
 
-   .vertical-navbar:hover {
-       width: 250px;
-       align-items: flex-start;
-       padding-left: 16px;
-
-   }
     .vertical-navbar:hover .nav-text {
-       opacity: 1;
-       visibility: visible;
-   }
+        opacity: 1;
+        visibility: visible;
+    }
 
-   .nav-text {
-    margin-left: 15px;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-10px);
-    visibility: hidden;
-    transition: opacity 0.3s ease, transform 0.8s ease;
+    .nav-text {
+        margin-left: 15px;
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-10px);
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.8s ease;
+        font-family: 'Poppins', 'Roboto', sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+    }
 
-    /* Font styling */
-    font-family: 'Poppins', 'Roboto', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
+    .vertical-navbar:hover .nav-text {
+        opacity: 1;
+        transform: translateX(0);
+        visibility: visible;
+    }
 
-}
-
-
-.vertical-navbar:hover .nav-text {
-    opacity: 1;
-    transform: translateX(0);
-    visibility: visible;
-}
-
-
-   .nav-icon a {
-       text-decoration: none;
-       color: inherit;
-       display: flex;
-       align-items: center;
+    .nav-icon a {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
         justify-content: flex-start;
-       width: 100%;
-       height: 100%;
+        width: 100%;
+        height: 100%;
+    }
 
+    .nav-indicator {
+        position: absolute;
+        left: 0;
+        width: 4px;
+        height: 48px;
+        background-color: #00b8d4;
+        border-radius: 0 4px 4px 0;
+        transition: top 0.3s ease;
+        pointer-events: none;
+    }
 
-
-   }
-
-   .nav-indicator {
-       position: absolute;
-       left: 0;
-       width: 4px;
-       height: 48px;
-       background-color: #00b8d4;
-       border-radius: 0 4px 4px 0;
-       transition: top 0.3s ease;
-       pointer-events: none;
-   }
-
-   .nav-icon {
-       width: 48px;
-       height: 48px;
-       margin: 12px 0;
-       display: flex;
-       align-items: center;
+    .nav-icon {
+        width: 48px;
+        height: 48px;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
         justify-content: flex-start;
-       border-radius: 8px;
-       color: #777;
-       font-size: 20px;
-       cursor: pointer;
-       transition: all 0.2s ease;
-       padding-left: 14px;
+        border-radius: 8px;
+        color: #777;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding-left: 14px;
+    }
 
-   }
-
-   .nav-icon:hover {
-       background-color: #f0f0f0;
-       transform: scale(1.05);
+    .nav-icon:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
         width: 90%;
-   }
+    }
 
-   .nav-icon.active {
-       background-color: #00b8d4;
-       color: white;
-       transition: background-color 1s ease;
+    .nav-icon.active {
+        background-color: #00b8d4;
+        color: white;
+        transition: background-color 1s ease;
         width: 90%;
         padding-left: 19px;
-   }
-
-   .nav-icon.logout {
-       margin-top: auto;
-       color: #f44336;
-   }
-
-   .main-content {
-       margin-left: 80px;
-       padding-left: 5rem;
-       padding-top: 3rem;
-       width: calc(100% - 80px);
-       max-width: 1440px;
-       margin-right: auto;
-   }
-
-   .header-container {
-       display: flex;
-       justify-content: space-between;
-       margin-bottom: 24px;
-       align-items: center;
-   }
-
-   .search-container {
-        position: relative;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .search-container input {
-        padding-left: 30px;
-        border-radius: 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    .nav-icon.logout {
+        margin-top: auto;
+        color: #f44336;
     }
 
-    .search-container i {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6c757d;
+    /* PERBAIKAN UTAMA: Main Content Lebih Compact */
+    .main-content {
+        margin-left: 80px;
+        padding: 2rem 2rem 2rem 3rem; /* Reduced right padding */
+        width: calc(100% - 80px - 2rem); /* Account for reduced padding */
+        max-width: none; /* Remove max-width restriction */
+        margin-right: 0;
+        box-sizing: border-box;
     }
 
-    @media (max-width: 768px) {
-        .vertical-navbar {
-            width: 60px;
-        }
-
-        .main-content {
-            margin-left: 60px;
-            width: calc(100% - 60px);
-            padding: 1rem;
-        }
-
-        .nav-icon {
-            width: 40px;
-            height: 40px;
-        }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        align-items: center;
     }
 
     .nav-logo {
-    width: 65px;
-    height: 65px;
-    margin: 0 0 12px 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    padding-right: 14px;
+        width: 65px;
+        height: 65px;
+        margin: 0 0 12px 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        padding-right: 14px;
+    }
 
-}
-
-.nav-logo span {
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-10px);
-    visibility: hidden;
-    transition: opacity 0.3s ease, transform 0.8s ease;
-    color: #00b8d4;
-    width: 20px;
+    .nav-logo span {
+        white-space: nowrap;
+        opacity: 0;
+        transform: translateX(-10px);
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.8s ease;
+        color: #00b8d4;
+        width: 20px;
         height: 20px;
-}
+    }
 
     .nav-logo img {
         width: 100%;
@@ -259,33 +218,6 @@
         padding: 1.5rem !important;
     }
 
-    @media (max-width: 992px) {
-        .stats-card {
-            height: 120px;
-        }
-
-        .icon-container {
-            width: 56px;
-            height: 56px;
-        }
-
-        .display-6 {
-            font-size: 1.8rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .stats-card {
-            height: auto;
-            min-height: 120px;
-        }
-
-        .nav-logo {
-            width: 50px;
-            height: 50px;
-        }
-    }
-
     .table-responsive {
         overflow-x: auto;
     }
@@ -308,7 +240,6 @@
         font-size: 14px;
     }
 
-    /* Additional styles for better table layout */
     .table-card {
         min-height: 400px;
     }
@@ -325,7 +256,6 @@
         max-height: 350px;
     }
 
-    /* Custom styles for the large table */
     .large-table-card {
         min-height: 500px;
     }
@@ -334,252 +264,190 @@
         max-height: 450px;
     }
 
-    .card1 {
-        background: linear-gradient(135deg, #e9d5ff, #ddd6fe);
-        border-radius: 24px;
-        padding: 40px 50px;
-        margin-bottom: 24px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
-        width: 100%;
-        max-width: none;
-        margin-left: 0;
-        margin-right: 0;
+    /* === Tab Button Styling === */
+    .nav-link {
+        border: none;
+        background-color: #f5f5f5;
+        color: #333;
+        border-radius: 20px;
+        padding: 6px 18px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        min-width: 180px;
     }
 
-    .decorative-dots {
-        position: absolute;
-        width: 100%;
+    .nav-link.active {
+        background-color: #00b8d4;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(0,184,212,0.4);
+    }
+
+    .nav-link:hover {
+        background-color: #e0f7fa;
+    }
+
+    /* === Container Chart Kesehatan - FIXED === */
+    .health-chart-container {
+        padding: 1.5rem !important;
+    }
+
+    .health-chart-container h6 {
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        color: #000;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .health-chart-container #healthTabs {
+        margin-top: 0 !important;
+        margin-bottom: 0.5rem !important;
+        padding: 0 !important;
+    }
+
+    .health-chart-container .tab-content {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        min-height: 260px;
+    }
+
+    .health-chart-container .tab-content .tab-pane {
+        margin: 0 !important;
+        padding: 0 !important;
         height: 100%;
-        top: 0;
-        left: 0;
-        pointer-events: none;
     }
 
-    .dot {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.6;
+    .health-chart-container .tab-content canvas {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        height: 260px !important;
+        width: 100% !important;
     }
 
-    .dot-1 {
-        width: 12px;
-        height: 12px;
-        background: #8b5cf6;
-        top: 20px;
-        right: 80px;
+    /* === Container Chart Pelayanan === */
+    .pelayanan-chart-container {
+        padding: 1.5rem !important;
     }
 
-    .dot-2 {
-        width: 8px;
-        height: 8px;
-        background: #6366f1;
-        top: 50px;
-        right: 50px;
+    .pelayanan-chart-container h6 {
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        color: #000 !important;
+        text-align: left !important;
+        margin-bottom: 0.75rem !important;
     }
 
-    .dot-3 {
-        width: 6px;
-        height: 6px;
-        background: #a855f7;
-        bottom: 60px;
-        left: 60px;
+    .pelayanan-chart-container canvas {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        height: 260px !important;
+        width: 100% !important;
     }
 
-    .dot-4 {
-        width: 10px;
-        height: 10px;
-        background: #7c3aed;
-        bottom: 100px;
-        left: 40px;
+    /* PERBAIKAN: Compact Layout untuk Mengurangi Space Kanan */
+    .compact-container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
     }
 
-    .content {
+    .row.g-4 {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+
+    /* Responsive Design dengan Lebih Compact */
+    @media (max-width: 1400px) {
+        .main-content {
+            padding: 2rem 1.5rem 2rem 2.5rem;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .main-content {
+            padding: 1.5rem 1rem 1.5rem 2rem;
+        }
+
+        .health-chart-container,
+        .pelayanan-chart-container {
+            padding: 1rem !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .vertical-navbar {
+            width: 60px;
+            margin: 15px 15px;
+        }
+
+        .main-content {
+            margin-left: 60px;
+            width: calc(100% - 60px);
+            padding: 1rem;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .stats-card {
+            height: auto;
+            min-height: 120px;
+        }
+
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .health-chart-container .tab-content canvas {
+            height: 220px !important;
+        }
+
+        .nav-link {
+            min-width: 140px;
+            padding: 5px 12px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .main-content {
+            padding: 0.75rem;
+        }
+
+        .header-container h2 {
+            font-size: 1.5rem;
+        }
+
+        .stats-card .display-6 {
+            font-size: 1.5rem;
+        }
+
+        .health-chart-container,
+        .pelayanan-chart-container {
+            padding: 0.75rem !important;
+        }
+    }
+
+    /* Pastikan chart menggunakan width 100% */
+    .chart-container {
+        width: 100% !important;
         position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        gap: 40px;
     }
 
-    .text-section {
-        flex: 1;
-    }
-
-    .greeting {
-        font-size: 42px;
-        font-weight: 700;
-        color: #374151;
-        margin-bottom: 16px;
-        letter-spacing: -0.5px;
-    }
-
-    .message {
-        font-size: 18px;
-        color: #6b7280;
-        line-height: 1.6;
-        font-weight: 400;
-    }
-
-    .illustration {
-        flex-shrink: 0;
-        position: relative;
-    }
-
-    .person {
-        width: 180px;
-        height: 180px;
-        position: relative;
-    }
-
-    .chair {
-        position: absolute;
-        bottom: -10px;
-        left: 20px;
-        width: 140px;
-        height: 80px;
-        background: linear-gradient(145deg, #7c3aed, #6d28d9);
-        border-radius: 15px 15px 8px 8px;
-    }
-
-    .chair::before {
-        content: '';
-        position: absolute;
-        top: -60px;
-        left: 10px;
-        width: 120px;
-        height: 70px;
-        background: linear-gradient(145deg, #8b5cf6, #7c3aed);
-        border-radius: 12px 12px 0 0;
-    }
-
-    .desk {
-        position: absolute;
-        bottom: -20px;
-        left: 0;
-        width: 180px;
-        height: 12px;
-        background: linear-gradient(90deg, #e5e7eb, #d1d5db);
-        border-radius: 6px;
-    }
-
-    .laptop {
-        position: absolute;
-        bottom: 15px;
-        right: 10px;
-        width: 70px;
-        height: 45px;
-        background: linear-gradient(145deg, #6d28d9, #5b21b6);
-        border-radius: 6px;
-        transform: perspective(100px) rotateX(15deg);
-    }
-
-    .laptop::before {
-        content: '';
-        position: absolute;
-        top: -35px;
-        left: 0;
-        width: 70px;
-        height: 35px;
-        background: linear-gradient(145deg, #4c1d95, #3730a3);
-        border-radius: 6px 6px 0 0;
-    }
-
-    .person-body {
-        position: absolute;
-        bottom: 30px;
-        left: 40px;
-        width: 60px;
-        height: 80px;
-        background: linear-gradient(145deg, #fbbf24, #f59e0b);
-        border-radius: 20px 20px 0 0;
-    }
-
-    .person-head {
-        position: absolute;
-        top: 10px;
-        left: 50px;
-        width: 40px;
-        height: 40px;
-        background: #fef3c7;
-        border-radius: 50%;
-    }
-
-    .hair {
-        position: absolute;
-        top: 5px;
-        left: 45px;
-        width: 50px;
-        height: 35px;
-        background: linear-gradient(145deg, #5b21b6, #4c1d95);
-        border-radius: 25px 25px 15px 15px;
-    }
-
-    .hair::before {
-        content: '';
-        position: absolute;
-        right: -10px;
-        top: 5px;
-        width: 25px;
-        height: 40px;
-        background: linear-gradient(145deg, #5b21b6, #4c1d95);
-        border-radius: 0 15px 15px 0;
-    }
-
-    .coffee {
-        position: absolute;
-        bottom: 50px;
-        left: 10px;
-        width: 16px;
-        height: 20px;
-        background: #f3f4f6;
-        border-radius: 0 0 8px 8px;
-    }
-
-    .coffee::before {
-        content: '';
-        position: absolute;
-        right: -4px;
-        top: 5px;
-        width: 6px;
-        height: 8px;
-        border: 2px solid #d1d5db;
-        border-left: none;
-        border-radius: 0 4px 4px 0;
-    }
-
-    @media (max-width: 640px) {
-        .card1 {
-            padding: 30px 25px;
-        }
-
-        .content {
-            flex-direction: column;
-            text-align: center;
-            gap: 30px;
-        }
-
-        .greeting {
-            font-size: 36px;
-        }
-
-        .message {
-            font-size: 16px;
-        }
-
-        .person {
-            width: 160px;
-            height: 160px;
-        }
-
-        .desk {
-            width: 160px;
-        }
+    .chart-container canvas {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 </style>
 <body>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Vertical Navbar -->
     <div class="vertical-navbar">
         <div class="nav-logo">
             <img src="{{ asset('image/logo_polije.png') }}" alt="Logo">
@@ -588,212 +456,147 @@
         <div class="nav-icon active">
             <a href="dashboard">
                 <i class="fas fa-th-large"></i>
-                 <span class="nav-text">Dashboard</span>
+                <span class="nav-text">Dashboard</span>
             </a>
         </div>
-
-
         <div class="nav-icon">
             <a href="data">
                 <i class="fas fa-clinic-medical"></i>
-                 <span class="nav-text">Data Masyarakat</span>
+                <span class="nav-text">Data Masyarakat</span>
             </a>
         </div>
-         <div class="nav-icon">
+        <div class="nav-icon">
             <a href="setting">
-            <i class="fas fa-cog"></i>
-             <span class="nav-text">Pengaturan</span>
+                <i class="fas fa-cog"></i>
+                <span class="nav-text">Pengaturan</span>
             </a>
         </div>
-
         <div class="nav-icon logout" onclick="handleLogout()">
             <i class="fas fa-sign-out-alt"></i>
-             <span class="nav-text">Logout</span>
+            <span class="nav-text">Logout</span>
         </div>
     </div>
 
-     <!-- Main Content -->
-     <div class="main-content">
+    <!-- Main Content - Compact -->
+    <div class="main-content">
         <div class="header-container">
             <h2 class="fs-3 fw-bold m-0">Dashboard</h2>
         </div>
 
-        {{-- <!-- Card 1 yang sudah diperlebar -->
-        <div class="card1">
-            <div class="decorative-dots">
-                <div class="dot dot-1"></div>
-                <div class="dot dot-2"></div>
-                <div class="dot dot-3"></div>
-                <div class="dot dot-4"></div>
-            </div>
-
-            <div class="content">
-                <div class="text-section">
-                    <h1 class="greeting">Hi, Alyssa</h1>
-                    <p class="message">Ready to start your day with some pitch decks?</p>
-                </div>
-
-                <div class="illustration">
-                    <div class="person">
-                        <div class="desk"></div>
-                        <div class="chair"></div>
-                        <div class="laptop"></div>
-                        <div class="person-body"></div>
-                        <div class="person-head"></div>
-                        <div class="hair"></div>
-                        <div class="coffee"></div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
-        <div class="row g-4 mb-4">
-            <!-- Card 1 - Total Users -->
+        <!-- Stats Cards -->
+        <div class="row g-3 mb-4"> <!-- Reduced gutter -->
             <div class="col-md-4">
                 <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div class="card-body d-flex justify-content-between align-items-center p-3"> <!-- Reduced padding -->
                         <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Warga</p>
+                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Masyarakat</p>
                             <h2 class="display-6 fw-bold mb-0">{{ number_format($totalMasyarakat) }}</h2>
                         </div>
-                        <div class="icon-container bg-primary bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-primary" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+                        <div class="icon-container bg-primary bg-opacity-10 rounded-circle p-2"> <!-- Reduced padding -->
+                            <i class="bi bi-people-fill text-primary fs-4"></i> <!-- Smaller icon -->
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2 - User Pregnant -->
             <div class="col-md-4">
                 <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div class="card-body d-flex justify-content-between align-items-center p-3">
                         <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2"> Kunjungan Kesehatan</p>
-                            <h2 class="display-6 fw-bold mb-0">{{ number_format($totalKunjunganKesehatan) }}</h2>
+                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Orang Tua</p>
+                            <h2 class="display-6 fw-bold mb-0">{{ number_format($totalOrangtua) }}</h2>
                         </div>
-                        <div class="icon-container bg-warning bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-warning" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                        <div class="icon-container bg-warning bg-opacity-10 rounded-circle p-2">
+                            <i class="bi bi-person-badge-fill text-warning fs-4"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 3 - Total Appointment -->
             <div class="col-md-4">
                 <div class="card shadow-sm stats-card">
-                    <div class="card-body d-flex justify-content-between align-items-center p-4">
+                    <div class="card-body d-flex justify-content-between align-items-center p-3">
                         <div>
-                            <p class="text-muted small text-uppercase fw-semibold mb-2">Imunisasi</p>
-                            <h2 class="display-6 fw-bold mb-0">{{ number_format($totalImunisasi) }}</h2>
+                            <p class="text-muted small text-uppercase fw-semibold mb-2">Total Anak</p>
+                            <h2 class="display-6 fw-bold mb-0">{{ number_format($totalAnak) }}</h2>
                         </div>
-                        <div class="icon-container bg-success bg-opacity-10 rounded-circle p-3">
-                            <svg class="text-success" style="width: 32px; height: 32px;" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                        <div class="icon-container bg-success bg-opacity-10 rounded-circle p-2">
+                            <i class="bi bi-person-fill text-success fs-4"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Table 1: Data Masyarakat (Full Width) -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card table-card large-table-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Masyarakat</h5>
-                        </div>
+        <!-- Charts Section - Compact -->
+        <div class="row g-3 mb-4"> <!-- Reduced gutter -->
+            <!-- Health Chart -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card shadow-sm health-chart-container h-100">
+                    <h6 class="fw-bold mb-2">Data Kesehatan ({{ date('Y') }})</h6>
 
+                    <div class="d-flex justify-content-start mb-2" id="healthTabs">
+                        <button class="nav-link active me-2" id="tab-gizi">Gizi Anak</button>
+                        <button class="nav-link" id="tab-penyakit">Riwayat Penyakit Orang Tua</button>
+                    </div>
+
+                    <div class="tab-content chart-container">
+                        <div class="tab-pane fade show active" id="chartGiziContainer">
+                            <canvas id="chartGizi"></canvas>
+                        </div>
+                        <div class="tab-pane fade" id="chartPenyakitContainer">
+                            <canvas id="chartPenyakit"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Chart -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card shadow-sm pelayanan-chart-container h-100">
+                    <h6 class="fw-bold mb-2">Pelayanan Kesehatan ({{ date('Y') }})</h6>
+                    <div class="chart-container">
+                        <canvas id="chartPelayanan"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section - Compact -->
+        <div class="row g-3">
+            <!-- Parents Table -->
+            <div class="col-lg-6">
+                <div class="card table-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title fw-bold mb-0">Data Orang Tua</h5>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
                                         <th>NIK</th>
-                                        <th>No. HP</th>
+                                        <th>Usia</th>
                                         <th>Gender</th>
-                                        <th>Alamat</th>
-                                        <th>Tanggal Lahir</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($masyarakat as $warga)
+                                    @forelse($orangtua as $data)
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-primary">{{ substr($warga->nama, 0, 2) }}</div>
-                                                    <span class="text-truncate">{{ $warga->nama }}</span>
+                                                    <div class="avatar bg-primary">{{ substr($data->nama_orangtua, 0, 2) }}</div>
+                                                    <span class="small">{{ $data->nama_orangtua }}</span>
                                                 </div>
                                             </td>
-                                            <td class="text-truncate">{{ $warga->nik }}</td>
-                                            <td class="text-truncate">{{ $warga->no_hp }}</td>
-                                            <td class="text-truncate">{{ $warga->jenis_kelamin }}</td>
-
-                                            <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
-                                            <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td>
+                                            <td class="small">{{ $data->nik }}</td>
+                                            <td class="small">{{ $data->usia_orangtua }}</td>
+                                            <td class="small">{{ $data->jenis_kelamin_orangtua }}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">Tidak ada data masyarakat</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tables in 2 Columns (Bottom Row) -->
-        <div class="row mb-5 g-4">
-            <!-- Table 2: Data Kunjungan -->
-            <div class="col-lg-6">
-                <div class="card table-card h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Kunjungan</h5>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <th>Diagnosa</th>
-                                        <th>Tanggal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($kunjungan as $kesehatan)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-warning">
-                                                        {{ substr($kesehatan->masyarakat->nama ?? 'N/A', 0, 2) }}
-                                                    </div>
-                                                    <span class="text-truncate">{{ $kesehatan->masyarakat->nama ?? 'N/A' }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="text-truncate">{{ $kesehatan->diagnosa }}</td>
-                                            <td class="text-truncate">
-                                                {{ \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') }}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">Tidak ada data kunjungan</td>
+                                            <td colspan="4" class="text-center small">Tidak ada data orang tua</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -803,42 +606,39 @@
                 </div>
             </div>
 
-            <!-- Table 3: Data Imunisasi -->
+            <!-- Children Table -->
             <div class="col-lg-6">
                 <div class="card table-card h-100">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title fw-bold">Tabel Data Imunisasi</h5>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title fw-bold mb-0">Data Anak</h5>
                         </div>
-
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead>
                                     <tr>
-                                        <th>Nama</th>
-                                        <th>Jenis</th>
-                                        <th>Tanggal</th>
+                                        <th>Nama Anak</th>
+                                        <th>Usia</th>
+                                        <th>Gender</th>
+                                        <th>Orang Tua</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($imunisasi as $vaksin)
+                                    @forelse($anak as $child)
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-success">
-                                                        {{ substr($vaksin->masyarakat->nama ?? 'N/A', 0, 2) }}
-                                                    </div>
-                                                    <span class="text-truncate">{{ $vaksin->masyarakat->nama ?? 'N/A' }}</span>
+                                                    <div class="avatar bg-success">{{ substr($child->nama_anak, 0, 2) }}</div>
+                                                    <span class="small">{{ $child->nama_anak }}</span>
                                                 </div>
                                             </td>
-                                            <td class="text-truncate">{{ $vaksin->jenis_imunisasi }}</td>
-                                            <td class="text-truncate">
-                                                {{ \Carbon\Carbon::parse($vaksin->tanggal_imunisasi)->format('d/m/Y') }}
-                                            </td>
+                                            <td class="small">{{ $child->usia_anak }}</td>
+                                            <td class="small">{{ $child->jenis_kelamin_anak }}</td>
+                                            <td class="small">{{ $child->orangtua->nama_orangtua ?? '-' }}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center">Tidak ada data imunisasi</td>
+                                            <td colspan="4" class="text-center small">Tidak ada data anak</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -852,113 +652,254 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    @if(session('swal'))
-        Swal.fire({
-            icon: '{{ session('swal.type') }}',
-            title: '{{ session('swal.title') }}',
-            text: '{{ session('swal.text') }}',
-            @if(isset(session('swal')['timer']))
-                timer: {{ session('swal.timer') }},
-                showConfirmButton: true
-            @endif
-        });
-    @endif
-
-    function handleLogout() {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Anda akan keluar dari aplikasi!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Logout',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Kirim POST request ke route logout
-            fetch("{{ route('logout') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                    "Accept": "application/json"
-                }
-            })
-            .then(() => {
-                Swal.fire({
-                    title: 'Berhasil Logout!',
-                    text: 'Anda telah keluar dari aplikasi',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: true
-                }).then(() => {
-                    window.location.href = '/';
-                });
-            })
-            .catch((error) => {
-                console.error("Logout error:", error);
-            });
-        }
-    });
-}
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const navIcons = document.querySelectorAll('.nav-icon:not(:first-child):not(.logout)');
-
-        const indicator = document.createElement('div');
-        indicator.className = 'nav-indicator';
-        document.querySelector('.vertical-navbar').appendChild(indicator);
-
-        const activeIcon = document.querySelector('.nav-icon.active');
-        if (activeIcon) {
-            positionIndicator(activeIcon);
-        }
-
-        navIcons.forEach(icon => {
-            icon.addEventListener('click', function(e) {
-                if (e.target.tagName === 'I') {
-                    e.preventDefault();
-                    const href = this.querySelector('a').getAttribute('href');
-                    handleNavClick(this, href);
+    <script>
+        // Handle logout
+        function handleLogout() {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan keluar dari aplikasi!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("{{ route('logout') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                            "Accept": "application/json"
+                        }
+                    })
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Berhasil Logout!',
+                            text: 'Anda telah keluar dari aplikasi',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: true
+                        }).then(() => window.location.href = '/');
+                    })
+                    .catch((error) => console.error("Logout error:", error));
                 }
             });
-        });
+        }
 
-        document.querySelectorAll('.nav-icon a').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const navIcon = this.parentElement;
-                const href = this.getAttribute('href');
-                handleNavClick(navIcon, href);
+        // Data from controller
+        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const dataStunting = [5, 8, 6, 9, 7, 10, 8, 6, 7, 5, 4, 6];
+        const dataGiziKurang = [3, 5, 4, 6, 5, 7, 6, 4, 5, 3, 2, 4];
+        const dataGiziBaik = [15, 12, 14, 10, 13, 8, 11, 14, 13, 16, 18, 15];
+        const dataPenyakitMenular = [2, 4, 3, 5, 4, 6, 5, 3, 4, 2, 1, 3];
+        const dataPenyakitTidakMenular = [8, 6, 7, 5, 6, 4, 5, 7, 6, 8, 9, 7];
+        const dataPelayanan = {
+            'Jan': 45, 'Feb': 52, 'Mar': 48, 'Apr': 55, 'May': 60, 'Jun': 58,
+            'Jul': 62, 'Aug': 59, 'Sep': 65, 'Oct': 70, 'Nov': 68, 'Dec': 72
+        };
+
+        // Gradient helper function
+        function makeGradient(ctx, color1, color2) {
+            const g = ctx.createLinearGradient(0, 0, 0, 250);
+            g.addColorStop(0, color1);
+            g.addColorStop(1, color2);
+            return g;
+        }
+
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Disease Chart
+            const ctxPenyakit = document.getElementById('chartPenyakit').getContext('2d');
+            new Chart(ctxPenyakit, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Penyakit Menular',
+                            data: dataPenyakitMenular,
+                            fill: true,
+                            borderColor: '#6a1b9a',
+                            backgroundColor: makeGradient(ctxPenyakit, 'rgba(106,27,154,0.35)', 'rgba(106,27,154,0.0)'),
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#6a1b9a',
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Tidak Menular',
+                            data: dataPenyakitTidakMenular,
+                            fill: true,
+                            borderColor: '#9c27b0',
+                            backgroundColor: makeGradient(ctxPenyakit, 'rgba(156,39,176,0.25)', 'rgba(156,39,176,0.0)'),
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#9c27b0',
+                            borderWidth: 2,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: 5 },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11 },
+                                padding: 10
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f2f2f2' },
+                            ticks: { padding: 3, font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { padding: 3, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Nutrition Chart
+            const ctxGizi = document.getElementById('chartGizi').getContext('2d');
+            new Chart(ctxGizi, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Stunting',
+                            data: dataStunting,
+                            fill: true,
+                            borderColor: '#ff4d6d',
+                            backgroundColor: makeGradient(ctxGizi, 'rgba(255,99,132,0.35)', 'rgba(255,99,132,0)'),
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#ff4d6d',
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Gizi Kurang',
+                            data: dataGiziKurang,
+                            fill: true,
+                            borderColor: '#ffb347',
+                            backgroundColor: makeGradient(ctxGizi, 'rgba(255,206,86,0.3)', 'rgba(255,206,86,0)'),
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#ffb347',
+                            borderWidth: 2,
+                        },
+                        {
+                            label: 'Gizi Baik',
+                            data: dataGiziBaik,
+                            fill: true,
+                            borderColor: '#00b8d4',
+                            backgroundColor: makeGradient(ctxGizi, 'rgba(0,184,212,0.3)', 'rgba(0,184,212,0)'),
+                            tension: 0.4,
+                            pointRadius: 3,
+                            pointBackgroundColor: '#00b8d4',
+                            borderWidth: 2,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: 5 },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11 },
+                                padding: 10
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f2f2f2' },
+                            ticks: { padding: 3, font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { padding: 3, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Service Chart
+            const ctxPelayanan = document.getElementById('chartPelayanan').getContext('2d');
+            const gradientPelayanan = ctxPelayanan.createLinearGradient(0, 0, 0, 400);
+            gradientPelayanan.addColorStop(0, '#b3e5fc');
+            gradientPelayanan.addColorStop(0.5, '#4fc3f7');
+            gradientPelayanan.addColorStop(1, '#0288d1');
+
+            new Chart(ctxPelayanan, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(dataPelayanan),
+                    datasets: [{
+                        label: 'Jumlah Pelayanan',
+                        data: Object.values(dataPelayanan),
+                        backgroundColor: gradientPelayanan,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: 5 },
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: Math.ceil(Math.max(...Object.values(dataPelayanan)) + 10),
+                            grid: { color: '#f0f0f0' },
+                            ticks: { padding: 3, font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { padding: 3, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Tab functionality
+            document.getElementById('tab-gizi').addEventListener('click', function() {
+                this.classList.add('active');
+                document.getElementById('tab-penyakit').classList.remove('active');
+                document.getElementById('chartGiziContainer').classList.add('show', 'active');
+                document.getElementById('chartPenyakitContainer').classList.remove('show', 'active');
+            });
+
+            document.getElementById('tab-penyakit').addEventListener('click', function() {
+                this.classList.add('active');
+                document.getElementById('tab-gizi').classList.remove('active');
+                document.getElementById('chartPenyakitContainer').classList.add('show', 'active');
+                document.getElementById('chartGiziContainer').classList.remove('show', 'active');
+            });
+
+            // Ensure consistent tab button width
+            document.querySelectorAll('#healthTabs .nav-link').forEach(btn => {
+                btn.style.minWidth = "160px";
             });
         });
-
-        function handleNavClick(clickedIcon, href) {
-            if (clickedIcon.classList.contains('active')) return;
-
-            const currentActive = document.querySelector('.nav-icon.active');
-            if (currentActive) {
-                currentActive.classList.remove('active');
-            }
-
-            clickedIcon.classList.add('active');
-            positionIndicator(clickedIcon);
-
-            setTimeout(() => {
-                window.location.href = href;
-            }, 300);
-        }
-
-        function positionIndicator(targetIcon) {
-            const rect = targetIcon.getBoundingClientRect();
-            const navbarRect = document.querySelector('.vertical-navbar').getBoundingClientRect();
-            const top = rect.top - navbarRect.top;
-            indicator.style.top = top + 'px';
-        }
-    });
-</script>
+    </script>
 </body>
 </html>

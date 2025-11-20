@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Dashboard Admin</title>
+</head>
+<style>
+    body { font-family: 'Poppins', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+
+
+    .vertical-navbar {
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 80px;
+       height: 92vh;
+       background-color: #ffffff;
+       box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+       display: flex;
+       flex-direction: column;
+       align-items: flex-start;
+       padding-left: 16px;
+       /* padding: 20px 0; */
+       z-index: 1000;
+       border-radius: 15px 15px 15px 15px;
+       margin: 30px 30px;
+       transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
+   }
+
+   .vertical-navbar:hover {
+       width: 250px;
+       align-items: flex-start;
+       padding-left: 16px;
+
+   }
+    .vertical-navbar:hover .nav-text {
+       opacity: 1;
+       visibility: visible;
+   }
+
+   .nav-text {
+    margin-left: 15px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.8s ease;
+
+    /* Font styling */
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+     /* abu gelap elegan */
+}
+
+
+.vertical-navbar:hover .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+}
+
+
+   .nav-icon a {
+       text-decoration: none;
+       color: inherit;
+       display: flex;
+       align-items: center;
+        justify-content: flex-start;
+       width: 100%;
+       height: 100%;
+
+
+
+   }
+
+   .nav-indicator {
+       position: absolute;
+       left: 0;
+       width: 4px;
+       height: 48px;
+       background-color: #00b8d4;
+       border-radius: 0 4px 4px 0;
+       transition: top 0.3s ease;
+       pointer-events: none;
+   }
+
+   .nav-icon {
+       width: 48px;
+       height: 48px;
+       margin: 12px 0;
+       display: flex;
+       align-items: center;
+        justify-content: flex-start;
+       border-radius: 8px;
+       color: #777;
+       font-size: 20px;
+       cursor: pointer;
+       transition: all 0.2s ease;
+       padding-left: 14px;
+
+   }
+
+   .nav-icon:hover {
+       background-color: #f0f0f0;
+       transform: scale(1.05);
+        width: 90%;
+   }
+
+   .nav-icon.active {
+       background-color: #00b8d4;
+       color: white;
+       transition: background-color 1s ease;
+        width: 90%;
+        padding-left: 19px;
+   }
+
+   .nav-icon.logout {
+       margin-top: auto;
+       color: #f44336;
+   }
+
+    .main-content {
+        margin-left: 80px;
+        padding-left: 5rem;
+        padding-top: 3rem;
+        width: calc(100% - 80px);
+        max-width: 1440px;
+        margin-right: auto;
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        align-items: center;
+    }
+
+    .search-container {
+        position: relative;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-container input {
+        padding-left: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-container i {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+
+    @media (max-width: 768px) {
+        .vertical-navbar {
+            width: 60px;
+        }
+
+        .main-content {
+            margin-left: 60px;
+            width: calc(100% - 60px);
+            padding: 1rem;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+   .nav-logo {
+    width: 65px;
+    height: 65px;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    padding-right: 14px;
+
+}
+.nav-logo span {
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-10px);
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.8s ease;
+    color: #00b8d4;
+    width: 20px;
+        height: 20px;
+}
+
+    .nav-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .nav-logo:hover img {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
+
+    .card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 24px;
+        height: 100%;
+    }
+
+    .stats-card {
+        height: 140px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-container {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .stats-card:hover .icon-container {
+        transform: scale(1.1);
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    @media (max-width: 992px) {
+        .stats-card {
+            height: 120px;
+        }
+
+        .icon-container {
+            width: 56px;
+            height: 56px;
+        }
+
+        .display-6 {
+            font-size: 1.8rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .stats-card {
+            height: auto;
+            min-height: 120px;
+        }
+
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table>:not(caption)>*>* {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        margin-right: 12px;
+        font-size: 14px;
+    }
+
+    .nav-tabs {
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 20px;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        color: #777;
+        font-weight: 600;
+        padding: 12px 20px;
+        margin-right: 5px;
+        border-radius: 0;
+    }
+
+    .nav-tabs .nav-link.active {
+        border-bottom: 3px solid #00b8d4;
+        color: #00b8d4;
+        background-color: transparent;
+    }
+
+    .nav-tabs .nav-link:hover:not(.active) {
+        border-bottom: 3px solid #f0f0f0;
+    }
+
+    .tab-content {
+        padding: 20px 0;
+    }
+
+    /* Fix for pagination alignment */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    /* Fix for action buttons alignment */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+
+     /* Pagination styling */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item .page-link {
+            color: #00b8d4;
+            border: 1px solid #dee2e6;
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #00b8d4;
+            border-color: #00b8d4;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+        }
+
+</style>
+<body>
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    Swal.fire({
+        title: 'Gagal!',
+        text: "{{ session('error') }}",
+        icon: 'error',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
+
+    {{-- <div class="vertical-navbar">
+        <div class="nav-logo">
+            <img src="{{ asset('image/logo_polije.png') }}" alt="Logo">
+             <span class="nav-text">POLIJE SIP</span>
+        </div>
+        <div class="nav-icon">
+            <a href="dashboard">
+                <i class="fas fa-th-large"></i>
+                 <span class="nav-text">Dashboard</span>
+            </a>
+        </div>
+
+
+
+        <div class="nav-icon active">
+            <a href="data">
+                <i class="fas fa-clinic-medical"></i>
+                 <span class="nav-text">Data Masyarakat</span>
+            </a>
+        </div>
+
+          <div class="nav-icon">
+            <a href="setting">
+            <i class="fas fa-cog"></i>
+             <span class="nav-text">Pengaturan</span>
+            </a>
+        </div>
+
+        <div class="nav-icon logout" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+             <span class="nav-text">Logout</span>
+        </div>
+    </div> --}}
+
+     <!-- Main Content -->
+     <div class="main-content">
+        <div class="header-container">
+            <h2 class="fs-3 fw-bold m-0">Data Kesehatan</h2>
+        </div>
+
+        <!-- Tab navigation -->
+        <ul class="nav nav-tabs" id="kesehatanTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="masyarakat-tab" data-bs-toggle="tab" data-bs-target="#masyarakat-content" type="button" role="tab" aria-controls="masyarakat-content" aria-selected="true">
+                    <i class="fas fa-users me-2"></i>Masyarakat
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kunjungan-tab" data-bs-toggle="tab" data-bs-target="#kunjungan-content" type="button" role="tab" aria-controls="kunjungan-content" aria-selected="false">
+                    <i class="fas fa-hospital-user me-2"></i>Kunjungan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="kehamilan-tab" data-bs-toggle="tab" data-bs-target="#kehamilan-content" type="button" role="tab" aria-controls="kehamilan-content" aria-selected="false">
+                    <i class="fas fa-baby me-2"></i>Kehamilan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="imunisasi-tab" data-bs-toggle="tab" data-bs-target="#imunisasi-content" type="button" role="tab" aria-controls="imunisasi-content" aria-selected="false">
+                    <i class="fas fa-syringe me-2"></i>Imunisasi
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="kesehatanTabsContent">
+            <!-- Masyarakat Content -->
+            <div class="tab-pane fade show active" id="masyarakat-content" role="tabpanel" aria-labelledby="masyarakat-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Masyarakat</h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchmasyarakat" placeholder="Cari masyarakat..." onkeyup="searchTable('masyarakatTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalMasyarakat">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive table-container" id="masyarakat-table-container">
+                            <table class="table table-hover mb-0" id="masyarakatTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>NIK</th>
+                                        <th>Nomor telepon</th>
+                                        {{-- <th>Jenis kelamin</th> --}}
+                                        <th>Alamat</th>
+                                        {{-- <th>Tanggal lahir</th> --}}
+                                        {{-- <th>Pekerjaan</th> --}}
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($masyarakat as $warga)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary">{{ substr($warga->nama, 0, 2) }}</div>
+                                                    <span class="text-truncate">{{ $warga->nama }}</span>
+                                                </div>
+                                            </td>
+                                            <td class="text-truncate">{{ $warga->nik }}</td>
+                                            <td class="text-truncate">{{ $warga->no_hp }}</td>
+                                            {{-- <td class="text-truncate">{{ $warga->jenis_kelamin }}</td> --}}
+                                            <td class="text-truncate">{{ $warga->alamat ?? '-' }}</td>
+                                            {{-- <td class="text-truncate">{{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}</td> --}}
+                                            {{-- <td class="text-truncate">{{ $warga->pekerjaan }}</td> --}}
+
+                                            <td class="text-center action-buttons">
+                                            <!-- Tombol Lihat -->
+                                            <button class="btn btn-sm btn-info"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#detailMasyarakat{{ $warga->masyarakat_id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+
+                                            <!-- Tombol Edit -->
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+
+                                            <!-- Tombol Hapus -->
+                                            <form action="{{ route('masyarakat.destroy', $warga->masyarakat_id) }}"
+                                                method="POST" class="d-inline delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="masyarakat_page"
+                                                    value="{{ request('masyarakat_page', $masyarakat->currentPage() ?? 1) }}">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="8" class="text-center">Tidak ada data masyarakat</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination for masyarakat -->
+                        @if($masyarakat->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for masyarakat">
+                                <ul class="pagination">
+                                    {{-- Previous --}}
+                                    <li class="page-item {{ $masyarakat->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                        href="{{ $masyarakat->previousPageUrl() }}#masyarakat-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    {{-- Numbers --}}
+                                    @for($i = 1; $i <= $masyarakat->lastPage(); $i++)
+                                        <li class="page-item {{ $masyarakat->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                            href="{{ $masyarakat->url($i) }}#masyarakat-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next --}}
+                                    <li class="page-item {{ $masyarakat->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                        href="{{ $masyarakat->nextPageUrl() }}#masyarakat-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Detail Masyarakat -->
+@foreach($masyarakat as $warga)
+<div class="modal fade" id="detailMasyarakat{{ $warga->masyarakat_id }}" tabindex="-1" aria-labelledby="detailMasyarakatLabel{{ $warga->masyarakat_id }}" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="detailMasyarakatLabel{{ $warga->masyarakat_id }}">
+            Detail Masyarakat
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Nama:</strong> {{ $warga->nama }}</li>
+          <li class="list-group-item"><strong>NIK:</strong> {{ $warga->nik }}</li>
+          <li class="list-group-item"><strong>No HP:</strong> {{ $warga->no_hp ?? '-' }}</li>
+          <li class="list-group-item">
+            <strong>Jenis Kelamin:</strong>
+            @if($warga->jenis_kelamin === 'L')
+                Laki-laki
+            @elseif($warga->jenis_kelamin === 'P')
+                Perempuan
+            @else
+                -
+            @endif
+            </li>
+
+          <li class="list-group-item"><strong>Tanggal Lahir:</strong>
+              {{ isset($warga->tanggal_lahir) ? \Carbon\Carbon::parse($warga->tanggal_lahir)->format('d/m/Y') : '-' }}
+          </li>
+          <li class="list-group-item"><strong>Pekerjaan:</strong> {{ $warga->pekerjaan ?? '-' }}</li>
+          <li class="list-group-item"><strong>Alamat:</strong> {{ $warga->alamat ?? '-' }}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
+
+
+
+          <!-- Form Input Masyarakat -->
+<div class="modal fade" id="modalMasyarakat" tabindex="-1" aria-labelledby="modalMasyarakatLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalMasyarakatLabel">Tambah Data Masyarakat</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('masyarakat.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nama -->
+            <div class="col-md-4">
+              <label class="form-label">Nama</label>
+              <input type="text" name="nama" class="form-control" maxlength="100" required>
+            </div>
+
+            <!-- NIK -->
+            <div class="col-md-4">
+              <label class="form-label">NIK</label>
+              <input type="text" name="nik" class="form-control" maxlength="16" required>
+            </div>
+
+            <!-- No HP -->
+            <div class="col-md-4">
+              <label class="form-label">Nomor Telepon</label>
+              <input type="text" name="no_hp" class="form-control" maxlength="15">
+            </div>
+
+            <!-- Jenis Kelamin -->
+            <div class="col-md-4">
+              <label class="form-label">Jenis Kelamin</label>
+              <select name="jenis_kelamin" class="form-select" required>
+                <option value="">--Pilih--</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+              </select>
+            </div>
+
+            <!-- Tanggal Lahir -->
+            <div class="col-md-4">
+              <label class="form-label">Tanggal Lahir</label>
+              <input type="date" name="tanggal_lahir" class="form-control">
+            </div>
+
+            <!-- Pekerjaan -->
+            <div class="col-md-4">
+              <label class="form-label">Pekerjaan</label>
+              <input type="text" name="pekerjaan" class="form-control" maxlength="100">
+            </div>
+
+            <!-- Alamat -->
+            <div class="col-md-12">
+              <label class="form-label">Alamat</label>
+              <textarea name="alamat" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+            <!-- Kunjungan Content -->
+            <div class="tab-pane fade" id="kunjungan-content" role="tabpanel" aria-labelledby="kunjungan-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Kunjungan</h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchkunjungan" placeholder="Cari kunjungan..." onkeyup="searchTable('kunjunganTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalKunjungan">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
+                            </div>
+                        </div>
+
+                        @if(session('kesehatan_success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('kesehatan_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="kunjungan-table-container">
+                            <table class="table table-hover mb-0" id="kunjunganTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Keluhan</th>
+                                        {{-- <th>Diagnosa</th>
+                                        <th>Tindakan</th> --}}
+                                        <th>Tanggal kunjungan</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($kunjungan as $kesehatan)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-warning">
+                                                        {{ substr($kesehatan->masyarakat->nama ?? 'N/A', 0, 2) }}
+                                                    </div>
+                                                    <span class="text-truncate">{{ $kesehatan->masyarakat->nama ?? 'N/A' }}</span>
+                                                </div>
+                                            </td>
+                                            {{-- <td class="text-truncate">{{ $kesehatan->keluhan }}</td>
+                                            <td class="text-truncate">{{ $kesehatan->diagnosa }}</td> --}}
+                                            <td class="text-truncate">{{ $kesehatan->tindakan }}</td>
+                                            <td class="text-truncate">
+                                                {{ \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') }}
+                                            </td>
+                                            <td class="text-center action-buttons">
+                                            <!-- Tombol Lihat -->
+                                            <button class="btn btn-sm btn-info"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#detailKunjungan{{ $kesehatan->kunjungan_id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+
+                                            <!-- Tombol Edit -->
+                                            <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+
+                                            <!-- Tombol Hapus -->
+                                            <form action="{{ route('kunjungan.destroy', $kesehatan->kunjungan_id) }}"
+                                                method="POST" class="d-inline delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="kunjungan_page"
+                                                    value="{{ request('kunjungan_page', $kunjungan->currentPage() ?? 1) }}">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">Tidak ada data kunjungan</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination for kunjungan -->
+                        @if($kunjungan->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for kunjungan">
+                                <ul class="pagination">
+                                    <li class="page-item {{ $kunjungan->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                        href="{{ $kunjungan->previousPageUrl() }}#kunjungan-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    @for($i = 1; $i <= $kunjungan->lastPage(); $i++)
+                                        <li class="page-item {{ $kunjungan->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                            href="{{ $kunjungan->url($i) }}#kunjungan-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    <li class="page-item {{ $kunjungan->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                        href="{{ $kunjungan->nextPageUrl() }}#kunjungan-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+
+
+<!-- Modal Detail Kunjungan -->
+@foreach($kunjungan as $kesehatan)
+<div class="modal fade" id="detailKunjungan{{ $kesehatan->kunjungan_id }}" tabindex="-1" aria-labelledby="detailKunjunganLabel{{ $kesehatan->kunjungan_id }}" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="detailKunjunganLabel{{ $kesehatan->kunjungan_id }}">
+            Detail Kunjungan
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item"><strong>Nama:</strong> {{ $kesehatan->masyarakat->nama ?? 'N/A' }}</li>
+          <li class="list-group-item"><strong>Keluhan:</strong> {{ $kesehatan->keluhan ?? '-' }}</li>
+          <li class="list-group-item"><strong>Diagnosa:</strong> {{ $kesehatan->diagnosa ?? '-' }}</li>
+          <li class="list-group-item"><strong>Tindakan:</strong> {{ $kesehatan->tindakan ?? '-' }}</li>
+          <li class="list-group-item"><strong>Tanggal Kunjungan:</strong>
+            {{ isset($kesehatan->tanggal_kunjungan) ? \Carbon\Carbon::parse($kesehatan->tanggal_kunjungan)->format('d/m/Y') : '-' }}
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
+
+
+
+
+<!-- Form Input Kunjungan -->
+<div class="modal fade" id="modalKunjungan" tabindex="-1" aria-labelledby="modalKunjunganLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalKunjunganLabel">Tambah Data Kunjungan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('kunjungan.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Pilih Masyarakat -->
+            <div class="col-md-6">
+              <label class="form-label">Nama Masyarakat</label>
+              <select name="masyarakat_id" class="form-select" required>
+                <option value="">--Pilih Masyarakat--</option>
+                @foreach($masyarakat as $warga)
+                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- Tanggal Kunjungan -->
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Kunjungan</label>
+              <input type="date" name="tanggal_kunjungan" class="form-control" required>
+            </div>
+
+            <!-- Keluhan -->
+            <div class="col-md-4">
+              <label class="form-label">Keluhan</label>
+              <input type="text" name="keluhan" class="form-control" required>
+            </div>
+
+            <!-- Diagnosa -->
+            <div class="col-md-4">
+              <label class="form-label">Diagnosa</label>
+              <input type="text" name="diagnosa" class="form-control">
+            </div>
+
+            <!-- Tindakan -->
+            <div class="col-md-4">
+              <label class="form-label">Tindakan</label>
+              <input type="text" name="tindakan" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+            <!-- Kehamilan Content -->
+            <div class="tab-pane fade" id="kehamilan-content" role="tabpanel" aria-labelledby="kehamilan-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Kehamilan</h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchKehamilan" placeholder="Cari kehamilan..." onkeyup="searchTable('kehamilanTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalKehamilan">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
+                            </div>
+                        </div>
+
+                        @if(session('pregnancy_success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('pregnancy_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="kehamilan-table-container">
+                            <table class="table table-hover mb-0" id="kehamilanTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>HPL</th>
+                                        <th>Usia kehamilan</th>
+                                        <th>Catatan</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($kehamilan as $hamil)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary">{{ substr($hamil->masyarakat->nama ?? '??', 0, 2) }}</div>
+                                                    <span class="ms-2">{{ $hamil->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ $hamil->hpl ?? '-' }}</td>
+                                            <td>{{ $hamil->usia_kehamilan ?? '-' }}</td>
+                                            <td>{{ $hamil->catatan ?? '-' }}</td>
+                                            <td class="text-center action-buttons">
+                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                                <form action="{{ route('kehamilan.destroy', $hamil->kehamilan_id) }}"
+                                                    method="POST" class="d-inline delete-form">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">Tidak ada data kehamilan</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination for kehamilan -->
+                        @if($kehamilan->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for kehamilan">
+                                <ul class="pagination">
+                                    <li class="page-item {{ $kehamilan->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                        href="{{ $kehamilan->previousPageUrl() }}#kehamilan-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    @for($i = 1; $i <= $kehamilan->lastPage(); $i++)
+                                        <li class="page-item {{ $kehamilan->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                            href="{{ $kehamilan->url($i) }}#kehamilan-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    <li class="page-item {{ $kehamilan->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                        href="{{ $kehamilan->nextPageUrl() }}#kehamilan-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+
+
+
+<!-- Form Input Kehamilan -->
+<div class="modal fade" id="modalKehamilan" tabindex="-1" aria-labelledby="modalKehamilanLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalKehamilanLabel">Tambah Data Kehamilan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('kehamilan.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nama Masyarakat -->
+            <div class="col-md-6">
+              <label class="form-label">Nama Masyarakat</label>
+              <select name="masyarakat_id" class="form-select" required>
+                <option value="">--Pilih Masyarakat--</option>
+                @foreach($masyarakat as $warga)
+                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- HPL -->
+            <div class="col-md-6">
+              <label class="form-label">HPL</label>
+              <input type="date" name="hpl" class="form-control">
+            </div>
+
+            <!-- Usia Kehamilan -->
+            <div class="col-md-6">
+              <label class="form-label">Usia Kehamilan (minggu)</label>
+              <input type="number" name="usia_kehamilan" class="form-control">
+            </div>
+
+            <!-- Catatan -->
+            <div class="col-md-12">
+              <label class="form-label">Catatan</label>
+              <textarea name="catatan" class="form-control"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+            <!-- Imunisasi Content -->
+            <div class="tab-pane fade" id="imunisasi-content" role="tabpanel" aria-labelledby="imunisasi-tab">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="card-title fw-bold">Tabel Data Imunisasi</h5>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="search-container" style="width: 250px;">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" id="searchimunisasi" placeholder="Cari imunisasi..." onkeyup="searchTable('imunisasiTable', this.value)">
+                                </div>
+                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalImunisasi">
+                                    <i class="fas fa-plus"></i> Tambah Data
+                                </button>
+                            </div>
+                        </div>
+                        @if(session('imunisasi_success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('imunisasi_success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <div class="table-responsive table-container" id="imunisasi-table-container">
+                            <table class="table table-hover mb-0" id="imunisasiTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Jenis imunisasi</th>
+                                        <th>Tanggal imunisasi</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($imunisasi as $imun)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar bg-primary">{{ substr($imun->masyarakat->nama ?? '??', 0, 2) }}</div>
+                                                    <span class="ms-2">{{ $imun->masyarakat->nama ?? 'Data tidak tersedia' }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ $imun->jenis_imunisasi ?? '-' }}</td>
+                                            <td>{{ isset($imun->tanggal_imunisasi) ? \Carbon\Carbon::parse($imun->tanggal_imunisasi)->format('d/m/Y') : '-' }}</td>
+                                            <td class="text-center action-buttons">
+                                                <button class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></button>
+                                                <form action="{{ route('imunisasi.destroy', $imun->imunisasi_id) }}"
+
+                                                    method="POST" class="d-inline delete-form">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <input type="hidden" name="imunisasi_page" value="{{ request('imunisasi_page', $imunisasi->currentPage() ?? 1) }}">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">Tidak ada data imunisasi</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination for imunisasi -->
+                        @if($imunisasi->hasPages())
+                        <div class="pagination-container">
+                            <nav aria-label="Page navigation for imunisasi">
+                                <ul class="pagination">
+                                    <li class="page-item {{ $imunisasi->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                        href="{{ $imunisasi->previousPageUrl() }}#imunisasi-content"
+                                        aria-label="Previous">
+                                        <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+
+                                    @for($i = 1; $i <= $imunisasi->lastPage(); $i++)
+                                        <li class="page-item {{ $imunisasi->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                            href="{{ $imunisasi->url($i) }}#imunisasi-content">
+                                                {{ $i }}
+                                            </a>
+                                        </li>
+                                    @endfor
+
+                                    <li class="page-item {{ $imunisasi->hasMorePages() ? '' : 'disabled' }}">
+                                        <a class="page-link"
+                                        href="{{ $imunisasi->nextPageUrl() }}#imunisasi-content"
+                                        aria-label="Next">
+                                        <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Form Input Imunisasi -->
+<div class="modal fade" id="modalImunisasi" tabindex="-1" aria-labelledby="modalImunisasiLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalImunisasiLabel">Tambah Data Imunisasi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form method="POST" action="{{ route('imunisasi.store') }}">
+        @csrf
+        <div class="modal-body">
+          <div class="row g-3">
+            <!-- Nama Masyarakat -->
+            <div class="col-md-6">
+              <label class="form-label">Nama Masyarakat</label>
+              <select name="masyarakat_id" class="form-select" required>
+                <option value="">--Pilih Masyarakat--</option>
+                @foreach($masyarakat as $warga)
+                  <option value="{{ $warga->masyarakat_id }}">{{ $warga->nama }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <!-- Jenis Imunisasi -->
+            <div class="col-md-6">
+              <label class="form-label">Jenis Imunisasi</label>
+              <input type="text" name="jenis_imunisasi" class="form-control" maxlength="100" required>
+            </div>
+
+            <!-- Tanggal Imunisasi -->
+            <div class="col-md-6">
+              <label class="form-label">Tanggal Imunisasi</label>
+              <input type="date" name="tanggal_imunisasi" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+// ===========================
+// 1) Logout dengan SweetAlert
+// ===========================
+function handleLogout() {
+  Swal.fire({
+    title: 'Apakah Anda yakin?',
+    text: "Anda akan keluar dari aplikasi!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Ya, Logout',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      fetch("{{ route('logout') }}", {
+        method: "POST",
+        headers: {
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+          "Accept": "application/json"
+        }
+      })
+      .then(() => {
+        Swal.fire({
+          title: 'Berhasil Logout!',
+          text: 'Anda telah keluar dari aplikasi',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: true
+        }).then(() => {
+          window.location.href = '/';
+        });
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
+    }
+  });
+}
+
+// =======================================
+// 2) Fungsi pencarian tabel
+// =======================================
+function searchTable(tableId, query) {
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
+  const rows = table.tBodies[0]?.rows || [];
+  const q = (query || '').toLowerCase();
+
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].cells;
+    let found = false;
+
+    for (let j = 0; j < cells.length; j++) {
+      const txt = (cells[j].textContent || cells[j].innerText || '').toLowerCase();
+      if (txt.includes(q)) {
+        found = true;
+        break;
+      }
+    }
+    rows[i].style.display = found ? '' : 'none';
+  }
+}
+
+// ===================================================
+// 3) Saat dokumen siap
+// ===================================================
+document.addEventListener('DOMContentLoaded', function () {
+
+  // -------------------------------------------------
+  // 3a) Navbar indicator
+  // -------------------------------------------------
+  const navbar = document.querySelector('.vertical-navbar');
+  if (navbar) {
+    const indicator = document.createElement('div');
+    indicator.className = 'nav-indicator';
+    navbar.appendChild(indicator);
+
+    function positionIndicator(targetIcon) {
+      const rect = targetIcon.getBoundingClientRect();
+      const navbarRect = navbar.getBoundingClientRect();
+      const top = rect.top - navbarRect.top;
+      indicator.style.top = top + 'px';
+    }
+
+    const activeIcon = document.querySelector('.nav-icon.active');
+    if (activeIcon) positionIndicator(activeIcon);
+
+    document.querySelectorAll('.nav-icon a').forEach(a => {
+      a.addEventListener('click', function () {
+        const icon = this.closest('.nav-icon');
+        if (!icon) return;
+
+        const curr = document.querySelector('.nav-icon.active');
+        if (curr) curr.classList.remove('active');
+        icon.classList.add('active');
+        positionIndicator(icon);
+      });
+    });
+  }
+
+  // -------------------------------------------------
+  // 3b) Tab <-> URL fragment (#...)
+  // -------------------------------------------------
+  function activateTabFromHash() {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const btn = document.querySelector(`button[data-bs-target="${hash}"]`);
+    if (btn) new bootstrap.Tab(btn).show();
+  }
+
+  // Aktifkan tab dari hash saat load
+  activateTabFromHash();
+
+  // Update hash saat tab berubah
+  document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => {
+    btn.addEventListener('shown.bs.tab', (e) => {
+      const target = e.target.getAttribute('data-bs-target');
+      if (target) {
+        const baseUrl = window.location.pathname + window.location.search;
+        history.replaceState(null, '', baseUrl + target);
+      }
+    });
+  });
+
+  // Aktifkan tab saat hash berubah manual
+  window.addEventListener('hashchange', activateTabFromHash);
+
+  // -------------------------------------------------
+  // 3c) Konfirmasi hapus dengan SweetAlert
+  // -------------------------------------------------
+  document.querySelectorAll('.delete-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const row = form.closest('tr');
+      const nama = row?.querySelector('td span.text-truncate, td .ms-2')?.textContent?.trim() || 'data ini';
+
+      Swal.fire({
+        title: 'Yakin ingin menghapus?',
+        text: `Data ${nama} akan dihapus permanen!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+
+});
+</script>
+
+</body>
+</html>

@@ -394,6 +394,55 @@
   }
 }
 
+/* === POTENSI (FIX: tidak menumpuk + tombol selalu terlihat) === */
+.potensi-slider{
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 96px;          /* ruang untuk tombol */
+}
+@media (min-width: 992px){ .potensi-slider{ min-height: 560px; } }
+@media (max-width: 991.98px){ .potensi-slider{ min-height: 760px; padding-bottom: 110px; } }
+
+/* hanya slide .active yang benar2 terlihat */
+.potensi-item{
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(100%);
+  transition: transform .7s ease, opacity .5s ease, visibility .5s ease;
+}
+.potensi-item.active{
+  position: relative;            /* biar tinggi container mengikuti konten aktif */
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+.potensi-item.slide-out-left{
+  transform: translateX(-20%);
+  opacity: 0;
+}
+
+/* gambar tengah diperkecil & seragam */
+.tembakau-center-img{ width: 300px; height: auto; margin-bottom: 12px; }
+.glow-ring{ width: 340px; height: 340px; filter: blur(45px); }
+@media (max-width: 992px){
+  .tembakau-center-img{ width: 240px; }
+  .glow-ring{ width: 280px; height: 280px; }
+}
+
+/* tombol konsisten di sudut bawah */
+#nextPotensiBtn{ position: absolute; bottom: 48px; z-index: 5; }
+.potensi-btn-right{ right: 28px; left: auto; }
+.potensi-btn-left{  left: 28px;  right: auto; }
+
+@media (max-width: 768px){
+  #nextPotensiBtn{
+    bottom: 36px; /* biar pas di HP */
+  }
+}
 
 
   </style>
@@ -414,6 +463,8 @@
           <li class="nav-item"><a class="nav-link" href="#potensi">Potensi</a></li>
           <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
           <li class="nav-item"><a class="nav-link" href="login">Login</a></li>
+          
+
         </ul>
       </div>
     </div>
@@ -577,62 +628,89 @@
   </div>
 </section>
 
-
-
-<!-- ===== POTENSI TEMBAKAU (Revisi Gambar Tengah) ===== -->
+<!-- ===== POTENSI (Tembakau, Jagung, dan Padi) ===== -->
 <section id="potensi" class="section-dark" style="position: relative; overflow: hidden;">
-  <div class="container text-center" data-aos="fade-up">
-    <h2 class="fw-bold mb-5 text-white">Kualitas Tembakau Desa TamanKursi</h2>
+  <div class="container text-center position-relative" data-aos="fade-up">
+    <h2 class="fw-bold mb-5 text-white">Potensi Utama Desa TamanKursi</h2>
 
-    <div class="row align-items-center justify-content-center position-relative g-4">
+    <div class="potensi-slider position-relative" style="min-height: 600px;">
 
-      <!-- Deskripsi Kiri -->
-      <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
-        <div data-aos="fade-right">
-          <h5 class="fw-bold text-info"><i class="bi bi-sun me-2"></i>Iklim Pegunungan yang Ideal</h5>
-          <p class="small opacity-75">Suhu sejuk dan kelembapan stabil membuat daun tembakau tumbuh sempurna dengan aroma khas.</p>
-        </div>
+      <!-- === TEMBAKAU === -->
+      <div class="potensi-item active" id="potensi-tembakau">
+        <div class="row align-items-center justify-content-center g-4">
+          <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
+            <div><h5 class="fw-bold text-info"><i class="bi bi-sun me-2"></i>Iklim Pegunungan yang Ideal</h5><p class="small opacity-75">Suhu sejuk dan kelembapan stabil membuat daun tembakau tumbuh sempurna dengan aroma khas.</p></div>
+            <div><h5 class="fw-bold text-info"><i class="bi bi-brightness-high me-2"></i>Pencahayaan Matahari Merata</h5><p class="small opacity-75">Paparan sinar matahari optimal membantu menghasilkan warna dan kadar nikotin seimbang.</p></div>
+            <div><h5 class="fw-bold text-info"><i class="bi bi-tree me-2"></i>Tanah Subur dan Kaya Mineral</h5><p class="small opacity-75">Struktur tanah gembur dengan kandungan mineral alami memberi cita rasa tembakau yang lembut.</p></div>
+          </div>
 
-        <div data-aos="fade-right" data-aos-delay="100">
-          <h5 class="fw-bold text-info"><i class="bi bi-brightness-high me-2"></i>Pencahayaan Matahari Merata</h5>
-          <p class="small opacity-75">Paparan sinar matahari optimal membantu menghasilkan warna dan kadar nikotin seimbang.</p>
-        </div>
+          <div class="col-lg-4 col-md-8 text-center position-relative">
+            <img src="{{ asset('image/tembakau.png') }}" alt="Tembakau" class="tembakau-center-img shadow-lg mx-auto">
+            <div class="glow-ring"></div>
+          </div>
 
-        <div data-aos="fade-right" data-aos-delay="200">
-          <h5 class="fw-bold text-info"><i class="bi bi-tree me-2"></i>Tanah Subur dan Kaya Mineral</h5>
-          <p class="small opacity-75">Struktur tanah gembur dengan kandungan mineral alami memberi cita rasa tembakau yang lembut.</p>
-        </div>
-      </div>
-
-      <!-- Gambar Tengah tanpa lingkaran -->
-      <div class="col-lg-4 col-md-8 text-center position-relative" data-aos="zoom-in">
-        <img src="{{ asset('image/tembakau.png') }}"
-             alt="Tembakau TamanKursi"
-             class="tembakau-center-img shadow-lg mx-auto">
-        <div class="glow-ring"></div>
-      </div>
-
-      <!-- Deskripsi Kanan -->
-      <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
-        <div data-aos="fade-left">
-          <h5 class="fw-bold text-info"><i class="bi bi-flower3 me-2"></i>Budidaya Tradisional Ramah Lingkungan</h5>
-          <p class="small opacity-75">Petani menjaga warisan teknik tanam alami dengan pupuk organik dan sistem rotasi tanaman.</p>
-        </div>
-
-        <div data-aos="fade-left" data-aos-delay="100">
-          <h5 class="fw-bold text-info"><i class="bi bi-droplet-half me-2"></i>Proses Pemanenan Teliti</h5>
-          <p class="small opacity-75">Panen dilakukan dengan seleksi daun matang dan pengeringan alami untuk hasil tembakau premium.</p>
-        </div>
-
-        <div data-aos="fade-left" data-aos-delay="200">
-          <h5 class="fw-bold text-info"><i class="bi bi-people me-2"></i>Dukungan Komunitas Petani</h5>
-          <p class="small opacity-75">Kelompok tani bekerja sama meningkatkan mutu, efisiensi produksi, dan pemasaran hingga luar daerah.</p>
+          <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
+            <div><h5 class="fw-bold text-info"><i class="bi bi-flower3 me-2"></i>Budidaya Tradisional Ramah Lingkungan</h5><p class="small opacity-75">Petani menjaga warisan teknik tanam alami dengan pupuk organik dan sistem rotasi tanaman.</p></div>
+            <div><h5 class="fw-bold text-info"><i class="bi bi-droplet-half me-2"></i>Proses Pemanenan Teliti</h5><p class="small opacity-75">Panen dilakukan dengan seleksi daun matang dan pengeringan alami untuk hasil tembakau premium.</p></div>
+            <div><h5 class="fw-bold text-info"><i class="bi bi-people me-2"></i>Dukungan Komunitas Petani</h5><p class="small opacity-75">Kelompok tani bekerja sama meningkatkan mutu, efisiensi produksi, dan pemasaran hingga luar daerah.</p></div>
+          </div>
         </div>
       </div>
 
+      <!-- === JAGUNG === -->
+      <div class="potensi-item" id="potensi-jagung">
+        <div class="row align-items-center justify-content-center g-4">
+          <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
+            <div><h5 class="fw-bold text-warning"><i class="bi bi-sunrise me-2"></i>Lahan Subur & Berlimpah</h5><p class="small opacity-75">Tanah vulkanik kaya nutrisi membuat jagung tumbuh besar dan sehat.</p></div>
+            <div><h5 class="fw-bold text-warning"><i class="bi bi-droplet-half me-2"></i>Irigasi Alam Pegunungan</h5><p class="small opacity-75">Air pegunungan jernih menjaga kelembapan lahan dan meningkatkan hasil panen.</p></div>
+            <div><h5 class="fw-bold text-warning"><i class="bi bi-box-seam me-2"></i>Produk Olahan Jagung</h5><p class="small opacity-75">Jagung diolah menjadi pakan ternak dan makanan ringan khas desa.</p></div>
+          </div>
+
+          <div class="col-lg-4 col-md-8 text-center position-relative">
+            <img src="{{ asset('image/jagung.png') }}" alt="Jagung" class="tembakau-center-img shadow-lg mx-auto">
+            <div class="glow-ring" style="background: radial-gradient(circle, rgba(255,215,0,0.35) 0%, rgba(255,255,0,0.1) 40%, transparent 70%);"></div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
+            <div><h5 class="fw-bold text-warning"><i class="bi bi-recycle me-2"></i>Teknik Ramah Lingkungan</h5><p class="small opacity-75">Petani menerapkan sistem tanam bergilir menjaga kesuburan tanah.</p></div>
+            <div><h5 class="fw-bold text-warning"><i class="bi bi-basket2-fill me-2"></i>Panen Melimpah</h5><p class="small opacity-75">Hasil panen jagung berkualitas tinggi untuk pasar lokal dan regional.</p></div>
+            <div><h5 class="fw-bold text-warning"><i class="bi bi-people-fill me-2"></i>Kelompok Petani Jagung</h5><p class="small opacity-75">Komunitas petani berkolaborasi meningkatkan produksi dan inovasi.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === PADI === -->
+      <div class="potensi-item" id="potensi-padi">
+        <div class="row align-items-center justify-content-center g-4">
+          <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
+            <div><h5 class="fw-bold text-success"><i class="bi bi-cloud-sun-fill me-2"></i>Iklim Sejuk dan Kelembapan Ideal</h5><p class="small opacity-75">Padi tumbuh subur di daerah dengan curah hujan merata dan suhu stabil.</p></div>
+            <div><h5 class="fw-bold text-success"><i class="bi bi-water me-2"></i>Sistem Irigasi Tradisional</h5><p class="small opacity-75">Sawah memanfaatkan aliran air alami dari pegunungan, menjaga kesuburan tanah.</p></div>
+            <div><h5 class="fw-bold text-success"><i class="bi bi-seedling me-2"></i>Varietas Unggul Lokal</h5><p class="small opacity-75">Petani menanam padi lokal dengan cita rasa khas dan hasil panen melimpah.</p></div>
+          </div>
+
+          <div class="col-lg-4 col-md-8 text-center position-relative">
+            <img src="{{ asset('image/padi2.png') }}" alt="Padi" class="tembakau-center-img shadow-lg mx-auto">
+            <div class="glow-ring" style="background: radial-gradient(circle, rgba(0,255,0,0.25) 0%, rgba(0,255,0,0.1) 40%, transparent 70%);"></div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 text-start text-light d-flex flex-column gap-4">
+            <div><h5 class="fw-bold text-success"><i class="bi bi-basket-fill me-2"></i>Panen Berkualitas Tinggi</h5><p class="small opacity-75">Hasil panen padi dikenal berkualitas, dengan bulir padat dan warna cerah.</p></div>
+            <div><h5 class="fw-bold text-success"><i class="bi bi-box2-heart me-2"></i>Produk Olahan Padi</h5><p class="small opacity-75">Diolah menjadi beras dan produk turunan seperti emping dan tepung beras.</p></div>
+            <div><h5 class="fw-bold text-success"><i class="bi bi-people-fill me-2"></i>Dukungan Komunitas Petani</h5><p class="small opacity-75">Petani padi bekerja sama menjaga tradisi menanam dan panen bersama.</p></div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- === Tombol Navigasi === -->
+    <button id="nextPotensiBtn" class="btn btn-outline-info rounded-pill px-4 mt-5 position-absolute potensi-btn-right">
+      Next <i class="bi bi-arrow-right-circle ms-2"></i>
+    </button>
   </div>
 </section>
+
+
+
 
 
 
@@ -660,6 +738,8 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
 <script>
+
+
   // === Inisialisasi AOS ===
   AOS.init({
     duration: 900,
@@ -697,11 +777,6 @@ window.addEventListener('scroll', () => {
     lokasiBg.style.transform = `translateY(${relativeScroll * 0.3}px)`;
   }
 });
-
-
-
-
-
 
 
   // === Carousel Auto Slide ===
@@ -818,6 +893,68 @@ window.addEventListener('scroll', () => {
       window.location.href = mailtoUrl;
     }
   });
+
+ /* === SLIDE POTENSI (3 Slide: Tembakau → Jagung → Padi → balik lagi) === */
+const nextBtn = document.getElementById('nextPotensiBtn');
+const slides = [
+  document.getElementById('potensi-tembakau'),
+  document.getElementById('potensi-jagung'),
+  document.getElementById('potensi-padi')
+];
+
+let idx = 0;               // posisi awal = tembakau
+let forward = true;        // arah awal = maju (Next)
+
+function setActive(n) {
+  slides.forEach((s, i) => {
+    if (i === n) {
+      s.classList.add('active');
+      s.classList.remove('slide-out-left');
+    } else {
+      s.classList.remove('active', 'slide-out-left');
+    }
+  });
+}
+
+nextBtn.addEventListener('click', () => {
+  const out = slides[idx];
+  out.classList.add('slide-out-left');
+
+  // Hitung slide selanjutnya berdasarkan arah
+  if (forward) {
+    idx++;
+    if (idx >= slides.length - 1) {
+      forward = false;
+      nextBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i> Prev';
+      nextBtn.classList.remove('potensi-btn-right');
+      nextBtn.classList.add('potensi-btn-left');
+    } else {
+      nextBtn.innerHTML = 'Next <i class="bi bi-arrow-right-circle ms-2"></i>';
+      nextBtn.classList.remove('potensi-btn-left');
+      nextBtn.classList.add('potensi-btn-right');
+    }
+  } else {
+    idx--;
+    if (idx <= 0) {
+      forward = true;
+      nextBtn.innerHTML = 'Next <i class="bi bi-arrow-right-circle ms-2"></i>';
+      nextBtn.classList.remove('potensi-btn-left');
+      nextBtn.classList.add('potensi-btn-right');
+    } else {
+      nextBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i> Prev';
+      nextBtn.classList.remove('potensi-btn-right');
+      nextBtn.classList.add('potensi-btn-left');
+    }
+  }
+
+
+  setTimeout(() => {
+    setActive(idx);
+  }, 500);
+});
+
+
+
 </script>
 
 

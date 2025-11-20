@@ -504,12 +504,12 @@
                     <i class="fas fa-sync-alt me-2"></i>Ubah Password
                 </button>
             </form>
-          
+
         <!-- Tombol buka modal reset password -->
-<button type="button" class="btn btn-link text-decoration-none mt-2"
+{{-- <button type="button" class="btn btn-link text-decoration-none mt-2"
         data-bs-toggle="modal" data-bs-target="#resetPasswordModal">
     <i class="fas fa-unlock-alt me-2"></i>Verifikasi Token Reset Password
-</button>
+</button> --}}
 
 
         </div>
