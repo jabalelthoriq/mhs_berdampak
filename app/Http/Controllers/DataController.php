@@ -36,30 +36,56 @@ class DataController
     }
     public function index(Request $request)
 {
-    // $masyarakatPage = $request->get('masyarakat_page', 1);
-    // $masyarakat = Masyarakat::orderBy('created_at', 'desc')
-    //     ->paginate(10, ['*'], 'masyarakat_page', $masyarakatPage);
+    // 🔍 ambil kata pencarian dari request
+    $searchOrtu = $request->input('searchOrtu');
+    $searchAnak = $request->input('searchAnak');
+    $searchPelayanan = $request->input('searchPelayanan');
 
-    // $kunjunganPage = $request->get('kunjungan_page', 1);
-    // $kunjungan = KunjunganKesehatan::with('masyarakat')
-    //     ->orderBy('tanggal_kunjungan', 'desc')
-    //     ->paginate(10, ['*'], 'kunjungan_page', $kunjunganPage);
+    /* =======================
+       ORANG TUA (SEARCH + PAGINATION)
+    ======================== */
+    $orangtua = Orangtua::when($searchOrtu, function($query) use ($searchOrtu) {
+            $query->where('nama_orangtua', 'like', "%{$searchOrtu}%")
+                  ->orWhere('nik', 'like', "%{$searchOrtu}%")
+                  ->orWhere('alamat', 'like', "%{$searchOrtu}%")
+                  ->orWhere('pekerjaan', 'like', "%{$searchOrtu}%");
+        })
+        ->orderBy('created_at','desc')
+        ->paginate(10, ['*'], 'orangtua_page')
+        ->withQueryString();
 
-    // $kehamilanPage = $request->get('kehamilan_page', 1);
-    // $kehamilan = Kehamilan::orderBy('usia_kehamilan', 'desc')
-    //     ->paginate(10, ['*'], 'kehamilan_page', $kehamilanPage);
 
-    // $imunisasiPage = $request->get('imunisasi_page', 1);
-    // $imunisasi = Imunisasi::with('masyarakat')
-    //     ->orderBy('tanggal_imunisasi', 'desc')
-    //     ->paginate(10, ['*'], 'imunisasi_page', $imunisasiPage);
+    /* =======================
+       ANAK (SEARCH + PAGINATION)
+    ======================== */
+    $anak = Anak::when($searchAnak, function($query) use ($searchAnak) {
+            $query->where('nama_anak', 'like', "%{$searchAnak}%")
+                  ->orWhere('nama_ortu', 'like', "%{$searchAnak}%")
+                  ->orWhere('nik', 'like', "%{$searchAnak}%");
+        })
+        ->orderBy('created_at','desc')
+        ->paginate(10, ['*'], 'anak_page')
+        ->withQueryString();
 
-    $orangtua = Orangtua::orderBy('created_at','desc')->paginate(10, ['*'], 'orangtua_page');
-        $anak = Anak::orderBy('created_at','desc')->paginate(10, ['*'], 'anak_page');
-        $pelayanan = Pelayanan::orderBy('tanggal_pelayanan','desc')->paginate(10, ['*'], 'pelayanan_page');
 
-    return view('data', compact('orangtua', 'anak', 'pelayanan'));
+    /* =======================
+       PELAYANAN (SEARCH + PAGINATION)
+    ======================== */
+    $pelayanan = Pelayanan::when($searchPelayanan, function($query) use ($searchPelayanan) {
+            $query->where('nama_pasien', 'like', "%{$searchPelayanan}%")
+                  ->orWhere('jenis_pelayanan', 'like', "%{$searchPelayanan}%")
+                  ->orWhere('program_kesehatan', 'like', "%{$searchPelayanan}%");
+        })
+        ->orderBy('tanggal_pelayanan','desc')
+        ->paginate(10, ['*'], 'pelayanan_page')
+        ->withQueryString();
+
+    return view('data',
+        compact('orangtua', 'anak', 'pelayanan',
+                'searchOrtu','searchAnak','searchPelayanan')
+    );
 }
+
 
 
 

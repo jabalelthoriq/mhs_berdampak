@@ -468,7 +468,10 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div class="search-container" style="width: 250px;">
             <i class="fas fa-search"></i>
-            <input type="text" class="form-control" placeholder="Cari orang tua..." onkeyup="searchTable('orangtuaTable', this.value)">
+            <input type="text" class="form-control"
+       placeholder="Cari orang tua..."
+       value="{{ request('searchOrtu') }}"
+       onkeyup="searchOrtu(this.value)">
           </div>
           <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalOrangtua">
             <i class="fas fa-plus"></i> Tambah Data
@@ -571,8 +574,10 @@
                 <div class="search-container" style="width: 250px;">
                     <i class="fas fa-search"></i>
                     <input type="text" class="form-control"
-                        placeholder="Cari anak..."
-                        onkeyup="searchTable('anakTable', this.value)">
+       placeholder="Cari anak..."
+       value="{{ request('searchAnak') }}"
+       onkeyup="searchAnak(this.value)">
+
                 </div>
                 <button class="btn btn-success btn-sm"
                     data-bs-toggle="modal"
@@ -713,7 +718,11 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div class="search-container" style="width: 250px;">
             <i class="fas fa-search"></i>
-            <input type="text" class="form-control" placeholder="Cari pelayanan..." onkeyup="searchTable('pelayananTable', this.value)">
+            <input type="text" class="form-control"
+       placeholder="Cari pelayanan..."
+       value="{{ request('searchPelayanan') }}"
+       onkeyup="searchPelayanan(this.value)">
+
           </div>
           <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalPelayanan">
             <i class="fas fa-plus"></i> Tambah Data
@@ -805,59 +814,32 @@
 
 <script>
 // ===========================
-// GLOBAL FUNCTIONS (bisa dipakai semua)
+// SEARCH REDIRECT (SERVER-SIDE SEARCH)
 // ===========================
-function hidePagination(){
-    document.querySelectorAll('.pagination-container').forEach(el=>{
-        el.style.display='none';
-    });
+function searchOrtu(q){
+    const base = window.location.pathname;
+    window.location.href = base + "?searchOrtu=" + encodeURIComponent(q) + "#orangtua-content";
 }
 
-function showPagination(){
-    document.querySelectorAll('.pagination-container').forEach(el=>{
-        el.style.display='';
-    });
+function searchAnak(q){
+    const base = window.location.pathname;
+    window.location.href = base + "?searchAnak=" + encodeURIComponent(q) + "#anak-content";
 }
 
-function searchTable(tableId,query){
-    const table = document.getElementById(tableId);
-    if(!table) return;
-
-    const rows = table.tBodies[0].rows;
-    const q = query.toLowerCase();
-
-    if(q==='') showPagination();
-    else hidePagination();
-
-    for(let r of rows){
-        let text = r.innerText.toLowerCase();
-        r.style.display = text.includes(q) ? '' : 'none';
-    }
+function searchPelayanan(q){
+    const base = window.location.pathname;
+    window.location.href = base + "?searchPelayanan=" + encodeURIComponent(q) + "#pelayanan-content";
 }
+
 
 // ===========================
 // SAAT DOKUMEN SELESAI LOAD
 // ===========================
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ===========================
-    // 1) Pagination hide saat fokus
-    // ===========================
-    const searchSelectors = [
-        'input[placeholder="Cari orang tua..."]',
-        'input[placeholder="Cari anak..."]',
-        'input[placeholder="Cari pelayanan..."]'
-    ];
-
-    searchSelectors.forEach(sel=>{
-        const input = document.querySelector(sel);
-        if(input){
-            input.addEventListener('focus', hidePagination);
-        }
-    });
 
     // ===========================
-    // 2) Logout SweetAlert
+    // Logout SweetAlert
     // ===========================
     window.handleLogout = function(){
         Swal.fire({
@@ -893,8 +875,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
+
     // ===========================
-    // 3) Navbar indicator
+    // Navbar indicator
     // ===========================
     const navbar = document.querySelector('.vertical-navbar');
     if(navbar){
@@ -921,8 +904,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+
     // ===========================
-    // 4) Tab fragment URL
+    // Aktifkan tab berdasarkan URL fragment
     // ===========================
     function activateTabFromHash() {
         const hash = window.location.hash;
@@ -936,14 +920,15 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('shown.bs.tab', (e)=>{
             const target = e.target.getAttribute('data-bs-target');
             const baseUrl = window.location.pathname + window.location.search;
-            history.replaceState(null,'',baseUrl + target);
+            history.replaceState(null,'', baseUrl + target);
         });
     });
 
     window.addEventListener('hashchange', activateTabFromHash);
 
+
     // ===========================
-    // 5) Delete confirm alert
+    // Delete confirm alert
     // ===========================
     document.querySelectorAll('.delete-form').forEach(form=>{
         form.addEventListener('submit',function(e){
@@ -967,6 +952,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
+
 
 </body>
 </html>
