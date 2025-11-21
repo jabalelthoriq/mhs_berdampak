@@ -34,114 +34,118 @@ class DashboardController
 
 
 public function index()
-{
-    $tahunSekarang = Carbon::now()->year;
+    {
+        $tahun = Carbon::now()->year;
+        $bulanList = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
 
-    // === DATA DASAR ===
-    $totalOrangtua = Orangtua::count();
-    $totalAnak = Anak::count();
-    $totalMasyarakat = $totalOrangtua + $totalAnak;
+        // ===========================
+        //  DATA DASHBOARD
+        // ===========================
+        $totalOrangtua = Orangtua::count();
+        $totalAnak     = Anak::count();
+        $totalMasyarakat = $totalOrangtua + $totalAnak;
 
-    // === FILTER DATA TABEL ===
-    $orangtua = Orangtua::where('riwayat_penyakit', 'menular')
-        ->orderBy('usia_orangtua', 'desc')
-        ->paginate(5);
+        $orangtua = Orangtua::where('jenis_penyakit', 'menular')
+            ->orderBy('usia_orangtua', 'desc')
+            ->paginate(100);
 
-    $anak = Anak::whereIn('kesimpulan', ['Stunting', 'Gizi Kurang'])
-        ->orderBy('usia_anak', 'desc')
-        ->paginate(5);
+        $anak = Anak::whereIn('kesimpulan', ['Stunting', 'Gizi Kurang'])
+            ->orderBy('usia_anak', 'desc')
+            ->paginate(100);
 
-    $pelayanan = Pelayanan::orderBy('tanggal_pelayanan', 'desc')
-        ->paginate(5);
+        $pelayanan = Pelayanan::orderBy('tanggal_pelayanan', 'desc')
+            ->paginate(5);
 
-    // === CHART: Kesimpulan Anak per Bulan (1 Tahun) ===
-    $chartKesimpulan = Anak::select(
-        DB::raw('MONTH(created_at) as bulan'),
-        DB::raw("SUM(CASE WHEN kesimpulan = 'Stunting' THEN 1 ELSE 0 END) as stunting"),
-        DB::raw("SUM(CASE WHEN kesimpulan = 'Gizi Kurang' THEN 1 ELSE 0 END) as gizi_kurang"),
-        DB::raw("SUM(CASE WHEN kesimpulan = 'Gizi Baik' THEN 1 ELSE 0 END) as gizi_baik")
-    )
-        ->whereYear('created_at', $tahunSekarang)
-        ->groupBy('bulan')
-        ->orderBy('bulan')
-        ->get();
+        // =====================================================
+        //  CHART 1: GRAFIK GIZI ANAK (Stunting, Gizi Kurang, Gizi Baik)
+        // =====================================================
+        $chartGizi = Anak::select(
+            DB::raw('MONTH(updated_at) as bulan'),
+            DB::raw("SUM(CASE WHEN kesimpulan = 'Stunting' THEN 1 ELSE 0 END) as stunting"),
+            DB::raw("SUM(CASE WHEN kesimpulan = 'Gizi Kurang' THEN 1 ELSE 0 END) as gizi_kurang"),
+            DB::raw("SUM(CASE WHEN kesimpulan = 'Gizi Baik' THEN 1 ELSE 0 END) as gizi_baik")
+        )
+            ->whereYear('updated_at', $tahun)
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get();
 
-    // Pisahkan data untuk chart.js
-    $bulanLabels = [];
-    $dataStunting = [];
-    $dataGiziKurang = [];
-    $dataGiziBaik = [];
+        // Siapkan array 12 bulan agar grafik tetap stabil meski data kosong
+        $dataStunting = array_fill(0, 12, 0);
+        $dataGiziKurang = array_fill(0, 12, 0);
+        $dataGiziBaik = array_fill(0, 12, 0);
 
-    $namaBulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        foreach ($chartGizi as $row) {
+            $index = $row->bulan - 1;
+            $dataStunting[$index] = $row->stunting;
+            $dataGiziKurang[$index] = $row->gizi_kurang;
+            $dataGiziBaik[$index] = $row->gizi_baik;
+        }
 
-    foreach ($chartKesimpulan as $row) {
-        $bulanLabels[] = $namaBulan[$row->bulan - 1];
-        $dataStunting[] = $row->stunting;
-        $dataGiziKurang[] = $row->gizi_kurang;
-        $dataGiziBaik[] = $row->gizi_baik;
+        // =====================================================
+        //  CHART 2: GRAFIK PENYAKIT ORANGTUA (Menular vs Tidak Menular)
+        // =====================================================
+        $chartPenyakit = Orangtua::select(
+            DB::raw('MONTH(updated_at) as bulan'),
+            DB::raw("SUM(CASE WHEN jenis_penyakit = 'menular' THEN 1 ELSE 0 END) as menular"),
+            DB::raw("SUM(CASE WHEN jenis_penyakit = 'tidak menular' THEN 1 ELSE 0 END) as tidak_menular")
+        )
+            ->whereYear('updated_at', $tahun)
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get();
+
+        $dataPenyakitMenular = array_fill(0, 12, 0);
+        $dataPenyakitTidakMenular = array_fill(0, 12, 0);
+
+        foreach ($chartPenyakit as $row) {
+            $index = $row->bulan - 1;
+            $dataPenyakitMenular[$index] = $row->menular;
+            $dataPenyakitTidakMenular[$index] = $row->tidak_menular;
+        }
+
+        // =====================================================
+        //  CHART 3: JUMLAH PELAYANAN PER BULAN
+        // =====================================================
+        $chartPelayanan = Pelayanan::select(
+            DB::raw('MONTH(tanggal_pelayanan) as bulan'),
+            DB::raw('COUNT(*) as total')
+        )
+            ->whereYear('tanggal_pelayanan', $tahun)
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->pluck('total', 'bulan');
+
+        $dataPelayanan = array_fill(0, 12, 0);
+        foreach ($chartPelayanan as $bulan => $total) {
+            $dataPelayanan[$bulan - 1] = $total;
+        }
+
+        return view('dashboard', compact(
+            'orangtua',
+            'anak',
+            'pelayanan',
+
+            // counter
+            'totalMasyarakat',
+            'totalAnak',
+            'totalOrangtua',
+
+            // chart gizi anak
+            'bulanList',
+            'dataStunting',
+            'dataGiziKurang',
+            'dataGiziBaik',
+
+            // chart penyakit orangtua
+            'dataPenyakitMenular',
+            'dataPenyakitTidakMenular',
+
+            // chart pelayanan
+            'dataPelayanan'
+        ));
     }
 
-    // === CHART: Riwayat Penyakit Orangtua per Bulan ===
-$chartPenyakit = Orangtua::select(
-    DB::raw('MONTH(created_at) as bulan'),
-    DB::raw("SUM(CASE WHEN riwayat_penyakit = 'menular' THEN 1 ELSE 0 END) as menular"),
-    DB::raw("SUM(CASE WHEN riwayat_penyakit = 'tidak menular' THEN 1 ELSE 0 END) as tidak_menular")
-)
-    ->whereYear('created_at', $tahunSekarang)
-    ->groupBy('bulan')
-    ->orderBy('bulan')
-    ->get();
-
-$bulanLabels = [];
-$dataStunting = [];
-$dataGiziKurang = [];
-$dataGiziBaik = [];
-$dataPenyakitMenular = [];
-$dataPenyakitTidakMenular = [];
-
-$namaBulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-
-foreach ($chartKesimpulan as $row) {
-    $bulanLabels[] = $namaBulan[$row->bulan - 1];
-    $dataStunting[] = $row->stunting;
-    $dataGiziKurang[] = $row->gizi_kurang;
-    $dataGiziBaik[] = $row->gizi_baik;
-}
-
-foreach ($chartPenyakit as $row) {
-    $dataPenyakitMenular[] = $row->menular;
-    $dataPenyakitTidakMenular[] = $row->tidak_menular;
-}
-
-
-    // === CHART: Jumlah Pelayanan per Bulan ===
-    $chartPelayanan = Pelayanan::select(
-        DB::raw('MONTH(tanggal_pelayanan) as bulan'),
-        DB::raw('COUNT(*) as total')
-    )
-        ->whereYear('tanggal_pelayanan', $tahunSekarang)
-        ->groupBy('bulan')
-        ->orderBy('bulan')
-        ->pluck('total', 'bulan');
-
-    return view('dashboard', compact(
-        'orangtua',
-        'anak',
-        'pelayanan',
-        'totalMasyarakat',
-        'totalAnak',
-        'totalOrangtua',
-        'chartKesimpulan',
-        'chartPenyakit',
-        'chartPelayanan',
-        'dataPenyakitMenular',
-        'dataPenyakitTidakMenular',
-        'bulanLabels',
-        'dataStunting',
-        'dataGiziKurang',
-        'dataGiziBaik'
-    ));
-}
 
     public function test()
     {

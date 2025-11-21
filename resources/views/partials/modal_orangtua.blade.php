@@ -53,8 +53,8 @@
               <label class="form-label">Jenis Penyakit</label>
             <select name="jenis_penyakit" class="form-select">
                 <option value="">--Pilih--</option>
-                <option value="Laki-laki">Menular</option>
-                <option value="Perempuan">Tidak Menular</option>
+                <option value="menular">Menular</option>
+                <option value="tidak menular">Tidak Menular</option>
               </select>
               </div>
           </div>

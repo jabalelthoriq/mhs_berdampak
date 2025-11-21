@@ -579,6 +579,7 @@
                                         <th>NIK</th>
                                         <th>Usia</th>
                                         <th>Gender</th>
+                                        <th>Jenis Penyakit</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -586,13 +587,14 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-primary">{{ substr($data->nama_orangtua, 0, 2) }}</div>
+                                                    {{-- <div class="avatar bg-primary">{{ substr($data->nama_orangtua, 0, 2) }}</div> --}}
                                                     <span class="small">{{ $data->nama_orangtua }}</span>
                                                 </div>
                                             </td>
                                             <td class="small">{{ $data->nik }}</td>
                                             <td class="small">{{ $data->usia_orangtua }}</td>
                                             <td class="small">{{ $data->jenis_kelamin_orangtua }}</td>
+                                            <td class="small">{{ $data->jenis_penyakit }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -618,9 +620,10 @@
                                 <thead>
                                     <tr>
                                         <th>Nama Anak</th>
+                                        <th>Nik</th>
                                         <th>Usia</th>
                                         <th>Gender</th>
-                                        <th>Orang Tua</th>
+                                        <th>Status Gizi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -628,13 +631,14 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar bg-success">{{ substr($child->nama_anak, 0, 2) }}</div>
+                                                    {{-- <div class="avatar bg-success">{{ substr($child->nama_anak, 0, 2) }}</div> --}}
                                                     <span class="small">{{ $child->nama_anak }}</span>
                                                 </div>
                                             </td>
+                                            <td class="small">{{ $child->nik }}</td>
                                             <td class="small">{{ $child->usia_anak }}</td>
                                             <td class="small">{{ $child->jenis_kelamin_anak }}</td>
-                                            <td class="small">{{ $child->orangtua->nama_orangtua ?? '-' }}</td>
+                                            <td class="small">{{ $child->kesimpulan }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -655,251 +659,215 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // Handle logout
-        function handleLogout() {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Anda akan keluar dari aplikasi!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Logout',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch("{{ route('logout') }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                            "Accept": "application/json"
-                        }
-                    })
-                    .then(() => {
-                        Swal.fire({
-                            title: 'Berhasil Logout!',
-                            text: 'Anda telah keluar dari aplikasi',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: true
-                        }).then(() => window.location.href = '/');
-                    })
-                    .catch((error) => console.error("Logout error:", error));
-                }
-            });
-        }
-
-        // Data from controller
-        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const dataStunting = [5, 8, 6, 9, 7, 10, 8, 6, 7, 5, 4, 6];
-        const dataGiziKurang = [3, 5, 4, 6, 5, 7, 6, 4, 5, 3, 2, 4];
-        const dataGiziBaik = [15, 12, 14, 10, 13, 8, 11, 14, 13, 16, 18, 15];
-        const dataPenyakitMenular = [2, 4, 3, 5, 4, 6, 5, 3, 4, 2, 1, 3];
-        const dataPenyakitTidakMenular = [8, 6, 7, 5, 6, 4, 5, 7, 6, 8, 9, 7];
-        const dataPelayanan = {
-            'Jan': 45, 'Feb': 52, 'Mar': 48, 'Apr': 55, 'May': 60, 'Jun': 58,
-            'Jul': 62, 'Aug': 59, 'Sep': 65, 'Oct': 70, 'Nov': 68, 'Dec': 72
-        };
-
-        // Gradient helper function
-        function makeGradient(ctx, color1, color2) {
-            const g = ctx.createLinearGradient(0, 0, 0, 250);
-            g.addColorStop(0, color1);
-            g.addColorStop(1, color2);
-            return g;
-        }
-
-        // Initialize charts
-        document.addEventListener('DOMContentLoaded', function() {
-            // Disease Chart
-            const ctxPenyakit = document.getElementById('chartPenyakit').getContext('2d');
-            new Chart(ctxPenyakit, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Penyakit Menular',
-                            data: dataPenyakitMenular,
-                            fill: true,
-                            borderColor: '#6a1b9a',
-                            backgroundColor: makeGradient(ctxPenyakit, 'rgba(106,27,154,0.35)', 'rgba(106,27,154,0.0)'),
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#6a1b9a',
-                            borderWidth: 2,
-                        },
-                        {
-                            label: 'Tidak Menular',
-                            data: dataPenyakitTidakMenular,
-                            fill: true,
-                            borderColor: '#9c27b0',
-                            backgroundColor: makeGradient(ctxPenyakit, 'rgba(156,39,176,0.25)', 'rgba(156,39,176,0.0)'),
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#9c27b0',
-                            borderWidth: 2,
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: { padding: 5 },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                boxWidth: 12,
-                                font: { size: 11 },
-                                padding: 10
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#f2f2f2' },
-                            ticks: { padding: 3, font: { size: 10 } }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { padding: 3, font: { size: 10 } }
-                        }
+    // Handle logout
+    function handleLogout() {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda akan keluar dari aplikasi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Logout',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("{{ route('logout') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                        "Accept": "application/json"
                     }
-                }
-            });
-
-            // Nutrition Chart
-            const ctxGizi = document.getElementById('chartGizi').getContext('2d');
-            new Chart(ctxGizi, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Stunting',
-                            data: dataStunting,
-                            fill: true,
-                            borderColor: '#ff4d6d',
-                            backgroundColor: makeGradient(ctxGizi, 'rgba(255,99,132,0.35)', 'rgba(255,99,132,0)'),
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#ff4d6d',
-                            borderWidth: 2,
-                        },
-                        {
-                            label: 'Gizi Kurang',
-                            data: dataGiziKurang,
-                            fill: true,
-                            borderColor: '#ffb347',
-                            backgroundColor: makeGradient(ctxGizi, 'rgba(255,206,86,0.3)', 'rgba(255,206,86,0)'),
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#ffb347',
-                            borderWidth: 2,
-                        },
-                        {
-                            label: 'Gizi Baik',
-                            data: dataGiziBaik,
-                            fill: true,
-                            borderColor: '#00b8d4',
-                            backgroundColor: makeGradient(ctxGizi, 'rgba(0,184,212,0.3)', 'rgba(0,184,212,0)'),
-                            tension: 0.4,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#00b8d4',
-                            borderWidth: 2,
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: { padding: 5 },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                boxWidth: 12,
-                                font: { size: 11 },
-                                padding: 10
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#f2f2f2' },
-                            ticks: { padding: 3, font: { size: 10 } }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { padding: 3, font: { size: 10 } }
-                        }
-                    }
-                }
-            });
-
-            // Service Chart
-            const ctxPelayanan = document.getElementById('chartPelayanan').getContext('2d');
-            const gradientPelayanan = ctxPelayanan.createLinearGradient(0, 0, 0, 400);
-            gradientPelayanan.addColorStop(0, '#b3e5fc');
-            gradientPelayanan.addColorStop(0.5, '#4fc3f7');
-            gradientPelayanan.addColorStop(1, '#0288d1');
-
-            new Chart(ctxPelayanan, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(dataPelayanan),
-                    datasets: [{
-                        label: 'Jumlah Pelayanan',
-                        data: Object.values(dataPelayanan),
-                        backgroundColor: gradientPelayanan,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: { padding: 5 },
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            suggestedMax: Math.ceil(Math.max(...Object.values(dataPelayanan)) + 10),
-                            grid: { color: '#f0f0f0' },
-                            ticks: { padding: 3, font: { size: 10 } }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { padding: 3, font: { size: 10 } }
-                        }
-                    }
-                }
-            });
-
-            // Tab functionality
-            document.getElementById('tab-gizi').addEventListener('click', function() {
-                this.classList.add('active');
-                document.getElementById('tab-penyakit').classList.remove('active');
-                document.getElementById('chartGiziContainer').classList.add('show', 'active');
-                document.getElementById('chartPenyakitContainer').classList.remove('show', 'active');
-            });
-
-            document.getElementById('tab-penyakit').addEventListener('click', function() {
-                this.classList.add('active');
-                document.getElementById('tab-gizi').classList.remove('active');
-                document.getElementById('chartPenyakitContainer').classList.add('show', 'active');
-                document.getElementById('chartGiziContainer').classList.remove('show', 'active');
-            });
-
-            // Ensure consistent tab button width
-            document.querySelectorAll('#healthTabs .nav-link').forEach(btn => {
-                btn.style.minWidth = "160px";
-            });
+                })
+                .then(() => {
+                    Swal.fire({
+                        title: 'Berhasil Logout!',
+                        text: 'Anda telah keluar dari aplikasi',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: true
+                    }).then(() => window.location.href = '/');
+                })
+                .catch((error) => console.error("Logout error:", error));
+            }
         });
-    </script>
+    }
+
+    // ==========================
+    // AMBIL DATA DARI CONTROLLER
+    // ==========================
+    const labels = @json($bulanList);
+    const dataStunting = @json($dataStunting);
+    const dataGiziKurang = @json($dataGiziKurang);
+    const dataGiziBaik = @json($dataGiziBaik);
+
+    const dataPenyakitMenular = @json($dataPenyakitMenular);
+    const dataPenyakitTidakMenular = @json($dataPenyakitTidakMenular);
+
+    const dataPelayanan = @json($dataPelayanan);
+
+    // ==========================
+    // GRADIENT HELPER
+    // ==========================
+    function makeGradient(ctx, color1, color2) {
+        const g = ctx.createLinearGradient(0, 0, 0, 250);
+        g.addColorStop(0, color1);
+        g.addColorStop(1, color2);
+        return g;
+    }
+
+    // ==========================
+    // RENDER CHART
+    // ==========================
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // -----------------------------
+        // 1. Chart Gizi Anak
+        // -----------------------------
+        const ctxGizi = document.getElementById('chartGizi').getContext('2d');
+        new Chart(ctxGizi, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Stunting',
+                        data: dataStunting,
+                        fill: true,
+                        borderColor: '#ff4d6d',
+                        backgroundColor: makeGradient(ctxGizi, 'rgba(255,99,132,0.35)', 'rgba(255,99,132,0)'),
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#ff4d6d',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Gizi Kurang',
+                        data: dataGiziKurang,
+                        fill: true,
+                        borderColor: '#ffb347',
+                        backgroundColor: makeGradient(ctxGizi, 'rgba(255,206,86,0.3)', 'rgba(255,206,86,0)'),
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#ffb347',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Gizi Baik',
+                        data: dataGiziBaik,
+                        fill: true,
+                        borderColor: '#00b8d4',
+                        backgroundColor: makeGradient(ctxGizi, 'rgba(0,184,212,0.3)', 'rgba(0,184,212,0)'),
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#00b8d4',
+                        borderWidth: 2,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, font: { size: 11 }, padding: 10 }
+                    }
+                }
+            }
+        });
+
+        // -----------------------------
+        // 2. Chart Penyakit Orang Tua
+        // -----------------------------
+        const ctxPenyakit = document.getElementById('chartPenyakit').getContext('2d');
+        new Chart(ctxPenyakit, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Penyakit Menular',
+                        data: dataPenyakitMenular,
+                        fill: true,
+                        borderColor: '#6a1b9a',
+                        backgroundColor: makeGradient(ctxPenyakit, 'rgba(106,27,154,0.35)', 'rgba(106,27,154,0.0)'),
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#6a1b9a',
+                        borderWidth: 2,
+                    },
+                    {
+                        label: 'Tidak Menular',
+                        data: dataPenyakitTidakMenular,
+                        fill: true,
+                        borderColor: '#9c27b0',
+                        backgroundColor: makeGradient(ctxPenyakit, 'rgba(156,39,176,0.25)', 'rgba(156,39,176,0.0)'),
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#9c27b0',
+                        borderWidth: 2,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, font: { size: 11 }, padding: 10 }
+                    }
+                }
+            }
+        });
+
+        // -----------------------------
+        // 3. Chart Pelayanan
+        // -----------------------------
+        const ctxPelayanan = document.getElementById('chartPelayanan').getContext('2d');
+        const gradientPelayanan = ctxPelayanan.createLinearGradient(0, 0, 0, 400);
+        gradientPelayanan.addColorStop(0, '#b3e5fc');
+        gradientPelayanan.addColorStop(0.5, '#4fc3f7');
+        gradientPelayanan.addColorStop(1, '#0288d1');
+
+        new Chart(ctxPelayanan, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Jumlah Pelayanan',
+                    data: dataPelayanan,
+                    backgroundColor: gradientPelayanan,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // ==========================
+        // TAB SWITCHING
+        // ==========================
+        document.getElementById('tab-gizi').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('tab-penyakit').classList.remove('active');
+            document.getElementById('chartGiziContainer').classList.add('show', 'active');
+            document.getElementById('chartPenyakitContainer').classList.remove('show', 'active');
+        });
+
+        document.getElementById('tab-penyakit').addEventListener('click', function () {
+            this.classList.add('active');
+            document.getElementById('tab-gizi').classList.remove('active');
+            document.getElementById('chartPenyakitContainer').classList.add('show', 'active');
+            document.getElementById('chartGiziContainer').classList.remove('show', 'active');
+        });
+
+    });
+</script>
+
 </body>
 </html>

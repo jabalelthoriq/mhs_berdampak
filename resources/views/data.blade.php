@@ -335,12 +335,7 @@
         padding: 20px 0;
     }
 
-    /* Fix for pagination alignment */
-    .pagination-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
+
 
     /* Fix for action buttons alignment */
     .action-buttons {
@@ -353,9 +348,6 @@
     justify-content: center;
     align-items: center;
 }
-
-
-
 
      /* Pagination styling */
         .pagination-container {
@@ -570,260 +562,146 @@
     </div>
   </div>
 
-
- <!-- Anak -->
-  <div class="tab-pane fade" id="anak-content" role="tabpanel">
+<!-- Anak -->
+<div class="tab-pane fade" id="anak-content" role="tabpanel">
     <div class="card mt-3">
-      <div class="card-body">
-        <h5 class="card-title fw-bold">Data Anak</h5>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <div class="search-container" style="width: 250px;">
-            <i class="fas fa-search"></i>
-            <input type="text" class="form-control" placeholder="Cari anak..." onkeyup="searchTable('anakTable', this.value)">
-          </div>
-          <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAnak">
-            <i class="fas fa-plus"></i> Tambah Data
-          </button>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-hover mb-0" id="anakTable">
-            <thead>
-                <tr>
-                    <th>NIK</th>
-                    <th>Nama Orang Tua</th>
-                    <th>Nama Anak</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Usia</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Imunisasi</th>
-                    <th>Tanggal Imunisasi</th>
-                    <th>Tinggi</th>
-                    <th>Berat</th>
-                    <th>Status Gizi</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="card-body">
+            <h5 class="card-title fw-bold">Data Anak</h5>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="search-container" style="width: 250px;">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control"
+                        placeholder="Cari anak..."
+                        onkeyup="searchTable('anakTable', this.value)">
+                </div>
+                <button class="btn btn-success btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalAnak">
+                    <i class="fas fa-plus"></i> Tambah Data
+                </button>
+            </div>
 
-@php
-    $imunList = [
-        'hepatitis_b' => 'Hepatitis B',
-        'bcg' => 'BCG',
-        'polio' => 'Polio',
-        'dpt_hb_hib' => 'DPT-HB-HIB',
-        'pcv' => 'PCV',
-        'rota' => 'Rota Virus',
-        'campak_rubella' => 'Campak Rubella'
-    ];
-@endphp
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="anakTable">
+                    <thead>
+                        <tr>
+                            <th>NIK</th>
+                            <th>Nama Orang Tua</th>
+                            <th>Nama Anak</th>
+                            <th>Tanggal Lahir</th>
+                            <th>Usia</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Imunisasi</th>
+                            <th>Tanggal Imunisasi</th>
+                            <th>Tinggi</th>
+                            <th>Berat</th>
+                            <th>Status Gizi</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
 
-@foreach($anak as $child)
-<tr>
+                    <tbody>
+                        @php
+                        $imunList = [
+                            'hepatitis_b' => 'Hepatitis B',
+                            'bcg' => 'BCG',
+                            'polio' => 'Polio',
+                            'dpt_hb_hib' => 'DPT-HB-HIB',
+                            'pcv' => 'PCV',
+                            'rota' => 'Rota Virus',
+                            'campak_rubella' => 'Campak Rubella'
+                        ];
+                        @endphp
 
-    {{-- NIK --}}
-    <td>{{ $child->nik }}</td>
+                        @foreach($anak as $child)
+                        <tr>
+                            <td>{{ $child->nik }}</td>
+                            <td>{{ $child->nama_ortu }}</td>
+                            <td>{{ $child->nama_anak }}</td>
+                            <td>{{ $child->tanggal_lahir }}</td>
+                            <td>{{ $child->usia_anak }}</td>
+                            <td>{{ $child->jenis_kelamin_anak }}</td>
 
-    {{-- Nama Orang Tua --}}
-    <td>{{ $child->nama_ortu }}</td>
+                            <td style="white-space: nowrap;">
+                                @foreach($imunList as $key => $label)
+                                @php
+                                $status = $child->{'imunisasi_'.$key};
+                                $icon = $status == 'ya' ? '✓' : '✗';
+                                $color = $status == 'ya' ? '#0a8f35' : '#d00';
+                                @endphp
+                                <span style="color: {{ $color }}; font-weight:bold;">
+                                    {{ $icon }}
+                                </span>
+                                {{ $label }} <br>
+                                @endforeach
+                            </td>
 
-    {{-- Nama Anak --}}
-    <td>{{ $child->nama_anak }}</td>
+                            <td style="white-space: nowrap;">
+                                @foreach($imunList as $key => $label)
+                                {{ $child->{'tanggal_'.$key} ?? '-' }} <br>
+                                @endforeach
+                            </td>
 
-    {{-- Tanggal Lahir --}}
-    <td>{{ $child->tanggal_lahir }}</td>
+                            <td>{{ $child->tinggi_badan }}</td>
+                            <td>{{ $child->berat_badan }}</td>
+                            <td>{{ $child->kesimpulan }}</td>
 
-    {{-- Usia --}}
-    <td>{{ $child->usia_anak }}</td>
+                            <td class="text-center action-buttons">
+                                <button class="btn btn-sm btn-warning"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editAnak{{ $child->id_anak }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <form action="{{ route('anak.destroy',$child->id_anak) }}"
+                                    method="POST"
+                                    class="d-inline delete-form">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
 
-    {{-- Jenis Kelamin --}}
-    <td>{{ $child->jenis_kelamin_anak }}</td>
+                </table>
+            </div>
 
-    {{-- STATUS IMUNISASI --}}
-    <td style="white-space: nowrap;">
-        @foreach($imunList as $key => $label)
-            @php
-                $status = $child->{'imunisasi_'.$key};
-                $icon = $status == 'ya' ? '✓' : '✗';
-                $color = $status == 'ya' ? '#0a8f35' : '#d00';
-            @endphp
-
-            <span style="color: {{ $color }}; font-weight:bold;">
-                {{ $icon }}
-            </span>
-            {{ $label }} <br>
-        @endforeach
-    </td>
-
-    {{-- TANGGAL IMUNISASI --}}
-    <td style="white-space: nowrap;">
-        @foreach($imunList as $key => $label)
-            {{ $child->{'tanggal_'.$key} ?? '-' }} <br>
-        @endforeach
-    </td>
-
-    {{-- Tinggi Badan --}}
-    <td>{{ $child->tinggi_badan }}</td>
-
-    {{-- Berat Badan --}}
-    <td>{{ $child->berat_badan }}</td>
-
-    {{-- Status Gizi --}}
-    <td>{{ $child->kesimpulan }}</td>
-
-    {{-- ACTION BUTTONS --}}
-    <td class="text-center action-buttons">
-        <button
-            class="btn btn-sm btn-warning"
-            data-bs-toggle="modal"
-            data-bs-target="#editAnak{{ $child->id_anak }}">
-            <i class="fas fa-edit"></i>
-        </button>
-
-        <form action="{{ route('anak.destroy', $child->id_anak) }}"
-              method="POST"
-              class="d-inline delete-form">
-            @csrf @method('DELETE')
-            <button class="btn btn-sm btn-danger">
-                <i class="fas fa-trash"></i>
-            </button>
-        </form>
-    </td>
-
-</tr>
-@endforeach
-
-</tbody>
-<tbody>
-
-@php
-    $imunList = [
-        'hepatitis_b' => 'Hepatitis B',
-        'bcg' => 'BCG',
-        'polio' => 'Polio',
-        'dpt_hb_hib' => 'DPT-HB-HIB',
-        'pcv' => 'PCV',
-        'rota' => 'Rota Virus',
-        'campak_rubella' => 'Campak Rubella'
-    ];
-@endphp
-
-@foreach($anak as $child)
-<tr>
-
-    {{-- NIK --}}
-    <td>{{ $child->nik }}</td>
-
-    {{-- Nama Orang Tua --}}
-    <td>{{ $child->nama_ortu }}</td>
-
-    {{-- Nama Anak --}}
-    <td>{{ $child->nama_anak }}</td>
-
-    {{-- Tanggal Lahir --}}
-    <td>{{ $child->tanggal_lahir }}</td>
-
-    {{-- Usia --}}
-    <td>{{ $child->usia_anak }}</td>
-
-    {{-- Jenis Kelamin --}}
-    <td>{{ $child->jenis_kelamin_anak }}</td>
-
-    {{-- STATUS IMUNISASI --}}
-    <td style="white-space: nowrap;">
-        @foreach($imunList as $key => $label)
-            @php
-                $status = $child->{'imunisasi_'.$key};
-                $icon = $status == 'ya' ? '✓' : '✗';
-                $color = $status == 'ya' ? '#0a8f35' : '#d00';
-            @endphp
-
-            <span style="color: {{ $color }}; font-weight:bold;">
-                {{ $icon }}
-            </span>
-            {{ $label }} <br>
-        @endforeach
-    </td>
-
-    {{-- TANGGAL IMUNISASI --}}
-    <td style="white-space: nowrap;">
-        @foreach($imunList as $key => $label)
-            {{ $child->{'tanggal_'.$key} ?? '-' }} <br>
-        @endforeach
-    </td>
-
-    {{-- Tinggi Badan --}}
-    <td>{{ $child->tinggi_badan }}</td>
-
-    {{-- Berat Badan --}}
-    <td>{{ $child->berat_badan }}</td>
-
-    {{-- Status Gizi --}}
-    <td>{{ $child->kesimpulan }}</td>
-
-    {{-- ACTION BUTTONS --}}
-    <td class="text-center action-buttons">
-        <button
-            class="btn btn-sm btn-warning"
-            data-bs-toggle="modal"
-            data-bs-target="#editAnak{{ $child->id_anak }}">
-            <i class="fas fa-edit"></i>
-        </button>
-
-        <form action="{{ route('anak.destroy', $child->id_anak) }}"
-              method="POST"
-              class="d-inline delete-form">
-            @csrf @method('DELETE')
-            <button class="btn btn-sm btn-danger">
-                <i class="fas fa-trash"></i>
-            </button>
-        </form>
-    </td>
-
-</tr>
-@endforeach
-
-</tbody>
-
-
-          </table>
-        </div>
-
-        <!-- Pagination for anak -->
-        @if($anak->hasPages())
-        <div class="pagination-container">
-            <nav aria-label="Page navigation for anak">
-                <ul class="pagination">
-                    <li class="page-item {{ $anak->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link"
-                        href="{{ $anak->previousPageUrl() }}#anak-content"
-                        aria-label="Previous">
-                        <i class="fas fa-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @for($i = 1; $i <= $anak->lastPage(); $i++)
-                        <li class="page-item {{ $anak->currentPage() == $i ? 'active' : '' }}">
+            @if($anak->hasPages())
+            <div class="pagination-container">
+                <nav aria-label="Page navigation for anak">
+                    <ul class="pagination">
+                        <li class="page-item {{ $anak->onFirstPage() ? 'disabled':'' }}">
                             <a class="page-link"
-                            href="{{ $anak->url($i) }}#anak-content">
+                                href="{{ $anak->previousPageUrl() }}#anak-content">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        @for($i = 1; $i <= $anak->lastPage(); $i++)
+                        <li class="page-item {{ $anak->currentPage()==$i?'active':'' }}">
+                            <a class="page-link"
+                                href="{{ $anak->url($i) }}#anak-content">
                                 {{ $i }}
                             </a>
                         </li>
-                    @endfor
+                        @endfor
 
-                    <li class="page-item {{ $anak->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link"
-                        href="{{ $anak->nextPageUrl() }}#anak-content"
-                        aria-label="Next">
-                        <i class="fas fa-chevron-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                        <li class="page-item {{ $anak->hasMorePages()?'':'disabled' }}">
+                            <a class="page-link"
+                                href="{{ $anak->nextPageUrl() }}#anak-content">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            @endif
+
         </div>
-        @endif
-      </div>
     </div>
-  </div>
+</div>
 
 
 
@@ -925,162 +803,167 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
+<script>
 // ===========================
-// 1) Logout dengan SweetAlert
+// GLOBAL FUNCTIONS (bisa dipakai semua)
 // ===========================
-function handleLogout() {
-  Swal.fire({
-    title: 'Apakah Anda yakin?',
-    text: "Anda akan keluar dari aplikasi!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Ya, Logout',
-    cancelButtonText: 'Batal'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      fetch("{{ route('logout') }}", {
-        method: "POST",
-        headers: {
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-          "Accept": "application/json"
-        }
-      })
-      .then(() => {
-        Swal.fire({
-          title: 'Berhasil Logout!',
-          text: 'Anda telah keluar dari aplikasi',
-          icon: 'success',
-          timer: 2000,
-          showConfirmButton: true
-        }).then(() => {
-          window.location.href = '/';
-        });
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
-    }
-  });
+function hidePagination(){
+    document.querySelectorAll('.pagination-container').forEach(el=>{
+        el.style.display='none';
+    });
 }
 
-// =======================================
-// 2) Fungsi pencarian tabel
-// =======================================
-function searchTable(tableId, query) {
-  const table = document.getElementById(tableId);
-  if (!table) return;
-
-  const rows = table.tBodies[0]?.rows || [];
-  const q = (query || '').toLowerCase();
-
-  for (let i = 0; i < rows.length; i++) {
-    const cells = rows[i].cells;
-    let found = false;
-
-    for (let j = 0; j < cells.length; j++) {
-      const txt = (cells[j].textContent || cells[j].innerText || '').toLowerCase();
-      if (txt.includes(q)) {
-        found = true;
-        break;
-      }
-    }
-    rows[i].style.display = found ? '' : 'none';
-  }
+function showPagination(){
+    document.querySelectorAll('.pagination-container').forEach(el=>{
+        el.style.display='';
+    });
 }
 
-// ===================================================
-// 3) Saat dokumen siap
-// ===================================================
+function searchTable(tableId,query){
+    const table = document.getElementById(tableId);
+    if(!table) return;
+
+    const rows = table.tBodies[0].rows;
+    const q = query.toLowerCase();
+
+    if(q==='') showPagination();
+    else hidePagination();
+
+    for(let r of rows){
+        let text = r.innerText.toLowerCase();
+        r.style.display = text.includes(q) ? '' : 'none';
+    }
+}
+
+// ===========================
+// SAAT DOKUMEN SELESAI LOAD
+// ===========================
 document.addEventListener('DOMContentLoaded', function () {
 
-  // -------------------------------------------------
-  // 3a) Navbar indicator
-  // -------------------------------------------------
-  const navbar = document.querySelector('.vertical-navbar');
-  if (navbar) {
-    const indicator = document.createElement('div');
-    indicator.className = 'nav-indicator';
-    navbar.appendChild(indicator);
+    // ===========================
+    // 1) Pagination hide saat fokus
+    // ===========================
+    const searchSelectors = [
+        'input[placeholder="Cari orang tua..."]',
+        'input[placeholder="Cari anak..."]',
+        'input[placeholder="Cari pelayanan..."]'
+    ];
 
-    function positionIndicator(targetIcon) {
-      const rect = targetIcon.getBoundingClientRect();
-      const navbarRect = navbar.getBoundingClientRect();
-      const top = rect.top - navbarRect.top;
-      indicator.style.top = top + 'px';
+    searchSelectors.forEach(sel=>{
+        const input = document.querySelector(sel);
+        if(input){
+            input.addEventListener('focus', hidePagination);
+        }
+    });
+
+    // ===========================
+    // 2) Logout SweetAlert
+    // ===========================
+    window.handleLogout = function(){
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda akan keluar dari aplikasi!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Logout',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("{{ route('logout') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                        "Accept": "application/json"
+                    }
+                })
+                .then(() => {
+                    Swal.fire({
+                        title: 'Berhasil Logout!',
+                        text: 'Anda telah keluar dari aplikasi',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: true
+                    }).then(() => {
+                        window.location.href = '/';
+                    });
+                });
+            }
+        });
+    };
+
+    // ===========================
+    // 3) Navbar indicator
+    // ===========================
+    const navbar = document.querySelector('.vertical-navbar');
+    if(navbar){
+        const indicator = document.createElement('div');
+        indicator.className = 'nav-indicator';
+        navbar.appendChild(indicator);
+
+        function positionIndicator(icon){
+            const rect = icon.getBoundingClientRect();
+            const navbarRect = navbar.getBoundingClientRect();
+            indicator.style.top = (rect.top - navbarRect.top) + 'px';
+        }
+
+        const activeIcon = document.querySelector('.nav-icon.active');
+        if(activeIcon) positionIndicator(activeIcon);
+
+        document.querySelectorAll('.nav-icon a').forEach(a=>{
+            a.addEventListener('click',function(){
+                const icon = this.closest('.nav-icon');
+                document.querySelector('.nav-icon.active')?.classList.remove('active');
+                icon.classList.add('active');
+                positionIndicator(icon);
+            });
+        });
     }
 
-    const activeIcon = document.querySelector('.nav-icon.active');
-    if (activeIcon) positionIndicator(activeIcon);
+    // ===========================
+    // 4) Tab fragment URL
+    // ===========================
+    function activateTabFromHash() {
+        const hash = window.location.hash;
+        const btn = document.querySelector(`button[data-bs-target="${hash}"]`);
+        if (btn) new bootstrap.Tab(btn).show();
+    }
 
-    document.querySelectorAll('.nav-icon a').forEach(a => {
-      a.addEventListener('click', function () {
-        const icon = this.closest('.nav-icon');
-        if (!icon) return;
+    activateTabFromHash();
 
-        const curr = document.querySelector('.nav-icon.active');
-        if (curr) curr.classList.remove('active');
-        icon.classList.add('active');
-        positionIndicator(icon);
-      });
+    document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn=>{
+        btn.addEventListener('shown.bs.tab', (e)=>{
+            const target = e.target.getAttribute('data-bs-target');
+            const baseUrl = window.location.pathname + window.location.search;
+            history.replaceState(null,'',baseUrl + target);
+        });
     });
-  }
 
-  // -------------------------------------------------
-  // 3b) Tab <-> URL fragment (#...)
-  // -------------------------------------------------
-  function activateTabFromHash() {
-    const hash = window.location.hash;
-    if (!hash) return;
+    window.addEventListener('hashchange', activateTabFromHash);
 
-    const btn = document.querySelector(`button[data-bs-target="${hash}"]`);
-    if (btn) new bootstrap.Tab(btn).show();
-  }
-
-  // Aktifkan tab dari hash saat load
-  activateTabFromHash();
-
-  // Update hash saat tab berubah
-  document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(btn => {
-    btn.addEventListener('shown.bs.tab', (e) => {
-      const target = e.target.getAttribute('data-bs-target');
-      if (target) {
-        const baseUrl = window.location.pathname + window.location.search;
-        history.replaceState(null, '', baseUrl + target);
-      }
+    // ===========================
+    // 5) Delete confirm alert
+    // ===========================
+    document.querySelectorAll('.delete-form').forEach(form=>{
+        form.addEventListener('submit',function(e){
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: 'Data akan dihapus permanen!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    form.submit();
+                }
+            });
+        });
     });
-  });
-
-  // Aktifkan tab saat hash berubah manual
-  window.addEventListener('hashchange', activateTabFromHash);
-
-  // -------------------------------------------------
-  // 3c) Konfirmasi hapus dengan SweetAlert
-  // -------------------------------------------------
-  document.querySelectorAll('.delete-form').forEach(function (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const row = form.closest('tr');
-      const nama = row?.querySelector('td span.text-truncate, td .ms-2')?.textContent?.trim() || 'data ini';
-
-      Swal.fire({
-        title: 'Yakin ingin menghapus?',
-        text: `Data ${nama} akan dihapus permanen!`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          form.submit();
-        }
-      });
-    });
-  });
 
 });
 </script>
