@@ -463,7 +463,7 @@
           <li class="nav-item"><a class="nav-link" href="#potensi">Potensi</a></li>
           <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
           <li class="nav-item"><a class="nav-link" href="login">Login</a></li>
-          
+
 
         </ul>
       </div>
@@ -475,7 +475,7 @@
     <div class="carousel-inner">
       <!-- Slide 1 -->
       <div class="carousel-item active">
-        <div class="parallax-bg" style="background-image: url('{{ asset('image/hero1.jpg') }}');"></div>
+        <div class="parallax-bg" style="background-image: url('{{ asset('image/1.jpg') }}');"></div>
         <div class="hero-caption">
           <h1>VISIT <span>DESA TAMANKURSI</span></h1>
           <p class="lead mt-3">Nikmati keindahan alam dan budaya yang menenangkan jiwa</p>
@@ -485,7 +485,7 @@
 
       <!-- Slide 2 -->
       <div class="carousel-item">
-        <div class="parallax-bg" style="background-image: url('{{ asset('image/hero2.jpg') }}');"></div>
+        <div class="parallax-bg" style="background-image: url('{{ asset('image/2.jpg') }}');"></div>
         <div class="hero-caption">
           <h1>EXPLORE <span>KEINDAHAN</span></h1>
           <p class="lead mt-3">Desa dengan panorama yang menenangkan hati</p>
@@ -528,11 +528,12 @@
       <div class="col-lg-6" data-aos="fade-right">
         <div class="ratio ratio-16x9 shadow-lg rounded-4 overflow-hidden" style="border: 2px solid rgba(0,180,216,0.3);">
           <iframe
-            src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0&mute=1&rel=0"
-            title="Video Profil Desa TamanKursi"
-            allowfullscreen
-            style="border:0;">
-          </iframe>
+  src="https://www.youtube.com/embed/5dRrpyAZoSQ?rel=0&modestbranding=1"
+  title="Video Profil Desa TamanKursi"
+  allowfullscreen
+  style="border:0; width:100%; height:100%;">
+</iframe>
+
         </div>
       </div>
 
@@ -549,7 +550,7 @@
       <i class="bi bi-people-fill"></i>
     </div>
     <div>
-      <h4 class="fw-bold mb-1 text-white">{{ $totalMasyarakat }} orang</h4>
+      <h4 class="fw-bold mb-1 text-white">2184 orang</h4>
       <p class="mb-0 text-secondary">Total Penduduk</p>
     </div>
   </div>
@@ -569,7 +570,7 @@
       <i class="bi bi-house-door-fill"></i>
     </div>
     <div>
-      <h4 class="fw-bold mb-1 text-white">7 dusun</h4>
+      <h4 class="fw-bold mb-1 text-white">4 dusun</h4>
       <p class="mb-0 text-secondary">Jumlah Dusun</p>
     </div>
   </div>
